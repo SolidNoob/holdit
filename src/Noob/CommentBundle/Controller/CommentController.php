@@ -1,5 +1,4 @@
 <?php
-/*ok*/
 namespace Noob\CommentBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
