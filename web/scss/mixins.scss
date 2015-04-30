@@ -1,0 +1,20 @@
+@mixin setLogo($image-name, $width, $height ) {
+    background: url(#{$img-design-dir}#{$image-name}) no-repeat;
+    width: $width;
+    height: $height;
+    display:inline-block;
+}
+
+
+@mixin transition($transition-property, $transition-time, $method) {
+    -webkit-transition: $transition-property $transition-time $method;
+    -moz-transition: $transition-property $transition-time $method;
+    -ms-transition: $transition-property $transition-time $method;
+    -o-transition: $transition-property $transition-time $method;
+    transition: $transition-property $transition-time $method;
+}
+
+@mixin imageFadeOnHover(){
+    @include transition(all, 0.3s, ease-in-out);
+    opacity: 0.7;
+}

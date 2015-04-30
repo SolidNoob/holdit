@@ -1,0 +1,25 @@
+{# 
+    NoobUserBundle:Buttons:followme.html.twig
+    
+    Display follow-me button depending of the user UserIFollow
+
+    Changelog:
+    20/04/2015 17h13: file created
+
+    This template need the following variables:
+    userToFollow: the user to follow
+#}
+
+{% if not app.user %}
+<button type="button" class='follow-me' data-user-id="{{ user.id }}"></button>
+{% else %}
+    {% if app.user.id == userToFollow.id %}
+        {# C'est le profil de l'utilisateur, on affiche pas le bouton #}
+    {% elseif userToFollow in app.user.usersIFollow %}
+        <button type="button" class='follow-me selected' data-user-id="{{ user.id }}"></button>
+    {% else %}
+        <button type="button" class='follow-me' data-user-id="{{ user.id }}"></button>
+    {% endif %}
+{% endif %}
+
+

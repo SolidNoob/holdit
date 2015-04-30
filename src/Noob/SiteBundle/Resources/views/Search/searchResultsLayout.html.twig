@@ -1,0 +1,177 @@
+{# 
+    NoobSiteBundle:Search:searchResultsLayout.html.twig
+    
+    Search results general layout + javascripts.
+    This file includes the view 'searchResultsDisplay.html.twig' to display the content.
+    
+    Changelog:
+    09/04/2015 12h24: file created
+    11/04/2015 23h52: start of crappy javascript...
+    13/04/2015 15h22 (hum...): split the view into two, to ease the ajax update
+#}
+
+{% extends ':default:layout.html.twig' %}
+
+{% block content %}
+    <div class="board violet">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <header>
+                        <h1><span class="xl-size">Résultats</span> de la recherche</h1>
+                      </header>
+                  </div>
+              </div>
+              <div class='row'>
+                <div class='col-xs-12'>
+                    <span class='text-left'>Votre recherche:</span> 
+                    <ul class="tag-cloud">
+                    {% for tag in recherche %}
+                        <li><a href='#' class="deletetag">{{ tag }}</a></li>
+                    {% endfor %}
+                        <li id="addtagwrapper">
+                            <form method="post" action="#" class="newtagform">
+                            <span class="addnewtag">+</span><!--
+                              --><input type="text" name="newtagfield" class="search-bar form-control" id="newtagfield"/>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div class='col-xs-12'>
+                    <div id="tag-suggestions">
+                    </div>
+                </div>
+            </div>
+          </div>
+      </div>
+
+      
+    <section class="board grey">
+       <div class="container pb" id="updatehere">
+          {% include 'NoobSiteBundle:Search:searchResultsDisplay.html.twig' with{'postList':postList, 'userList': userList} %}
+       </div>
+    </section>
+            
+{% endblock %}
+
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+    $("#newtagfield").hide();
+    
+    $('.addnewtag').click(function(e){
+        e.preventDefault();
+        $("#newtagfield").toggle();
+        $(this).toggleClass('reallyAddTag');
+    });
+    $('body').on('click', '.reallyAddTag', function(e){ 
+        e.preventDefault();
+        appendNewTag();
+    });
+    $('.newtagform').submit(function(e){
+        e.preventDefault();
+        appendNewTag();
+    });
+    function appendNewTag(){
+        var newTag = $('#newtagfield').val();
+        if(newTag.length > 1)
+        {
+           $('#addtagwrapper').before('<li><a href="#" class="deletetag">'+newTag+'</a></li>');
+           $('#newtagfield').val('');
+            updateSearch();
+        }
+        $('.reallyAddTag').toggleClass('reallyAddTag');
+    }
+    
+    var timer = null;
+    $("#newtagfield").keyup(function(e){
+        if(timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(getSuggestions, 300);
+    });
+    function getSuggestions(){
+        var searchString = $("#newtagfield").val();
+        if(searchString.length > 1){
+            $.ajax({
+                type: "POST",
+                url: "{{ path('noob_tag_ajax_suggestion')}}",
+                data: {searchString: searchString},
+                success: function(data){
+                    $("#tag-suggestions").html(data);
+                }
+            });
+        }
+    }
+    $('body').on('click', '.deletetag', function(e){ 
+        e.preventDefault();
+        $(this).parent('li').remove();
+        updateSearch();
+    });
+    $('body').on('click', '.clicktoadd', function(e){ 
+        e.preventDefault();
+        var newTag = $(this).text();
+        $('#addtagwrapper').before('<li><a href="#" class="deletetag">'+newTag+'</a></li>');
+        $('#newtagfield').val('');
+        $('.addnewtag').toggleClass('reallyAddTag');
+        $(this).fadeOut('fast');
+        updateSearch();
+    });
+    
+    function updateSearch(){
+        var searchString = [];
+        $('.tag-cloud .deletetag').each(function(){
+            searchString.push($(this).text());
+        });
+        if(searchString.length <= 0){
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "{{ path('noob_site_searchUpdateAjax')}}",
+            data: {searchString: searchString},
+            success: function(data){
+                $("#updatehere").hide().html(data).fadeIn();
+            }
+        });
+    }
+    
+    
+    //display more
+    $('body').on('click', '.load-more', function(e){
+        var searchString = [];
+        $('.tag-cloud .deletetag').each(function(){
+            searchString.push($(this).text());
+        });
+        var ty = $(this).data('ty');
+        var of = $(this).attr('data-of');
+        $.ajax({
+            type: "POST",
+            url: "{{ path('noob_site_searchSeeMoreAjax')}}",
+            data: {searchString: searchString, ty: ty, of:of},
+            context: $(this),
+            success: function(data){
+                if(data.length === 0)
+                {
+                    $(this).fadeOut('1000',function(){
+                        $(this).next('.no-more-result').fadeIn().css({'display':'block'});
+                    });
+                }
+                else
+                {
+                    $response = $(data).hide();
+                    $(this).parent('div').before($response);
+                    $response.fadeIn();
+                    $(this).children('span').removeClass('hide-me').addClass('show-me');
+                    $(this).children('i').addClass('hide-me').removeClass('show-me');
+                    of = parseInt(of) + 10;
+                    $(this).attr('data-of',of);
+                }
+            }
+        });
+        $(this).children('span').toggleClass('hide-me').toggleClass('show-me');
+        $(this).children('i').toggleClass('hide-me').toggleClass('show-me');
+    });
+});
+</script>
+{% endblock %}

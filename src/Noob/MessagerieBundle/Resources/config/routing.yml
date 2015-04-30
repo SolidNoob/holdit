@@ -1,0 +1,3 @@
+noob_messagerie_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: NoobMessagerieBundle:Default:index }

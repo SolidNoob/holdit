@@ -1,0 +1,58 @@
+{# 
+    NoobPostBundle:Global:postImage.html.twig
+    
+    Display post picture 
+    Centralize drastically the code, and ease maintaining it.
+
+    Changelog:
+    07/04/2015 16h24: file created
+
+    This template need the following variables:
+    mode: the 'mode' is just a way of displaying the picture. The repertory where to load the picture from depends directly of this 'mode'.
+          The 'mode' is a sort of slug which allow the parent template to just give an idea of what kind of image this template have to load.
+          If the parent template had do use directly the repertory as a parameter, and the repertory suddenly change for whatever reason, it 
+          would have been needed to search EACH file wich include this present template just to change the repertory.
+          In conclusion: just use the damn mode!
+          Value can be: 'preview',
+
+    picturename: the name of the picture, including the extension.
+    
+    alt (not required): the alternative text of the picture. 
+                        Default = '' (so no W3C errors :-) )
+    
+    customclass (not required): a string of the CSS classes to apply to the picture
+                                Default = ''
+#}
+
+{# Set the variables needed #}
+{% if mode == 'preview' %}
+    {% set repertory = 'postpic230' %}
+    {% set cssclass = 'preview-pic' %}
+{% elseif mode == 'detail' %}
+    {% set repertory = 'postpicoriginal' %}
+    {% set cssclass = 'post-detail-image' %}
+{% elseif mode == 'minithumb' %}
+    {% set repertory = 'postpicoriginal' %}
+    {% set cssclass = 'minithumb' %}
+{% else %}
+    {% set repertory = 'Son, this repertory does not exist' %}
+{% endif %}
+
+{% if alt is not defined  %}
+    {% set alt = '' %}
+{% endif %}
+
+{% if customclass is not defined  %}
+    {% set customclass = '' %}
+{% endif %}
+
+
+
+{# Actual display of the picture #}
+{% if picturename is null or picturename is empty %}
+<div class="nopicture {{ cssclass ~' '~ customclass }}">
+    <span><i class="fa fa-file-text"></i></span>
+</div>
+{% else %}
+<img src="{{asset('img/'~ repertory ~'/'~ picturename)}}" alt="{{ alt }}" class="img-responsive {{ cssclass ~' '~ customclass }}" />
+{% endif %}

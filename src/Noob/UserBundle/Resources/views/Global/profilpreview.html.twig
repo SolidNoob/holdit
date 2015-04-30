@@ -1,0 +1,61 @@
+{# 
+    NoobUserBundle:Global:profilpreview.html.twig
+    
+    Display profil preview (picture, name, description, tags and button 'Suivre')
+    This file centralize the display and drastically ease the update
+
+    Changelog:
+    05/04/2015 15h20: file created
+
+    This template need the following variables:
+    user: the user with their complete informations
+#}
+
+<article>
+    <div class="media-left media-top text-center">
+      <a href="{{ path('noob_user_userprofilepage', {'slug': user.slug})  }}">
+        <figure>
+            {% include 'NoobUserBundle:Global:userImage.html.twig' with{ 'mode':'preview', 'picturename': user.picture, 'alt': user.firstname ~ user.surname, 'customclass':'img-responsive' } %}
+        </figure>
+      </a>
+    </div>
+    <div class="media-body">
+        <header>
+            <span class='media-heading'><a href='{{ path('noob_user_userprofilepage', {'slug': user.slug})  }}'>{{ user.firstname }} {{ user.surname }}</a></span>
+            {% if user.role.slug == 'etudiant' %}
+                <div>Étudiant(e) en {{ user.section.name }}</div>
+            {% elseif user.role.slug == 'entreprise'%}
+                {% if user.websiteurl is not null and user.websiteurl is not empty %}
+                <div><a href="{{ user.websiteurl }}" target="_blank" rel="nofollow" class="violet-me">{{ user.society }}</a></div>
+                {% else %}
+                    <div>{{ user.society }}</div>
+                {% endif %}
+            {% endif %}
+        </header>
+        {% if user.role.slug == 'etudiant' %}
+            <div class="lookingfor">
+                {% if user.lookingForInternship %}
+                    Recherche un stage
+                    {% if user.lookingForJob %}
+                     -
+                    {% endif %}
+                {% endif %}
+                {% if user.lookingForJob %}
+                    Recherche un emploi
+                {% endif %}
+            </div>
+        {% endif %}
+        <div class="visible-lg visible-md">{{ user.description }} </div>
+        {% include 'NoobTagBundle:Global:tagList.html.twig' with{ 'tagList': user.tags } %}
+        <div class='previewbottom wrapper'>
+            {% include 'NoobUserBundle:Buttons:followme.html.twig' with{ 'userToFollow': user } %}
+            <a href='#' class='user-followers' data-user-id='{{ user.id }}'>
+                {% if hideFollowers is defined %}
+                    {# Dat solution... #}
+                {% else %}
+                    Follower(s): <span class="nb-followers">{{ user.getUsersFollowers|length }}</span>
+                {% endif %}
+            </a>
+        </div>
+    </div>
+</article>

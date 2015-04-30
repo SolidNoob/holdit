@@ -1,0 +1,18 @@
+<div class="bordered-panel border-violet">
+    <div class='heading'>Poster un commentaire:</div>
+{% if app.user %}
+<form action="{{ path('noob_comment_createComment',{'postId': postId}) }}" method="post"  {{ form_enctype(form) }} id='commentForm' >
+   {{ form_errors(form) }}
+    
+    {{ form_label(form.content, 'Votre commentaire: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+    {{ form_widget(form.content) }}
+    
+    {{ form_label(form.recaptcha, 'Recopiez le captcha: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+    {{ form_widget(form.recaptcha) }}
+    {{ form_widget(form.save, { 'attr': {'class': 'btn btn-default'},'label': 'Poster ce commentaire'  }) }}
+    {{ form_rest(form) }}
+</form>
+{% else %}
+Vous devez vous connecter pour poster un commentaire.
+{% endif %}
+</div>

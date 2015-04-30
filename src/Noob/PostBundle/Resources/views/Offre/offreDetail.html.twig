@@ -1,0 +1,123 @@
+{# 
+    NoobPostBundle:Offre:offreDetail.html.twig
+    
+    Offre detail page
+
+    Changelog:
+    08/04/2015 17h11: file created
+
+    This template need the following variables:
+    item: the main item (offre) to display, with its complete information (tag, author, author's tag)
+    otherItems: a list of other offre with de same tags
+#}
+
+{% extends 'NoobPostBundle:Global:postDetail.html.twig' %}
+
+{% block content %}
+
+
+{% if item.type.name == 'offrestage' %}
+    {% set titre = "Offre de stage" %}
+{% elseif item.type.name == 'offreemploi' %}
+    {% set titre = "Offre d'emploi" %}
+{% endif %}
+
+
+<div class="board violet">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                  <h2><span class="xl-size">{{ titre }}</span> publiée par {{ item.author.firstname }} {{ item.author.surname }}</h2>
+                </header>
+            </div>
+        </div>
+        <div class="row result-wrapper plank">
+            <div class="col-md-6">
+              {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user': item.author} %}
+              </div>
+              <div class='col-md-6 '>
+                  <aside class='other-posts'>
+                    <p class="white-me">Offres similaires:</p>
+                    {% if otherItems is empty %}
+                        <p>Pas d'offres similaires</p>
+                    {% else %}
+                        {% for item in otherItems|slice(0,3) %}
+                            <a href="{{ path('noob_offre_detail', {'id': item.id, 'slug': item.slug})}}" title="{{ item.name }}">
+                                <div class="media-top">
+                                    {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'preview', 'picturename': item.picture, 'alt': item.name} %}
+                                </div>
+                                <div class="media-body">
+                                    {{ item.name|slice(0,15) }}...
+                                </div>
+                            </a>
+                        {% endfor %}
+                    {% endif %}
+                  </aside>
+              </div>
+        </div>
+    </div>
+</div>
+
+
+<section class="board grey noborder">
+    <div class="container pb">
+        <div class='row'>
+            <div class='col-md-5'>
+                <figure>
+                    {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'detail', 'picturename': item.picture, 'alt': item.name} %}
+                </figure>
+            </div>
+            <div class='col-md-7'>
+                <div class="planked post-detail">
+                <h1 class='post-detail-title'><span class='xl-size'>{{ item.name }}</span> de {{ item.author.firstname }} {{ item.author.surname }}</h1>
+                <div class='result-wrapper'>
+                  <p>Publication: {{ item.pubDate|date('d/m/Y à H:i') }}</p>
+                 {% include 'NoobTagBundle:Global:tagList.html.twig' with{ 'tagList': item.tags } %}
+                 {% include 'NoobPostBundle:Global:likePost.html.twig' with{ 'post': item } %}
+                    {% if item.url is not null and item.url is not empty %}
+                        <a href='{{ item.url }}' class='post-detail-url' rel='nofollow'>{{ item.url }}</a>
+                    {% endif %}
+                  <div class='post-detail-text text-justify'>
+                    {{ item.description|nl2br }}
+                  </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="board grey nopaddingtop">
+    <div class="container pb">
+        <div class="row">
+            <div class='col-xs-12'>
+                <h3 class="commentlist-title">Commentaire(s) à propos de "{{ item.name }}":</h3>
+                <div id="renderform">
+                   {# {{ render(url('noob_comment_createComment', {'postId':item.id})) }}  #}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-xs-12'>
+                <div class='comment-wrapper'>
+                {{ render(controller('NoobCommentBundle:Comment:getCommentsList', { 'postId': item.id })) }}
+                {% if item.comments|length != 0 %}
+                    <div class="col-lg-4 col-lg-offset-4 col-md-12 result-wrapper">
+                        <span class="load-more" data-of="10"> 
+                            <span class="show-me">Afficher plus</span>
+                            <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
+                        </span>
+                        <span class="no-more-result hide-me">
+                            Aucun résultat
+                        </span>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

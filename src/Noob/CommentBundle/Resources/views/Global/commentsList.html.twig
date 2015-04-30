@@ -1,0 +1,26 @@
+{% if commentsList is not empty %}
+    {% for comment in commentsList %}
+    <div class="comment">
+        {% if comment.isActive %}
+            {% if comment.author == app.user %}
+                    <i class="fa fa-times deletecomm" title='Supprimer mon commentaire' data-id='{{ comment.id }}'></i>
+            {% endif %}
+            <a href="{{ path('noob_user_userprofilepage', {'slug': comment.author.slug})  }}" class="hidden-xs">
+                <figure>
+                    {% include 'NoobUserBundle:Global:userImage.html.twig' with{ 'mode':'minithumb', 'picturename': comment.author.picture, 'alt': comment.author.firstname ~ comment.author.surname, 'customclass':'img-responsive comment-image' } %}
+                </figure>
+            </a>
+            <a href="{{ path('noob_user_userprofilepage', {'slug': comment.author.slug})  }}" class="violet-me comment-author">{{ comment.author.firstname }} {{ comment.author.surname }}</a>  
+            <span class="comment-date">le {{ comment.pubDate|date('d/m/Y à H:i') }}</span>:
+            <p class="comment-content">{{ comment.content|nl2br }}</p>
+            <div style="clear:both"></div>
+        {% else %}
+            <em>Ce commentaire a été supprimé par son auteur.</em>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% else %}
+<div class="bordered-panel border-violet no-comment">
+    Aucun commentaire pour le moment.
+</div>
+{% endif %}

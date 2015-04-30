@@ -1,0 +1,124 @@
+{% extends ':default:layout.html.twig' %}
+
+
+
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+    $.ajax({
+        type: "POST",
+        url: "{{ path('noob_comment_createComment', {'postId':item.id})}}",
+        context: $(this),
+        success: function(data){
+            $('#renderform').html(data);
+        }
+    });
+    
+    var currEvent = true;
+    //display more
+    $('body').on('click', '.load-more', function(e){
+        if(currEvent){
+            currEvent = false;
+            var of = $(this).attr('data-of');
+            $.ajax({
+                type: "POST",
+                url: "{{ path('noob_comment_getCommentsList', {'postId':item.id})}}",
+                data: {of:of},
+                context: $(this),
+                success: function(data){
+                    if(data.stillrecord === false)
+                    {
+                        $(this).fadeOut('1000',function(){
+                            $(this).next('.no-more-result').fadeIn().css({'display':'block'});
+                        });
+                    }
+                    else
+                    {
+                        $response = $(data.response).hide();
+                        $(this).parent('div').before($response);
+                        $response.fadeIn();
+                        $(this).children('span').removeClass('hide-me').addClass('show-me');
+                        $(this).children('i').addClass('hide-me').removeClass('show-me');
+                        of = parseInt(of) + 10;
+                        $(this).attr('data-of',of);
+                    }
+                },
+                complete: function(){
+                    currEvent = true;
+                }
+            });
+            $(this).children('span').toggleClass('hide-me').toggleClass('show-me');
+            $(this).children('i').toggleClass('hide-me').toggleClass('show-me');
+        }
+    });
+    
+    $('body').on('submit','#commentForm', function(e){
+    e.preventDefault();
+        if(currEvent){
+            currEvent = false;
+            $.ajax({
+                type: "POST",
+                url: "{{ path('noob_comment_createComment', {'postId':item.id})}}",
+                data: $(this).serialize(),
+                context: $(this),
+                success: function(data){
+                        $response = $(data).hide();
+                        $($response).prependTo('.comment-wrapper');
+                        $response.fadeIn();
+                        $('.no-comment').hide();
+                        resetForm();
+                },
+                complete: function(){
+                    currEvent = true;
+                }
+            });
+        }
+    });
+    
+    function resetForm(){
+        $.ajax({
+            type: "POST",
+            url: "{{ path('noob_comment_createComment', {'postId':item.id})}}",
+            context: $(this),
+            success: function(data){
+                    $('#renderform').html(data);
+                }
+        });
+    }
+    
+    $('body').on('click','.deletecomm', function(e){
+        if(currEvent){
+            currEvent = false;
+            var id = $(this).attr('data-id');
+            var mythis = $(this);
+            bootbox.confirm({
+                title: "Confirmer la suppression du commentaire?",
+                message: "Cette action irreversible entrainera la suppression du commentaire. Confirmer la suppression?",
+                buttons: {
+                    cancel: {
+                        label: "Annuler la suppression",
+                        className: "btn-default pull-left"
+                    },
+                    confirm: {
+                        label: "Confirmer la suppression",
+                        className: "btn-danger pull-right"
+                    }
+                },
+                callback: function(result) {
+                    currEvent = true;
+                    if (result) {
+                        $.ajax({
+                            type: "POST",
+                            url: Routing.generate('noob_comment_deleteComment', { commentId: id }),
+                            success: function(data){
+                                $(mythis).parent('.comment').fadeOut();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% set recordNumber = recordList|length %}
+{% if recordNumber != 0 %}  
+    <div class="col-md-12 spacer"></div>
+    {% set firstHalf =  (recordNumber/2)|round(0,'ceil') %}
+    <div class="col-md-6">
+        {% for record in recordList | slice(0,firstHalf)%}
+            {% if type == 'post' %}
+                {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':record} %}
+            {% elseif type == 'user' %}
+                {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':record} %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="col-md-6">
+        {% if recordNumber != 1 %}
+            {% for record in recordList | slice(firstHalf,recordNumber)%}
+                {% if type == 'post' %}
+                    {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':record} %}
+                {% elseif type == 'user' %}
+                    {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':record} %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endif %}

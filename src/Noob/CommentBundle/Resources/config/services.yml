@@ -1,0 +1,4 @@
+services:
+#    noob_comment.example:
+#        class: Noob\CommentBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

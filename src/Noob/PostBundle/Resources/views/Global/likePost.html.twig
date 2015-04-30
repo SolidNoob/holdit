@@ -1,0 +1,12 @@
+{#  post : le post  mdr lol c drole #}
+
+{% set class = '' %}
+{% if app.user %}
+    {% if post in app.user.postsLiked %}
+        {% set class = 'selected' %}
+    {% endif %}
+{% endif %}
+<div class='wrapper'>
+    <button type="button" class='like-me {{ class }}' data-post-id='{{post.id}}'><i class="fa fa-heart"></i></button>
+    <a href='#' data-post-id='{{post.id}}' class='post-likers'><span class='nb-likes'>{{ post.likers|length }}</span> coup(s) de coeur</a>
+</div>

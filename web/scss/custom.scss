@@ -1,0 +1,933 @@
+@import "variables.scss";
+@import "mixins.scss";
+
+// --- Global: ------------------------------------------------------------------------------------------ // 
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,300);
+body{
+    background: $white-main;
+    font-family: $font-stack;
+    font-size: $font-size-main;
+}
+.xl-size{
+    font-weight: 600;
+}
+.hide-me{
+    display:none;
+}
+.block-me{
+    display:block;
+}
+.full-logo-ieps{
+    @include setLogo('iepslogo.png', 192px, 75px);
+}
+.full-logo-fwb{
+    @include setLogo('fwblogo.png', 58px, 75px);
+}
+.small-logo-ieps{
+    @include setLogo('iepslogosmall.png', 35px, 35px);
+}
+.small-logo-fwb{
+    @include setLogo('fwblogosmall.png', 35px, 35px);
+}
+.fb-button{
+    @include setLogo('fblogo.png', 24px, 24px);
+}
+.twitter-button{
+    @include setLogo('twitterlogo.png', 34px, 24px);   
+}
+.linkedin-button{
+    @include setLogo('linkedinlogo.png', 28px, 24px);
+}
+.no-more-result{
+    width:100%;
+    background: $grey-light-border;
+    color: $grey-dark;
+    text-align:center;
+    padding: 10px 0px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.load-more{
+    cursor: pointer;
+    display:block;
+    width:100%;
+    background: $white-main;
+    color: $violet-main;
+    text-align:center;
+    padding: 10px 0px;
+    @include transition(all, 0.3s, ease-in-out);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    &:hover{
+        text-decoration: none;
+        color: $white-main;
+        background: $violet-main;
+    }
+}
+.social-button{
+    &.empty{
+        -webkit-filter: grayscale(100%);
+        -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
+        filter: grayscale(100%);
+        filter: gray; /* IE 6-9 */
+        &:hover{
+            opacity: 1;
+        }
+    }
+    &:hover{
+        @include imageFadeOnHover();
+    }
+}
+.green{
+    background: $green-main;
+}
+.red{
+    background: $red-main;
+}
+.violet{
+    background: $violet-main;
+}
+.white{
+    background: $white-main;
+}
+.grey{
+    background: $grey-main;
+    border-bottom: 1px solid $grey-light-border;
+    &.noborder{ border-bottom: none;}
+}
+.deletetag{
+    &:hover{
+        text-decoration: line-through !important;
+    }
+}
+.addnewtag{
+    display:inline-block;
+    background: $black-main;
+    padding: 5px 14px;
+    cursor: pointer;
+    &:hover{
+        background: $red-main;
+    }
+}
+#newtagfield{
+    max-width: 150px;
+    display:inline-block;
+    height: 33px;
+}
+.newtagform{display: inline-block;}
+.tag-cloud{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li{
+        display:inline-block;
+        margin-right: 7px;
+        margin-bottom: 13px;
+        &:nth-child(even) a{
+            background: $green-main;
+        }
+        &:nth-child(odd) a{
+            background: $red-main;
+        }
+        a{
+            font-size: $font-size-main + 2;
+            color: #fff;
+            display:inline-block;
+            padding: 5px 14px;
+            border-radius: 0px;
+            &:hover{
+                text-decoration: none;
+                background: $white-main;
+                color: $violet-main;
+            }
+        }
+    }
+}
+a.seek{
+    @include transition(all, 0.3s, ease-in-out);
+    &:hover{
+        text-decoration: none;
+        background: $black-main;
+    }
+}
+.search-bar{
+    background: $white-main;
+    border: none;
+    border-radius: 0px;
+    color: $violet-main;
+    padding:0;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: $font-size-main + 3;
+}
+.search-button{
+    color: $violet-main;
+    background: $white-main;
+    border: none;
+    border-radius: 0px;
+}
+.follow-me, .mp-me{
+    display:inline-block;
+    font-size: $font-size-main;
+    font-weight: 300;
+    color:$white-main;
+    border:none;
+    padding: 3px 6px;
+    @include transition(all, 0.3s, ease-in-out);
+    &:hover, &.selected{
+        background: $black-main;
+    }
+}
+.mp-me{
+    background: $violet-main;
+}
+.follow-me{
+    background: $red-main;
+    &:hover, &.selected{
+        background: $grey-dark;
+    }
+    &:after{
+        content:"Suivre";
+    }
+    &.selected:hover{
+        background: $red-main;
+    }
+    &.selected:after{
+        content:"Ne plus suivre";
+    }
+}
+.like-me{
+    display:inline-block;
+    font-size: $font-size-main + 5;
+    background: none;
+    border:none;
+    color: $grey-dark;
+
+    &:hover, &.selected{
+        color: $red-main;
+    }
+}
+.preview-pic{
+    max-width: 131px;
+    max-height: 131px;
+}
+.previewbottom{
+    border-top: 1px solid $grey-light-border;
+    padding-top: 8px;
+    a{
+        color: $black-main;
+    }
+}
+.minithumb{
+    max-width: 65px;
+    max-height: 65px;
+    display:inline-block;
+}
+.nopicture{
+    min-width: 131px;
+    min-height: 131px;
+    line-height: 131px;
+    background:$grey-main;
+    text-align: center;
+    color: $grey-dark;
+    display: inline-block;
+    font-size: $font-size-lg;
+    &.minithumb{
+        min-width: 65px;
+        min-height: 65px;
+        line-height: 65px;
+        font-size: $font-size-main + 5;
+        margin-bottom: 7px;
+        margin-right: 4px;
+    }
+    &:hover{
+         @include imageFadeOnHover();
+    }
+    span{
+        display: inline-block;
+        vertical-align: middle;
+        line-height: normal; 
+    }
+    &.post-detail-image{
+        width:100%;
+        &:after{
+            content: "Pas d'image";
+        }
+    }
+}
+.commentlist-title{
+    margin: 30px 0 20px 0;
+    font-weight: 300;
+}
+.comment{
+    background: #fff;
+    border: 1px solid $grey-light-border;
+    border-radius: 2px;
+    margin-bottom: 15px;
+    padding:15px;
+    font-size: $font-size-main - 1px;
+    position:relative;
+    .comment-date{
+        font-size: $font-size-main - 3px;
+    }
+    .comment-content{
+        margin-top: 5px;
+        margin-left: 65px + 15px;
+        padding: 10px 30px 10px 10px;
+    }
+    .comment-author{
+        padding-left: 10px;
+        margin-left:  15px;
+    }
+    .comment-image{
+        border-radius: 50%;
+        float:left;
+    }
+    .deletecomm{
+        position:absolute;
+        top: 7px;
+        right: 5px;
+        color: $grey-dark;
+        cursor:pointer;
+        padding:10px;
+        &:hover{
+            color: $black-main;
+        }
+    }
+}
+.heading h4{
+    border-bottom: 1px solid $grey-light-border;
+    padding-bottom:5px;
+}
+.bordered-panel{
+    border-left: 5px solid $grey-light-border;
+    background: $white-main;
+    margin-bottom: 15px;
+    padding:15px;
+    font-size: $font-size-main - 1px;
+    &.border-violet{
+        border-color: $violet-main;
+    }
+    &.border-red{
+        border-color: $red-main;
+    }
+    .heading{
+        font-size: $font-size-heading - 5px;
+        margin-bottom: 15px;
+    }
+    &.bg-grey{
+        background: $grey-main;
+    }
+}
+
+.white-me{color: $white-main;}
+.black-strong-me{color:$black-main; font-weight: 600;}
+a.black-strong-me:hover{color:$violet-main; text-decoration: none;}
+.violet-me{
+    color: $violet-main;
+    &:hover{
+        color: inherit;
+        text-decoration: underline;
+    }
+}
+.pb{
+    padding-bottom: 30px;
+}
+.result-wrapper{
+    font-size: $font-size-main - 2;
+    figure:hover img{
+        @include imageFadeOnHover();
+    }
+    article{
+        margin-bottom: 15px;
+    }
+    header{
+        margin-bottom: 7px;
+        
+        font-weight: 300;
+        padding-bottom: 5px;
+        border-bottom: 1px solid $grey-light-border;
+        a{
+            font-size: $font-size-main + 4;
+            font-weight: 600;
+            &:hover{
+                text-decoration: none;
+            }
+        }
+        a.violet-me{
+            font-size: $font-size-main - 1;
+            font-weight: 300;
+            color: $violet-main !important;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }   
+    .tag-list{
+        list-style: none;
+        margin: 0; padding: 0;
+        margin-top: 5px;
+        margin-bottom:5px;
+        li{
+            display: inline-block;
+        }
+    }
+    .tag{
+        font-size: $font-size-sm;
+        display: inline-block;
+        padding: 3px 5px;
+        margin: 0 5px 5px 0;
+        &:hover{
+            text-decoration: none;
+        }
+    }
+}
+.other-posts{
+    text-align: right;
+    a{
+        float:right;
+        margin-left:10px;
+        color: $white-main;
+    }
+    a:hover{
+        color: $violet-dark;
+        text-decoration: none;
+        img{
+            @include imageFadeOnHover();
+        }
+    }
+}
+.post-detail{
+    a{
+        color: $violet-main;
+    }
+}
+.post-detail-text{
+    margin-top: 12px;
+    font-size: $font-size-main - 1px;
+}
+.portfolio-navigation{
+    border-top:1px solid $grey-light-border;
+    padding-top: 5px; 
+    margin-top: 13px;
+    .portfolio-navprev{
+        text-align: left;
+    }
+}
+.comments{
+    margin-top: 15px;
+}
+#commentForm{
+    label, button{
+        margin-top:10px;
+    }
+    textarea{
+        width: 100%;
+        height: 70px;
+    }
+}
+.board h1.post-detail-title{
+    font-size: $font-size-main;
+    color: $violet-main;
+    margin-top: 0;
+    
+    
+    font-weight: 300;
+    padding-bottom: 5px;
+    border-bottom: 1px solid $grey-light-border;
+    margin-bottom: 15px;
+    
+    .xl-size{
+        font-size: $font-size-main * 2;
+    }
+}
+a.post-detail-url{
+    color: $violet-main;
+    font-size: $font-size-main + 3;
+    
+    font-weight: 300;
+}
+.plank article, .planked{
+    background: $white-main;
+    padding:15px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    border: 1px solid $grey-light-border;
+    &.mb{
+        margin-bottom: 10px;
+    }
+}
+.myprofilbutton{
+    .dropdown-menu{
+        i{ width: 20px; }
+        li{
+            padding: 0px 5px; 
+            &:hover{
+                background: $violet-main;
+                a{
+                    display: inline-block;
+                    width: 100%;
+                    background: none;
+                    color: $white-main;
+                }
+            }
+        }
+    }
+}
+.suggest-wrapper{ 
+    font-size:  $font-size-main - 1; 
+    .suggest-content{
+        display: table;
+        width: 100%;
+        margin-bottom:15px;
+        &.grouped{
+            margin-bottom:0;
+            padding-left: 10px; 
+            padding-top: 10px;
+            .info{
+                padding-top: 20px;
+            }
+        }
+        .spacer{
+            clear:both;
+        }
+        .commentsugg{
+            padding: 10px;
+            background: rgba(170,170,170,0.2);
+            border-radius: 3px;
+            position:relative;
+            i{
+                position: absolute;
+                top: 8px;
+                right: 10px;
+                color: $grey-dark;
+                cursor: pointer;
+            }
+        }
+        .info{
+            padding-left:10px;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: left;
+        }
+        .icon{
+            display: table-cell;
+            width: 65px;
+        }
+        img, .nopicture{
+            border-radius: 50%;
+            &:hover{
+            @include imageFadeOnHover();
+            }
+        }
+        &.hide-me{
+            display:none;
+        }
+    }
+    ul.default{
+        padding-left:15px;
+        margin:0;
+        li{
+            list-style: none;
+            margin-bottom: 10px;
+            i{width:20px;}
+            a{
+                color:$violet-main;
+                &:hover{
+                    text-decoration: none;
+                    color: $black-main;
+                }
+            }
+        }
+    }
+    .date-limiter{
+        font-weight: 300;
+        margin-bottom: 8px;
+        margin-top: 12px;
+        font-size: $font-size-main;
+    }
+    .bar-delimiter{
+        border-top: 1px solid $grey-light-border;
+        opacity: 0.7;
+    }
+}
+
+// --- Main Nav bar (the smallest): ------------------------------------------------------------------------------------------ // 
+.main-navbar{
+    background: $violet-nav;
+    color:$white-main;
+    padding-bottom: 10px;
+    a{
+        color: inherit;
+        display:inline-block;
+    }
+    .float{
+        float:left;
+        margin-top: 15px;
+        margin-right: 10px;
+    }
+    .brand{ 
+        margin-top: 13px;
+        padding: 5px 8px;
+        border-radius: 3px;
+        .xl-size{
+            font-size: $font-size-main + 5;
+        }
+        &:hover{
+            background: $violet-dark;
+            text-decoration: none;
+        }
+    }
+    .signin{
+        padding-top: 17px;
+        text-align: right;
+        a{
+            padding: 5px 8px;
+            border-radius: 3px;
+            display:inline-block;
+            &:hover{
+                background: $violet-dark;
+                text-decoration: none;
+            }
+        }
+        .myprofilbutton{
+            margin-top: -8px;
+        }
+        form{
+            display:inline-block;
+            max-width:100%;
+            .search-bar{ height: 27px;  width: 80%; vertical-align: bottom; }
+            .search-button{ height: 27px; padding: 2px 10px 4px 10px; vertical-align: bottom; }
+        }
+    }
+}
+
+// --- Parallax transition Frames: ------------------------------------------------------------------------------------------ // 
+.parallax-frame{ 
+    height: 360px;
+}
+.parallax-cover{ 
+    height: 280px;
+}
+
+// --- Full Header: ------------------------------------------------------------------------------------------ // 
+.full-header{
+    padding-top: 40px;
+    height: 170px;
+    background: url(#{$img-design-dir}handshake.png) no-repeat fixed 50% (170px-122px);
+    color: $violet-main;
+    
+    .wrapper{
+        padding-top: 30px;
+    }
+    .wrapper-signin{
+        padding-top: 90px;
+        text-align: right;
+        a{
+            color:inherit;
+            font-weight: 600;
+            display: inline-block;
+            margin: 0 5px;
+            
+            padding: 5px 8px;
+            border-radius: 3px;
+            &:hover{
+                background: $grey-light-border;
+                text-decoration: none;
+            }
+        }
+        .myprofilbutton a{
+            font-weight: 400;
+        }
+    }
+    
+}
+
+// --- Boards sections: ------------------------------------------------------------------------------------------ // 
+.board{
+    padding-top: 30px;
+    padding-bottom: 50px;
+    color: $white-main;
+    font-size: $font-size-main+2;
+    .result-wrapper{
+        color:$black-main;
+        .media-body{
+            width:100%;
+        }
+        header a{
+            color:$black-main;
+            &:hover{
+                color:$grey-dark;
+            }
+        }
+        .tag{
+            color: $white-main;
+            &:hover{
+                @include imageFadeOnHover();
+            }
+        }
+    }
+    h2, h1{
+        font-size: $font-size-lg;
+        margin-bottom:30px;
+        .xl-size{
+            font-size: $font-size-xl;
+        }
+    }
+    &.violet{
+        .author a{
+            color:#fff;
+        }
+        .result-wrapper{
+            .tag{
+                background: $violet-main;
+            }
+        }
+        &.default{
+            background: url(#{$img-design-dir}default.png) no-repeat scroll 0% 100% $violet-main;
+        }
+    }
+    &.red{
+        .result-wrapper{
+            .tag{
+                background: $red-main;
+            }
+        }
+        .follow-me{
+            border: 1px solid $white-main;
+        }
+        &.sneaky{
+            background: url(#{$img-design-dir}sneaky.png) no-repeat scroll 100% 30% $red-main;
+        }
+    }
+    &.green{
+        .result-wrapper{
+            .tag{
+                background: $green-main;
+            }
+        }
+        &.pen{
+            background: url(#{$img-design-dir}pen.png) no-repeat scroll 100% 100% $green-main;
+        }
+    }
+    &.white{
+        padding-top:50px; 
+        padding-bottom: 0px;
+        color: $black-main;
+        .result-wrapper{
+            color: $black-main;
+            header a{
+                color: $black-main;
+            }
+            .tag{
+                color: $white-main;
+                background: $violet-main;
+            }
+        }
+    }
+    &.grey{
+        padding-top:50px; 
+        padding-bottom: 0px;
+        color: $black-main;
+        
+        &.nopaddingtop{padding-top: 0;}
+        .result-wrapper{
+            color: $black-main;
+            header a{
+                color: $black-main;
+                &:hover{
+                    color: $violet-main;
+                }
+            }
+            .tag{
+                color: $white-main;
+                background: $violet-main;
+            }
+        }
+    }
+}
+.heading-board{
+    h1{
+        font-size: $font-size-lg;
+        .xl-size{
+            font-size: $font-size-xxl;
+        }
+    }
+    .moto{
+        font-size: $font-size-lg - 5;
+        margin-top: -20px;
+        margin-bottom: 50px;
+        .xl-size{
+            font-size: $font-size-lg + 5;
+        }
+    }
+    .search-form{
+        margin-bottom:30px;
+        .search-bar{
+            height: 35px;
+            width: 90%;
+            vertical-align: bottom; 
+        }
+        button{
+            line-height: $font-size-main + 5;
+            height: 35px;
+            font-size: $font-size-main + 5;
+            vertical-align: bottom; 
+        }
+        
+    }
+}
+
+// --- Profil Page: ------------------------------------------------------------------------------------------ // 
+.profil-board{
+    color: $black-main;
+    background: $grey-main;
+    border-bottom: 1px solid $grey-light-border;
+    .profil-header{
+        margin-bottom: 15px;
+    }
+    .profil-pic{
+        margin-top:-85px;
+        margin-left: auto;
+        margin-right: auto;
+        display:block;
+        width:230px;
+        height: 230px;
+    }
+    .social-group{
+        text-align: center;
+    }
+    .profil-card{
+        margin-top: 15px;
+        font-size: $font-size-main - 1;
+        h1{
+            margin-top: 0px;
+            font-weight: 300;
+            padding-bottom: 0;
+            margin-bottom: 0;
+            strong{
+                font-weight: 400;
+            }
+        }
+        a{
+            color: $violet-main;
+            &:hover{
+                color: $violet-nav;
+            }
+        }
+        .contact{
+            i{
+                color: $grey-dark;
+                font-size: $font-size-main + 3;
+                margin-right: 3px;
+                margin-left: 5px;
+                &:first-child{
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+    .heading{
+        font-size: $font-size-heading;
+        margin-bottom: 7px;
+        
+        font-weight: 300;
+        padding-bottom: 5px;
+        border-bottom: 1px solid $grey-light-border;
+        margin-bottom: 15px;
+    }
+    h1{
+        margin-bottom: 10px;
+    }
+    .seek{
+        display: block;
+        color: $white-main;
+        text-align: center;
+        padding: 4px 5px;
+        font-size: $font-size-sm + 1;
+        margin-top: 9px;
+        margin-bottom: 4px;
+    }
+    .portfolio{
+        margin-bottom:15px;
+        article{
+            margin-bottom: 35px;
+            a img:hover{
+               @include imageFadeOnHover();
+            }
+        }
+        .see-more{
+            color:$violet-main;
+        }
+        .portfolio-title{
+            max-height: 50px;
+            overflow: hidden;
+            a{
+                color: $black-main;
+                font-size: $font-size-main - 2px;
+            }
+        }
+    }
+}
+.box{
+    color:$white-main;
+    margin-top: 15px;
+    padding: 15px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    
+    .see-more{
+        color:$white-main;
+        text-align: right;
+        display: block;
+    }
+    .group{
+        text-align: center;
+    }
+    a img{
+        margin-right: 4px;
+        margin-bottom: 7px;
+        &:hover{
+            @include imageFadeOnHover();
+        }
+    }
+    .heading{
+        font-size:$font-size-main + 5;
+        color: $white-main;
+    }
+}
+
+
+// --- Main Footer: ------------------------------------------------------------------------------------------ // 
+.main-footer{
+    padding-top: 20px;
+    .top-part{
+        height: 170px;
+        background: url(#{$img-design-dir}handshake.png) no-repeat 50% 100% scroll;
+        border-bottom: 45px solid $violet-main;
+    }
+    .middle-part{
+        background: $grey-main;
+    }
+    .bottom-part{
+        background: $white-main;        
+    }
+}
+
+// --- Login/SignIn Form: ------------------------------------------------------------------------------------------ // 
+.form-signin-wrapper{
+    margin: 70px auto;
+}
+.form-signin{
+    padding: 30px;
+    background:$white-main;
+    border:1px solid $grey-light-border; 
+    border-radius: 2px;
+}
+.form-signin-heading{padding-bottom: 20px; border-bottom: 1px solid #e6e6e6; margin-bottom: 20px;}
+.form-signin .col-left, .form-signin .col-right{padding:30px; padding-top: 10px;}
+.form-signin .col-left{border-right: 1px solid #e6e6e6;}
+.form-signin h4{font-size: $font-size-main + 3; font-weight: bolder; margin-bottom: 20px;}
+
+
+
+// --- Responsivness: ------------------------------------------------------------------------------------------ // 
+@import "responsive.scss";

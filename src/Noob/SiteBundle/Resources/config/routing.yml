@@ -1,0 +1,38 @@
+noob_site_homepage:
+    path:   /
+    defaults:   {_controller: NoobSiteBundle:Global:homepage }
+    
+#noob_site_searchContent_OneTag:
+#    path:     /recherche/{tag}
+#    defaults: { _controller: NoobSiteBundle:Search:searchContent }
+
+#noob_site_searchContent:
+#    path:     /recherche
+#    defaults: { _controller: NoobSiteBundle:Search:searchContent }
+
+noob_site_searchContent:
+    path:     /recherche
+    defaults: { _controller: NoobSiteBundle:Search:searchContent }
+    methods: [GET]
+    
+noob_site_searchUpdateAjax:
+    path:     /updateSearch
+    defaults: { _controller: NoobSiteBundle:Search:updateSearchAjax }
+    
+noob_site_searchSeeMoreAjax:
+    path:     /searchSeeMore
+    defaults: { _controller: NoobSiteBundle:Search:searchSeeMoreAjax }
+
+
+noob_site_dashboard_index:
+    path:     /user/dashboard
+    defaults: { _controller: NoobSiteBundle:DashBoard:dashBoardIndex }
+    
+noob_comment_getUserLastCommentAjax:
+    path:     /user/dashboard/getLastComment
+    defaults: { _controller: NoobSiteBundle:DashBoard:getUserLastCommentAjax }
+
+noob_comment_getUserFriendsPostsAjax:
+    path:     /user/dashboard/getFriendsPost
+    defaults: { _controller: NoobSiteBundle:DashBoard:getUserFriendsPostsAjax }
+

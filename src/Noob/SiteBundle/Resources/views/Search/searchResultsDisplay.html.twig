@@ -1,0 +1,88 @@
+{# 
+    NoobSiteBundle:Search:searchResultsDisplay.html.twig
+    
+    Display the search result content.
+    This view is also meant to be rendered in Ajax (this is why there is a general layout and a 'display' file)
+    
+    Changelog:
+    13/04/2015 15h24: file created
+
+    This file need the following variables:
+    > postList: a collection of post
+    > userList: a collection of users 
+    This file include the two general display file 'postpreview' and 'profilpreview', so the collection MUST have their complete informations 
+    to avoid A LOT of SQL request. For more information on 'what informations do the collections have to contains', see the two displaying files 
+    NoobPostBundle:Global:postpreview.html.twig and NoobUserBundle:Global:profilpreview.html.twig
+#}
+
+<div class='row result-wrapper plank'>
+  {% set postNumber = postList|length %}
+  {% if postNumber != 0 %}  
+      {% set firstHalf =  (postNumber/2)|round(0,'ceil') %}
+    <div class="col-md-12">
+      <h2>Contenu:</h2>
+    </div>
+      <div class="col-md-6">
+          {% for post in postList | slice(0,firstHalf)%}
+              {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':post} %}
+          {% endfor %}
+      </div>
+      <div class="col-md-6">
+          {% if postNumber != 1 %}
+              {% for post in postList | slice(firstHalf,postNumber)%}
+                  {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':post} %}
+              {% endfor %}
+          {% endif %}
+      </div>
+    <div class="col-lg-4 col-lg-offset-4 col-md-12">
+        <span class="load-more" data-of="10" data-ty="1"> 
+            <span class="show-me">Afficher plus de contenu</span>
+            <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
+        </span>
+        <span class="no-more-result hide-me">
+            Aucun résultat
+        </span>
+    </div>
+  {% endif %}
+</div>
+
+<div class='row result-wrapper plank'>
+  {% set userNumber = userList|length %}
+  {% if userNumber != 0 %}  
+      {% set firstHalf =  (userNumber/2)|round(0,'ceil') %}
+    <div class="col-md-12">
+      <h2>Membres:</h2>
+    </div>
+      <div class="col-md-6">
+          {% for user in userList | slice(0,firstHalf)%}
+              {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':user} %}
+          {% endfor %}
+      </div>
+      <div class="col-md-6">
+          {% if userNumber != 1 %}
+              {% for user in userList | slice(firstHalf,userNumber)%}
+                  {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':user} %}
+              {% endfor %}
+          {% endif %}
+      </div>
+    <div class="col-lg-4 col-lg-offset-4 col-md-12">
+        <span class="load-more" data-of="10" data-ty="0"> 
+            <span class="show-me">Afficher plus de membres</span>
+            <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
+        </span>
+        <span class="no-more-result hide-me">
+            Aucun résultat
+        </span>
+    </div>
+  {% endif %}
+</div>
+
+    {% if postNumber == 0 and userNumber == 0 %}
+<div class='row result-wrapper plank'>
+    <div class="col-lg-4 col-lg-offset-4 col-md-12">
+        <span class="no-more-result block-me">
+            La recherche n'a retourné aucun résultat
+        </span>
+    </div>
+</div>
+    {% endif %}

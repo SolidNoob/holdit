@@ -1,0 +1,50 @@
+{# 
+    NoobPostBundle:Global:postpreview.html.twig
+    
+    Display post preview (picture, name, description, author, tags and button 'Like')
+    This file centralize the display and drastically ease the update
+
+    Changelog:
+    06/04/2015 12h40: file created
+    07/04/2015 12h23: add routing depending of post type 
+
+    This template need the following variables:
+    post: the post with their complete informations (author and tag)
+#}
+
+
+{# Routing depending of post type #}
+{% if post.type.name == 'portfolio' %}
+    {% set type = 'Portfolio' %}
+    {% set route = path('noob_portfolio_detail', { 'id': post.id,'slug': post.slug }) %}
+{% elseif post.type.name == 'offrestage' %}
+    {% set type = 'Offre de stage' %}
+    {% set route = path('noob_offre_detail', { 'id': post.id,'slug': post.slug }) %}
+{% elseif post.type.name == 'offreemploi' %}
+    {% set type = "Offre d'emploi" %}
+    {% set route = path('noob_offre_detail', { 'id': post.id,'slug': post.slug }) %}
+{% elseif post.type.name == 'tfe' %}
+    {% set type = 'TFE' %}
+    {% set route = path('noob_tfe_detail', { 'id': post.id,'slug': post.slug }) %}
+{% endif %}
+
+<article>
+    <div class="media-left media-top">
+      <a href="{{ route }}">
+        <figure>
+            {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'preview', 'picturename': post.picture, 'alt': post.name } %}
+        </figure>
+      </a>
+    </div>
+    <div class="media-body">
+        <header>
+            <span class='media-heading'><a href='{{ route }}'>{{ post.name }}</a></span>
+            <div>{{ type }}, par <a href='{{ path('noob_user_userprofilepage', {'slug': post.author.slug})  }}' class='violet-me'>{{ post.author.firstname }} {{ post.author.surname }}</a></div>
+        </header>
+        <p>Publication: {{ post.pubDate|date('d/m/Y') }}</p>
+        {% include 'NoobTagBundle:Global:tagList.html.twig' with{ 'tagList': post.tags } %}
+        <div class='previewbottom wrapper'>
+        {% include 'NoobPostBundle:Global:likePost.html.twig' with{ 'post': post } %}
+        </div>
+    </div>
+</article>

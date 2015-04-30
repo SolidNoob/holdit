@@ -1,0 +1,10 @@
+{% for user in list %}
+{{ user.username }} : {{ user.role.role }} <br/>
+{% for followed in user.usersFollowed %}
+{{ followed.username }}
+{% endfor %} <br/><br/><br/>
+{% endfor %}
+
+
+
+</body>

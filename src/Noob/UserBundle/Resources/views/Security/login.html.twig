@@ -1,0 +1,52 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %} Connexion | {{ parent() }} {% endblock %}
+
+{% block content %}
+<div class="board violet">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                  <h1><span class="xl-size">Se connecter</span></h1>
+                </header>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grey">
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 col-xs-12">
+            <div class='form-signin-wrapper'>
+                <form class="form-signin" action="{{ path('user_login_check') }}" method="post">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {% if error %}
+                                <div class="alert alert-danger" role="alert">{{ error.message|trans }}</div>
+                            {% endif %}   
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-7 col-xs-12 col-left">
+                            <h4>Je possède déjà mon compte:</h4>
+                            <label for="username" class="sr-only">Nom d'utilisateur</label>
+                            <input type="text" id="username" name="_username" class="form-control" placeholder="Nom d'utilisateur" value="{{ last_username }}" required autofocus> 
+                            <label for="password" class="sr-only">Mot de passe</label>
+                            <input type="password" id="password" name="_password" class="form-control" placeholder="Mot de passe" required>
+                            <button class="btn btn-primary btn-block" type="submit">Connexion</button><br/>
+                            <a href='#'>Mot de passe oublié?</a>
+                        </div>
+                        <div class="col-sm-5 col-xs-12 col-right">
+                            <h4>Je n'ai pas encore de compte:</h4>
+                            <p class='text-justify'>Vous êtes un professionnel et vous désirez proposer des offres ou devenir membre d'un jury TFE? Créez dès maintenant votre profil pour entrer en contact avec les étudiants.</p>
+                            <a class="btn btn-primary" href="#">Créer un compte</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
+</div>
+{% endblock %}

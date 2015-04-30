@@ -1,0 +1,46 @@
+{% for post in friendsPosts %}
+    {% if groupDate is defined %}
+        {% set previousDate = groupDate %}
+    {% else %}
+        {% set previousDate = '' %}
+    {% endif %}
+
+    {% set difference = date("now").diff(date(post.pubDate)) %}
+    {% set days = difference.days %}
+    {% if days == 0 %}
+       {% set groupDate = "Aujourd'hui" %} 
+    {% elseif days == 1 %}
+       {% set groupDate = "Hier" %} 
+    {% elseif days < 7 %}
+        {% set groupDate = "Il y a "~days~" jours" %} 
+    {% else %}
+        {% set groupDate = "Le "~ post.pubDate|date('d/m/Y')%} 
+    {% endif %}
+
+    {% if groupDate != previousDate %}
+        {% if previousDate != '' %}
+             <div class='bar-delimiter'></div>
+        {% endif %}
+    <div class='date-limiter'> {{ groupDate }} :</div>
+    {% endif %}
+
+    <div class='suggest-content'>
+        {# Routing depending of post type #}
+        {% if post.type.name == 'portfolio' %}
+            {% set route = path('noob_portfolio_detail', { 'id': post.id,'slug': post.slug }) %}
+        {% elseif post.type.name == 'offrestage' %}
+            {% set route = path('noob_offre_detail', { 'id': post.id,'slug': post.slug }) %}
+        {% elseif post.type.name == 'offreemploi' %}
+            {% set route = path('noob_offre_detail', { 'id': post.id,'slug': post.slug }) %}
+        {% elseif post.type.name == 'tfe' %}
+            {% set route = path('noob_tfe_detail', { 'id': post.id,'slug': post.slug }) %}
+        {% endif %}
+        <a href="{{ route  }}" class='icon'>
+            {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'minithumb', 'picturename': post.picture, 'alt': post.name, 'customclass':'img-responsive' } %}
+        </a>
+        <div class='info'>
+            <div><a href='{{ path('noob_user_userprofilepage', {'slug': post.author.slug})  }}' class='violet-me'>{{ post.author.firstname }} {{ post.author.surname }}</a> a posté <a href='{{ route }}' class='black-strong-me'>{{ post.name }}</a></div>
+        </div>
+
+    </div>
+{% endfor %}

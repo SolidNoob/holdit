@@ -1,0 +1,20 @@
+noob_comment_createComment:
+    path:     /comment/post-{postId}
+    defaults: { _controller: NoobCommentBundle:Comment:createComment }
+    options:
+        expose: true
+    
+noob_comment_getCommentsList:
+    path:     /comments/post-{postId}
+    defaults: { _controller: NoobCommentBundle:Comment:getCommentsList }
+    options:
+        expose: true
+        
+noob_comment_deleteComment:
+    path:     /comments/delete-{commentId}
+    defaults: { _controller: NoobCommentBundle:Comment:deleteUserComment }
+    options:
+        expose: true
+        
+
+    

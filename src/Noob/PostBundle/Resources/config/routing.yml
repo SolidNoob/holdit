@@ -1,0 +1,23 @@
+noob_portfolio_detail:
+    path: /portfolio/{id}-{slug}
+    defaults: {_controller: NoobPostBundle:Portfolio:detail}
+    
+noob_offre_detail:
+    path: /offre/{id}-{slug}
+    defaults: {_controller: NoobPostBundle:Offre:detail}
+    
+noob_tfe_detail:
+    path: /tfe/{id}-{slug}
+    defaults: {_controller: NoobPostBundle:Tfe:detail}
+
+noob_post_ajax_like:
+    path: like-post-ajax
+    defaults: {_controller: NoobPostBundle:Global:like}
+    options:
+        expose: true
+        
+noob_post_ajax_get_likers:
+    path: get-likers-ajax
+    defaults: {_controller: NoobPostBundle:Global:getLikers}
+    options:
+        expose: true

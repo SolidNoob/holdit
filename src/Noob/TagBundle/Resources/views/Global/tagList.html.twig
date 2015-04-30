@@ -1,0 +1,18 @@
+{# 
+    NoobTagBundle:Global:tagList.html.twig
+    
+    Display clickable tags from a collection of tag
+    Centralize drastically the code.
+
+    Changelog:
+    07/04/2015 20h37: file created
+
+    This template need the following variables:
+    tagList: the collection of tag
+#}
+
+<ul class='tag-list'>
+    {% for tag in tagList %}
+    <li><a href='{{path('noob_site_searchContent', {'search': tag.name})}}' class='tag'>{{ tag.name }}</a></li>
+    {% endfor %}
+</ul>

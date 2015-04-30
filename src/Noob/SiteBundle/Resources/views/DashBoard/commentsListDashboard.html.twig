@@ -1,0 +1,22 @@
+{% for comment in comments %}
+    {% if comment.post.type.name == 'portfolio' %}
+        {% set route = path('noob_portfolio_detail', { 'id': comment.post.id,'slug': comment.post.slug }) %}
+    {% elseif comment.post.type.name == 'offrestage' %}
+        {% set route = path('noob_offre_detail', { 'id': comment.post.id,'slug': comment.post.slug }) %}
+    {% elseif comment.post.type.name == 'offreemploi' %}
+        {% set route = path('noob_offre_detail', { 'id': comment.post.id,'slug': comment.post.slug }) %}
+    {% elseif comment.post.type.name == 'tfe' %}
+        {% set route = path('noob_tfe_detail', { 'id': comment.post.id,'slug': comment.post.slug }) %}
+    {% endif %}
+<div class='suggest-content'>
+    <p>A propos de <a href='{{ route }}' class='black-strong-me'>{{ comment.post.name }}</a>, vous avez posté:</p>
+    <p class="commentsugg">
+    {% if comment.content|length > 100 %}
+        {{ comment.content|slice(0,100) }}...
+    {% else %}
+        {{ comment.content }}
+    {% endif %}
+    <i class="fa fa-trash-o deletecomm" data-id="{{ comment.id }}"></i>
+    </p>
+</div>
+{% endfor %}

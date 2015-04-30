@@ -1,0 +1,137 @@
+@media screen and (max-width: 992px){
+    // --- Global: ------------------------------------------------------------------------------------------ // 
+    .other-posts{
+        text-align: left;
+        a{
+            float:left;
+        }
+    }
+    .post-detail{
+        margin-top: 30px;
+    }
+    .post-detail-image{
+        margin: 0 auto;
+    }
+    .post-detail-text{
+        margin-top: 20px;
+    }
+    .board h1, .board h2{
+        .xl-size{
+            font-size: $font-size-lg + 20;
+        }
+    }
+    // --- Main Nav bar (the smallest): ------------------------------------------------------------------------------------------ // 
+    .main-navbar{
+        .signin{
+            text-align: left;
+        }
+    }
+    // --- Full Header: ------------------------------------------------------------------------------------------ // 
+    .full-header{
+        background: #fff;
+        padding-top:0;
+        height: auto;
+        .wrapper{
+            padding-top:0;
+        }
+        
+        .wrapper-signin{
+           text-align: left;
+           padding-top:0; 
+           margin-top: 10px;
+           margin-bottom: 10px;
+        }
+    }
+    
+    // --- Boards section: ------------------------------------------------------------------------------------------ // 
+    .board{
+        .board-text{
+            margin-bottom:30px;
+        }
+    }
+    .heading-board{
+        h1{
+            margin-bottom: 20px;
+            font-size: $font-size-lg - 10;
+            line-height: $font-size-lg - 10;
+            .xl-size{
+                font-size: $font-size-lg + 20;
+            }
+        }
+        .moto{
+            font-size: $font-size-lg - 15;
+            margin-top: 0;
+            margin-bottom: 20px;
+            line-height: $font-size-lg - 10;
+            .xl-size{
+                font-size: $font-size-lg - 5;
+            }
+        }
+        .search-form{
+            .search-bar{
+                width: 80%;
+            }
+        }
+    }
+    // --- Profil Page: ------------------------------------------------------------------------------------------ // 
+   .profil-board{
+       .portfolio{
+           margin-top: 15px;
+       }
+   }
+    
+}
+
+@media screen and (max-width: 768px){
+    // --- Global: ------------------------------------------------------------------------------------------ // 
+    .search-bar{
+        &.form-control{
+            display:inline-block;
+        }
+    }
+    .comment{
+        .comment-content{
+            margin-left: 0px;
+            padding: 0px;
+        }
+        .comment-author{
+            padding-left: 0;
+            margin-left: 0;
+        }
+    }
+    // --- Main Nav bar (the smallest): ------------------------------------------------------------------------------------------ // 
+    .main-navbar{
+        form{
+            .search-bar{ max-width: 80%;}
+        }
+    }
+    
+    // --- Full Header: ------------------------------------------------------------------------------------------ // 
+   
+    
+    // --- Boards section: ------------------------------------------------------------------------------------------ // 
+    .board{
+        &.red{
+            &.sneaky{
+                background: $red-main;
+            }
+        }
+        &.green{
+            &.pen{
+                background: $green-main;
+            }
+        }
+        &.violet{
+            &.default{
+                background: $violet-main;
+            }
+        }
+    }
+    
+     // --- Profil Page: ------------------------------------------------------------------------------------------ // 
+   .profil-board{
+       .portfolio{
+           margin-top: 30px;
+       }
+   }
+} 

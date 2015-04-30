@@ -1,0 +1,241 @@
+{# 
+    hompage.html.twig:
+    Page d'accueil du site. 
+    Utilise simplement le block body pour afficher du contenu
+
+    Pour le moment, la page n'appartient à aucun bundle, c'est pour cela qu'elle est rangée ici.
+
+    To do: placer la page dans le bundle "Site".
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<header class="full-header">
+          <div class="container">
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="wrapper">
+                        <a href="http://www.promotion-sociale.be/" class="text-hide full-logo-ieps">Promotion Sociale Fléron</a>
+                        <a href="http://www.federation-wallonie-bruxelles.be/" class="text-hide full-logo-fwb">Fédération Wallonie Bruxelles</a>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="wrapper-signin">
+                        {% include 'NoobUserBundle:Global:loginSigninLink.html.twig' %}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </header>
+
+      <section class="board violet heading-board">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <header>
+                        <h1><span class="xl-size">Interface.</span> promotion-sociale.be</h1>
+                        <p class="moto">La connexion entre les <strong class="xl-size">étudiants</strong> et les <strong class="xl-size">entreprises</strong></p>
+                      </header>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-4 text-justify board-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto.</div>
+                  <div class="col-md-7 col-md-offset-1">
+                      <form method="get" action="{{path('noob_site_searchContent')}}" class="search-form form-inline">
+                          <input type="text" name="search" class="search-bar form-control" autocomplete="off" id="searchbar" />
+                          <button type="submit" class="search-button btn btn-default">
+                              <i class="fa fa-search"></i>
+                          </button>
+                      </form>
+                      <ul class="tag-cloud">
+                          <li><a href="#">Portfolio</a></li>
+                          <li><a href="#">OffreStage</a></li>
+                          <li><a href="#">OffreEmploi</a></li>
+                          <li><a href="#">Etudiant</a></li>
+                          <li><a href="#">TFE</a></li>
+                          <li><a href="#">Entreprise</a></li>
+                          <li><a href="#">Symfony2</a></li>
+                          <li><a href="#">Framework</a></li>
+                          <li><a href="#">PHP</a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </section>
+      
+      <div class="parallax-frame parallax-window" data-parallax="scroll" data-image-src={{ asset("img/global/transition1.jpg")}} data-speed="0.6"></div>
+      
+      {% include 'NoobSiteBundle:Global:navbar.html.twig' %}
+      
+      <section class="board red sneaky">
+        <div class="container">
+          <div class="row">
+              <div class="col-lg-12">
+                  <header>
+                      <h2><span class="xl-size">Etudiants</span> en recherche de stage ou d'emploi</h2>
+                  </header>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-3 text-justify board-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto.</div>
+              <div class="col-md-9">
+                  <div class='row result-wrapper plank'>
+                    <div class="col-md-6">
+                        {% for student in studentsLookingFor | slice(0,2)%}
+                            {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':student} %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        {% for student in studentsLookingFor | slice(2,2)%}
+                            {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':student} %}
+                        {% endfor %}
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </section>
+      
+      <div class="parallax-frame parallax-window" data-parallax="scroll" data-image-src={{ asset("img/global/transition2.jpg" )}} data-speed="0.6"></div>
+      
+      
+      <section class="board green pen">
+          <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <header>
+                        <h2><span class="xl-size">Offres</span> de stage ou d'emploi</h2>
+                    </header>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 text-justify board-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto.</div>
+                <div class="col-md-9">
+                    <div class='row result-wrapper plank'>
+                    <div class="col-md-6">
+                        {% for offre in lastOffres | slice(0,2)%}
+                            {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':offre} %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        {% for offre in lastOffres | slice(2,2)%}
+                            {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':offre} %}
+                        {% endfor %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+      </section>
+      
+      <div class="parallax-frame parallax-window" data-parallax="scroll" data-image-src={{ asset("img/global/transition3.jpg" )}} data-speed="0.6"></div>
+      
+      <section class="board violet default">
+          <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <header>
+                        <h2><span class="xl-size">Portfolio</span> des membres</h2>
+                    </header>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 text-justify board-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto.</div>
+                <div class="col-md-9">
+                  <div class='row result-wrapper plank'>
+                    <div class="col-md-6">
+                        {% for portfolioItem in lastPortfolioItems | slice(0,2)%}
+                            {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':portfolioItem} %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        {% for portfolioItem in lastPortfolioItems | slice(2,2)%}
+                            {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':portfolioItem} %}
+                        {% endfor %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+      </section>
+      
+      <div class="parallax-frame parallax-window" data-parallax="scroll" data-image-src={{ asset("img/global/transition4.jpg" )}} data-speed="0.6"></div>
+      
+      <section class="board red sneaky">
+          <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <header>
+                        <h2><span class="xl-size">Profils</span> des membres</h2>
+                    </header>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 text-justify board-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto.</div>
+                <div class="col-md-9">
+                    <div class='row result-wrapper plank'>
+                    <div class="col-md-6">
+                        {% for lastUser in lastUsers | slice(0,2)%}
+                            {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':lastUser} %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        {% for lastUser in lastUsers | slice(2,2)%}
+                            {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':lastUser} %}
+                        {% endfor %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+      </section>
+      
+      <div class="parallax-frame parallax-window" data-parallax="scroll" data-image-src={{ asset("img/global/transition5.jpg" )}} data-speed="0.6"></div>
+      
+      <section class="board green pen">
+          <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <header>
+                        <h2><span class="xl-size">TFE</span> à venir</h2>
+                    </header>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 text-justify board-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, iste architecto est obcaecati ducimus quod quis a praesentium laudantium deserunt. Soluta, debitis, tempore sit amet vero perspiciatis alias labore architecto.</div>
+                <div class="col-md-9">
+                    <div class='row result-wrapper plank'>
+                    <div class="col-md-6">
+                        {% for tfe in lastTFE | slice(0,2)%}
+                            {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':tfe} %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        {% for tfe in lastTFE | slice(2,2)%}
+                            {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':tfe} %}
+                        {% endfor %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+      </section>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+    $(".tag-cloud li a").click(function(e){
+        e.preventDefault();
+        var actualSearch = $('#searchbar').val();
+        var currentTag = $(this).text();
+        if(actualSearch.length > 0){
+            $('#searchbar').val(actualSearch + ' ' + currentTag);
+        } else {
+            $('#searchbar').val(currentTag);
+        }
+    });
+});
+</script>
+{% endblock %}

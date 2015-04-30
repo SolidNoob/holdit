@@ -1,0 +1,292 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block content %}
+
+{% if user.cover %}
+    {% set cover_image = user.cover %}
+{% else %}
+    {% set cover_image = 'default.jpg' %}
+{% endif %}
+
+
+{# Background size cover method #}
+{#
+<div class="parallax-cover parallax-window" data-parallax="scroll" style="background: url({{asset('img/cover/' ~ cover_image)}}); background-size:cover;" data-speed="0.6"></div> 
+#}
+
+{# 
+Paralax method
+<div class="parallax-cover parallax-window" data-parallax="scroll" data-image-src="{{asset('img/cover/' ~ cover_image)}}" data-speed="0.6"></div>
+#}
+<div class="parallax-cover parallax-window" data-parallax="scroll" data-image-src="{{asset('img/cover/' ~ cover_image)}}" data-speed="0.6"></div>
+
+
+<div class="profil-board pb">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="row profil-header">
+                  <div class="col-md-4">
+                      <figure>
+                            {% include 'NoobUserBundle:Global:userImage.html.twig' with{ 'mode':'profil', 'picturename': user.picture, 'alt': user.firstname ~ user.surname } %}
+                      </figure>
+                      <div class="social-group">
+                        {% if user.fblink is not null and user.fblink is not empty %}
+                          <a href="{{user.fblink}}" rel="nofollow" target="_blank" class="fb-button social-button text-hide">Page Facebook de {{ user.firstname}} {{user.surname}}</a>
+                          {% else %}
+                          <span class="fb-button social-button text-hide empty">Page Facebook de {{ user.firstname}} {{user.surname}}</span>
+                        {% endif %}
+                          
+                        {% if user.twitterlink is not null and user.twitterlink is not empty %}
+                          <a href="{{user.twitterlink}}" rel="nofollow" target="_blank" class="twitter-button social-button  text-hide">Page Twitter de {{ user.firstname}} {{user.surname}}</a>
+                        {% else %}
+                          <span class="twitter-button social-button text-hide empty">Page Twitter de {{ user.firstname}} {{user.surname}}</span>
+                        {% endif %}
+                          
+                        {% if user.linkedinlink is not null and user.linkedinlink is not empty %}
+                          <a href="{{user.linkedinlink}}" rel="nofollow" target="_blank" class="linkedin-button social-button  text-hide">Page LinkedIn de {{ user.firstname}} {{user.surname}}</a>
+                        {% else %}
+                          <span class="linkedin-button social-button text-hide empty">Page LinkedIn de {{ user.firstname}} {{user.surname}}</span>
+                        {% endif %}
+                      </div>
+                  </div>
+                  <div class="col-md-8">
+                      <div class="profil-card planked">
+                          <div class="heading">
+                              <h1>{{ user.firstname}} <strong>{{user.surname}}</strong></h1>
+                          </div>
+                          
+                        {% if user.role.slug == 'etudiant' %}
+                            <div>Étudiant(e) en {{ user.section.name }}</div>
+                        {% elseif user.role.slug == 'entreprise'%}
+                            {% if user.websiteurl is not null and user.websiteurl is not empty %}
+                                <a href="{{ user.websiteurl }}" target="_blank" rel="nofollow" class="violet-me">{{ user.society }}</a>
+                                {% else %}
+                                {{ user.society }}
+                            {% endif %}
+                        {% endif %}
+                                
+                          <p>Tag(s) associé(s): 
+                              {% set nbTag =  user.tags|length -1%}
+                                {% for  key,tag in user.tags %}
+                                     <a href="{{path('noob_site_searchContent', {'search': tag.name})}}">{{tag.name}}</a>{% if key != nbTag %}, {% endif %}
+                              {% endfor %}
+                          </p>
+                          <p class="contact">
+                            {% if user.visibleInfo %}
+                              <span>
+                                <i class="fa fa-envelope"></i> 
+                                {% if user.email is not null and user.email is not empty %}
+                                    <a href="mailto:{{ user.email }}" >{{ user.email }}</a>
+                                {% else %}
+                                    Adresse e-mail non renseignée
+                                {% endif %}
+                              </span>
+                              
+                              <span>
+                                <i class="fa fa-phone"></i> 
+                                {% if user.phoneNumber is not null and user.phoneNumber is not empty %}
+                                    {{ user.phoneNumber }}
+                                {% else %}
+                                    Numéro de téléphone non renseigné
+                                {% endif %}
+                              </span>
+                              
+                              {% if user.role.slug == 'etudiant'%}
+                              <br/>
+                              <span>
+                                <i class="fa fa-bookmark"></i>
+                                {% if user.websiteurl is not null and user.websiteurl is not empty %}
+                                     <a href='{{ user.websiteurl }}' target='_blank' rel="nofollow">{{ user.websiteurl }}</a>
+                                {% else %}
+                                    Pas de site web
+                                {% endif %}
+                              </span>
+                              {% endif %}
+                              
+                            {% endif %}
+                        </p>
+                        <div class='result-wrapper'>
+                          {% include 'NoobUserBundle:Buttons:followme.html.twig' with{ 'userToFollow': user } %}
+                          <button type="button" class='mp-me'><i class="fa fa-envelope"></i> Envoyer un message privé</button>
+                        </div>
+                      </div>
+                  </div>
+               </div>
+                <div class="row">
+                    <article class="col-md-4 text-justify">
+                        <div class="planked">
+                            <div class="heading">Description</div>
+                            <p class="profil-description">
+                                {% if user.description %}
+                                    {{ user.description }}
+                                {% else %}
+                                    {{ user.firstname }} {{ user.surname }} n'a pas encore rempli sa description.
+                                {% endif %}
+                            </p>
+                            
+                            {% if user.role.slug == 'etudiant' %}
+                            
+                                {% if user.cv is not null and user.cv is not empty %}
+                                    <a href='{{ asset('cv/'~user.cv)}}' class="violet seek">Voir mon curriculum vitae</a>
+                                {% else %}
+                                    <div class='violet seek'>{{ user.firstname }} n'a pas encore déposé son CV</div>
+                                {% endif %}
+                                
+                                <div class='red seek'>
+                                {% if user.lookingforinternship is not null and user.lookingforinternship is not empty %}
+                                    {{ user.firstname }} est à la recherche d'un stage
+                                {% else %}
+                                    {{ user.firstname }} ne recherche pas de stage
+                                {% endif %}
+                                </div>
+
+                                <div class='green seek'>
+                                {% if user.lookingforjob is not null and user.lookingforjob is not empty%}
+                                    {{ user.firstname }} est à la recherche d'un emploi
+                                {% else %}
+                                    {{ user.firstname }} ne recherche pas d'emploi
+                                {% endif %}
+                                </div>
+                            {% else %}
+                                <div class='red seek'>
+                                {%  if user.jury %}
+                                        {{ user.firstname }} souhaite participer à un jury TFE
+                                    {% else%}
+                                        {{ user.firstname }} ne souhaite pas être contacté pour participer à un jury TFE
+                                {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </article>
+                    <div class="col-md-8">
+                        
+                        
+                       {% if offres is defined %}
+                        <div class="portfolio planked">
+                            <div class='heading'>Offres de stage ou d'emploi</div>
+                            <div class="row">
+                                {% if offres is not empty %}
+                                    {% for offre in offres %}
+                                        <article class='col-md-4 col-xs-4'>
+                                            <a href='{{ path('noob_offre_detail',{'id':offre.id,'slug':offre.slug}) }}' >
+                                                {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'preview', 'picturename': offre.picture, 'alt': offre.name } %}
+                                            </a>
+                                            <div class='portfolio-title'>
+                                                <a href='{{ path('noob_offre_detail',{'id':offre.id,'slug':offre.slug}) }}' >
+                                                    {{ offre.name|length > 20 ? offre.name|slice(0, 20) ~ '...' : offre.name }}
+                                                </a>
+                                            </div>
+                                        </article
+>                                    {% endfor %}
+                                {% else %}
+                                    <div class="col-sm-4 col-xs-6">
+                                        Aucune offre
+                                    </div>
+                                {% endif %}
+                                    </div>
+                                </div>
+                        {% endif %}
+                        
+                        
+                        <div class="portfolio planked">
+                            <div class='heading'>Portfolio</div>
+                            <div class="row">
+                                {% if portfolioElements is not empty %}
+                                    {% for project in portfolioElements %}
+                                        <article class='col-md-4 col-xs-4'>
+                                            <a href='{{ path('noob_portfolio_detail',{'id':project.id,'slug':project.slug}) }}'>
+                                                {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'preview', 'picturename': project.picture, 'alt': project.name } %}
+                                            </a>
+                                            <div class='portfolio-title'>
+                                                <a href='{{ path('noob_portfolio_detail',{'id':project.id,'slug':project.slug}) }}'>
+                                                    {{ project.name|length > 20 ? project.name|slice(0, 20) ~ '...' : project.name }}
+                                                </a>
+                                            </div>
+                                        </article>
+                                    {% endfor %}
+                                    <div class='col-xs-12'>
+                                        <a href='#' class='see-more'>Voir la liste complète</a>
+                                    </div>
+                                {% else %}
+                                    <div class='col-xs-12'>
+                                        <p>Aucun élément dans le portfolio de {{ user.firstname }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-12 col-md-4">
+                        <div class="box violet">
+                            <div class='heading'>Coups de <i class="fa fa-heart"></i> (<span class='count'>{{ postsLiked|length }}</span>)</div>
+                            <div class='group'>
+                            {% if postsLiked is not empty %}
+                                {% for post in postsLiked|slice(0, 6) %}
+                                    {% if post.type.name == 'portfolio' %}
+                                        {% set route = path('noob_portfolio_detail', { 'id': post.id,'slug': post.slug }) %}
+                                    {% elseif post.type.name == 'offrestage' %}
+                                        {% set route = path('noob_offre_detail', { 'id': post.id,'slug': post.slug }) %}
+                                    {% elseif post.type.name == 'offreemploi' %}
+                                        {% set route = path('noob_offre_detail', { 'id': post.id,'slug': post.slug }) %}
+                                    {% elseif post.type.name == 'tfe' %}
+                                        {% set route = path('noob_tfe_detail', { 'id': post.id,'slug': post.slug }) %}
+                                    {% endif %}
+                                     <a href='{{route}}' title='{{ post.name }}'>
+                                        {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'minithumb', 'picturename': post.picture, 'alt': post.name } %}
+                                     </a>
+                                {% endfor %}
+                                <a href='{{ path('noob_user_userPostsLiked',{'slug':user.slug}) }}' class='see-more'>Voir la liste complète</a>
+                            {% else %}
+                                Pour le moment, {{ user.firstname }} n'a aucun coup de coeur.
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-4">
+                        <div class="box red">
+                            <div class='heading'>Following (<span class='count'>{{ user.usersIFollow|length }}</span>)</div>
+                            <div class='group'>
+                            {% if usersIFollow is not empty %}
+                                {% for following in usersIFollow|slice(0, 6) %}
+                                        <a href='{{ path('noob_user_userprofilepage', {'slug': following.slug}) }}' title='{{ following.firstname }} {{ following.surname }}' >
+                                            {% include 'NoobUserBundle:Global:userImage.html.twig' with{ 'mode':'minithumb', 'picturename': following.picture, 'alt': following.firstname ~ following.surname } %}
+                                        </a>
+                                {% endfor %}
+                                <a href='{{ path('noob_user_userFollowings',{'slug':user.slug}) }}' class='see-more'>Voir la liste complète</a>
+                            {% else %}
+                                 Pour le moment, {{ user.firstname }} ne suit aucun membre
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-4">
+                        <div class="box green">
+                            <div class='heading'>Followers (<span class='count'>{{ user.usersFollowers|length }}</span>)</div> 
+                           <div class='group'>
+                            {% if usersFollowers is not empty %}
+                                {% for follower in usersFollowers|slice(0, 6) %}
+                                    <a href='{{ path('noob_user_userprofilepage', {'slug': follower.slug}) }}' title='{{ follower.firstname }} {{ follower.surname }}'>
+                                        {% include 'NoobUserBundle:Global:userImage.html.twig' with{ 'mode':'minithumb', 'picturename': follower.picture, 'alt': follower.firstname ~ follower.surname } %}
+                                    </a>
+                                {% endfor %}
+                                <a href='{{ path('noob_user_userFollowers',{'slug':user.slug}) }}' class='see-more'>Voir la liste complète</a>
+                            {% else %}
+                                Personne ne suit {{ user.firstname }} pour le moment. Soyez le premier à suivre {{ user.firstname }} !
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

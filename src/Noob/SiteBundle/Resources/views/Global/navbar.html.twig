@@ -1,0 +1,22 @@
+<nav class="main-navbar">
+    <div class="container">
+        <div class="row">
+           <div class="col-md-6 col-xs-12">
+              <a href="http://www.promotion-sociale.be/" target="_blank" class="text-hide small-logo-ieps float">Promotion Sociale Fléron</a>
+              <a href="http://www.federation-wallonie-bruxelles.be/" class="text-hide small-logo-fwb float">Fédération Wallonie Bruxelles</a>
+              <a href="{{ path('noob_site_homepage') }}" class="brand"><span class='xl-size'>Interface.</span>promotion-sociale.be</a>
+           </div>
+           <div class="col-md-6 col-xs-12 signin">
+               {% include 'NoobUserBundle:Global:loginSigninLink.html.twig' %}
+               
+                <form method="get" action="{{path('noob_site_searchContent')}}" class="search-form form-inline">
+                  <input type="text" name="search" class="search-bar form-control" autocomplete="off"/>
+                  <button type="submit" class="search-button btn btn-default">
+                      <i class="fa fa-search"></i>
+                  </button>
+              </form>
+           </div>
+        </div>
+    </div>
+</nav>
+

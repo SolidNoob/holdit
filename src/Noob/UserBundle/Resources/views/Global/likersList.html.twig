@@ -1,0 +1,5 @@
+<ul>
+{% for liker in likersList %}
+    <li><a href="{{ path('noob_user_userprofilepage',{'slug':liker.slug}) }}" class='violet-me'>{{ liker.firstname }} {{ liker.surname }}</a></li>
+{% endfor %}
+</ul>

@@ -1,0 +1,76 @@
+noob_user_userprofilepage:
+    path: /profil/{slug}
+    defaults: {_controller: NoobUserBundle:Profil:profilPage}
+
+noob_user_userFollowers:
+    path: /profil/{slug}/followers
+    defaults: {_controller: NoobUserBundle:Profil:followersPage} 
+    
+noob_user_userFollowings:
+    path: /profil/{slug}/following
+    defaults: {_controller: NoobUserBundle:Profil:followingsPage} 
+    
+noob_user_userPostsLiked:
+    path: /profil/{slug}/likes
+    defaults: {_controller: NoobUserBundle:Profil:likesPage} 
+
+noob_user_ajax_followUser:
+    path: /follow-user-ajax
+    defaults: {_controller: NoobUserBundle:Profil:followUser}
+    options:
+        expose: true
+        
+noob_user_ajax_get_followers:
+    path: get-followers-ajax
+    defaults: {_controller: NoobUserBundle:Profil:getFollowers}
+    options:
+        expose: true
+        
+noob_user_profilcompleteListAjax:
+    path: profil-complete-list-ajax/{contentType}
+    defaults: {_controller: NoobUserBundle:Profil:getCompleteListAjax}
+
+#login routes
+user_login:
+    pattern: /login
+    defaults: {_controller: NoobUserBundle:Security:login}
+    
+user_logout:
+    pattern: /logout
+
+user_login_check:
+    pattern: /login_check
+#end login routes
+    
+    
+    
+
+
+noob_user_list:
+    path:   /userlist
+    defaults: {_controller: NoobUserBundle:Test:list}
+    
+noob_insert_user:
+    path:   /insertuser
+    defaults: {_controller: NoobUserBundle:Test:insert}
+
+noob_user_testpage:
+    path:     /samot/pagetestuser
+    defaults: { _controller: NoobUserBundle:Test:test }
+    
+noob_user_testpagea:
+    path:     /samot/okok
+    defaults: { _controller: NoobUserBundle:Test:test }
+    
+    
+noob_user_testtestpage:
+    path:     /testtest
+    defaults: { _controller: NoobUserBundle:Test:testtest }
+    
+noob_user_testpourcrop:
+    path:     /testpourcrop
+    defaults: { _controller: NoobUserBundle:Test:testPourCrop }
+    
+noob_user_testLotOfFollowings:
+    path:     /testLotOfFollowings
+    defaults: { _controller: NoobUserBundle:Test:testLotOfFollowings }

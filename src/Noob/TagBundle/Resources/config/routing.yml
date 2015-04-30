@@ -1,0 +1,3 @@
+noob_tag_ajax_suggestion:
+    path: tagSuggestion
+    defaults: {_controller: NoobTagBundle:Tag:getSuggestionsAjax}

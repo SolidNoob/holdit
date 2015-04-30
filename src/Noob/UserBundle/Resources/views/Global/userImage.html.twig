@@ -1,0 +1,63 @@
+{# 
+    NoobUserBundle:Global:userImage.html.twig
+    
+    Display user picture 
+    Centralize drastically the code, and ease maintaining it.
+
+    Changelog:
+    06/04/2015 17h53: file created
+
+    This template need the following variables:
+    mode: the 'mode' is just a way of displaying the picture. The repertory where to load the picture from depends directly of this 'mode'.
+          The 'mode' is a sort of slug which allow the parent template to just give an idea of what kind of image this template have to load.
+          If the parent template had do use directly the repertory as a parameter, and the repertory suddenly change for whatever reason, it 
+          would have been needed to search EACH file wich include this present template just to change the repertory.
+          In conclusion: just use the damn mode!
+          Value can be: 'profil', 'preview'
+
+    picturename: the name of the picture, including the extension.
+    
+    alt (not required): the alternative text of the picture. 
+                        Default = '' (so no W3C errors :-) )
+    
+    customclass (not required): a string of the CSS classes to apply to the picture
+                                Default = ''
+#}
+
+{# Set the variables needed #}
+{% if mode == 'profil' %}
+    {% set repertory = 'userpic230' %}
+    {% set cssclass = 'profil-pic' %}
+    {% set replacementPicture =  'silouhette.jpg' %}
+    {% set imaginefilter = 'profil' %}
+{% elseif mode == 'preview' %}
+    {% set repertory = 'userpic230' %}
+    {% set cssclass = 'preview-pic' %}
+    {% set replacementPicture =  'silouhette.jpg' %}
+    {% set imaginefilter = 'thumb_preview' %}
+{% elseif mode == 'minithumb' %}
+    {% set repertory = 'userpic230' %}
+    {% set cssclass = 'minithumb' %}
+    {% set replacementPicture =  'silouhette.jpg' %}
+    {% set imaginefilter = 'mini' %}
+{% else %}
+    {% set repertory = 'Son, this repertory does not exist' %}
+{% endif %}
+
+{% if alt is not defined  %}
+    {% set alt = '' %}
+{% endif %}
+
+{% if customclass is not defined  %}
+    {% set customclass = '' %}
+{% endif %}
+
+
+
+{# Actual display of the picture #}
+{% if picturename is null or picturename is empty %}
+    <img src="{{('img/global/' ~ replacementPicture)|imagine_filter(imaginefilter)}}" alt="{{ alt }}" class="{{ cssclass ~' '~ customclass }}" />
+{% else %}
+    <img src="{{('img/'~ repertory ~'/'~ picturename)|imagine_filter(imaginefilter)}}" alt="{{ alt }}" class="{{ cssclass ~' '~ customclass }}" />
+{% endif %}
+    

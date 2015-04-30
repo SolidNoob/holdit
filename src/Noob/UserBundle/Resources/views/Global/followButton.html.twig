@@ -1,0 +1,13 @@
+{% if app.user %}
+    {# si l'utilisateur loggé est le même que celui affiché, on n'affiche pas le lien Suivre #}
+    {% if app.user.id != item.author.id %}
+        {% if item.author in app.user.usersIFollow %}
+            <span class="follow" data-user-id="{{ item.author.id }}">Suivi</span>
+        {% else %}
+            <span class="follow" data-user-id="{{ item.author.id }}">Suivre</span>
+        {% endif %}
+    {% else %}
+    {% endif %}
+{% else %}
+ <span class="follow" data-user-id="{{ item.author.id }}">Suivre</span>
+{% endif %}

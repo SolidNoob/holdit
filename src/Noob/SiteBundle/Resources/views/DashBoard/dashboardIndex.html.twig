@@ -1,0 +1,233 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block content %}
+
+<div class="board grey">
+    <div class="container pb">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                    <h1>Tableau de bord</h1>
+                </header>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-md-4'>
+                <div class='mb planked suggest-wrapper'>
+                    <div class="heading">
+                        <h4>{{ app.user.firstname }} {{ app.user.surname }}:</h4>
+                    </div>
+                    <ul class='default'>
+                        <li><a href='{{ path('noob_user_userPostsLiked', {'slug': app.user.slug}) }}'><i class="fa fa-heart"></i> Mes coups de coeur</a></li>
+                        <li><a href='#'><i class="fa fa-envelope"></i> Ma messagerie</a></li>
+                        <li><a href='#'><i class="fa fa-pencil-square-o"></i> Gérer mes posts</a></li>
+                        <li><a href='#'><i class="fa fa-refresh"></i> Modifier mes paramètres</a></li>
+                        <li><a href='{{ path('noob_user_userprofilepage', {'slug': app.user.slug}) }}'><i class="fa fa-user"></i> Voir mon profil</a></li>
+                    </ul>
+                </div>
+                <div class='mb planked  suggest-wrapper'>
+                    <div class="heading">
+                        <h4>Vos tags:</h4>
+                    </div>
+                    <ul class="tag-cloud">
+                        {% for tag in app.user.tags %}
+                          <li><a href='{{ path('noob_site_searchContent', {'search': tag.name}) }}'  class="deletetag">{{ tag.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    <a href='#' class='violet-me'>Modifier mes tags</a>
+                </div>
+                <div class='mb planked  suggest-wrapper'>
+                    <div class="heading">
+                        <h4>Vos derniers commentaires:</h4>
+                    </div>
+                    {% include 'NoobSiteBundle:DashBoard:commentsListDashboard.html.twig' with {'comments': comments} %}
+                    <div>
+                        <span href="#" class="load-more" data-of="10" data-route="{{ path('noob_comment_getUserLastCommentAjax')}}"> 
+                            <span class="show-me">Afficher plus</span>
+                            <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
+                        </span>
+                        <span class="no-more-result hide-me">
+                            Aucun résultat
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            {# Posts des amis #}
+            <div class="col-md-4">
+                <div class="mb planked suggest-wrapper">
+                    <div class="heading">
+                        <h4>Les membres que vous suivez ont posté les éléments suivants:</h4>
+                    </div>
+                    {% include 'NoobSiteBundle:DashBoard:friendsPosts.html.twig' with {'friendsPosts': friendsPosts} %}<div>
+                    <span href="#" class="load-more" data-of="10" data-route="{{ path('noob_comment_getUserFriendsPostsAjax')}}"> 
+                            <span class="show-me">Afficher plus</span>
+                            <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
+                        </span>
+                        <span class="no-more-result hide-me">
+                            Aucun résultat
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="suggest-wrapper bordered-panel border-violet">
+                    <div class="heading">
+                        <h4>Ces profils pourraient vous intéresser:</h4>
+                    </div>
+                        <p>Vous avez des tags en commun avec ces membres qui ne font pas partie de vos amis:</p>
+                        {% set nbProfils = profils|length %}
+                        {% if nbProfils == 0 %}
+                            Aucun résultat
+                        {% else %}
+                        {% for key,membre in profils %}
+                            <div class='suggest-content {% if key > 3 %} hide-me {% endif %}'>
+                                <a href="{{ path('noob_user_userprofilepage', {'slug': membre.slug})  }}"  class='icon'>
+                                    {% include 'NoobUserBundle:Global:userImage.html.twig' with{ 'mode':'minithumb', 'picturename': membre.picture, 'alt': membre.firstname ~ membre.surname, 'customclass':'img-responsive' } %}
+                                </a>
+                                <div class='info'>
+                                    <a href='{{ path('noob_user_userprofilepage', {'slug': membre.slug})  }}' class='black-strong-me'>{{ membre.firstname }} {{ membre.surname }}</a>
+                                    <p>En commun: 
+                                    {% for tag in membre.tags %}
+                                        {% if tag in app.user.tags %}
+                                             <a href='{{path('noob_site_searchContent', {'search': tag.name})}}' class='violet-me'>{{ tag.name }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% if nbProfils > 3 %}
+                            <a href='#' class='violet-me showmore'>Agrandir la liste</a>
+                        {% endif %}
+                </div>
+                <div class="suggest-wrapper bordered-panel border-violet">
+                    <div class="heading">
+                        <h4>Éléments qui pourraient vous correspondent:</h4>
+                    </div>
+                        <p>Ces éléments correspondent à vos tags:</p>
+                        {% set nbPosts = tagsPosts|length %}
+                        {% if nbPosts == 0 %}
+                            <div>Aucun résultat</div>
+                        {% else %}
+                        {% for key,post in tagsPosts %}
+                        <div class='suggest-content {% if key > 3 %} hide-me {% endif %}'>
+                            {# Routing depending of post type #}
+                            {% if post.type.name == 'portfolio' %}
+                                {% set route = path('noob_portfolio_detail', { 'id': post.id,'slug': post.slug }) %}
+                            {% elseif post.type.name == 'offrestage' %}
+                                {% set route = path('noob_offre_detail', { 'id': post.id,'slug': post.slug }) %}
+                            {% elseif post.type.name == 'offreemploi' %}
+                                {% set route = path('noob_offre_detail', { 'id': post.id,'slug': post.slug }) %}
+                            {% elseif post.type.name == 'tfe' %}
+                                {% set route = path('noob_tfe_detail', { 'id': post.id,'slug': post.slug }) %}
+                            {% endif %}
+                            <a href="{{ route  }}" class='icon'>
+                                {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'minithumb', 'picturename': post.picture, 'alt': post.name, 'customclass':'img-responsive' } %}
+                            </a>
+                            <div class='info'>
+                                <a href='{{ route }}' class='black-strong-me'>{{ post.name }}</a>
+                                <div>En commun: 
+                                {% for tag in post.tags %}
+                                    {% if tag in app.user.tags %}
+                                         <a href='{{path('noob_site_searchContent', {'search': tag.name})}}' class='violet-me'>{{ tag.name }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                                <div class='small'>{{ post.pubDate|date('d/m/Y') }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% if nbPosts > 3 %}
+                            <a href='#' class='violet-me showmore'>Agrandir la liste</a>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+var currEvent = true;
+$('body').on('click','.deletecomm', function(e){
+    if(currEvent){
+        currEvent = false;
+        var id = $(this).attr('data-id');
+        var mythis = $(this);
+        bootbox.confirm({
+            title: "Confirmer la suppression du commentaire?",
+            message: "Cette action irreversible entrainera la suppression du commentaire. Confirmer la suppression?",
+            buttons: {
+                cancel: {
+                    label: "Annuler la suppression",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Confirmer la suppression",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                currEvent = true;
+                if (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: Routing.generate('noob_comment_deleteComment', { commentId: id }),
+                        success: function(data){
+                            $(mythis).closest('.suggest-content').fadeOut();
+                        }
+                    });
+                }
+            }
+        });
+    }
+});
+
+
+
+//display more
+$('body').on('click', '.load-more', function(e){
+    if(currEvent){
+        currEvent = false;
+        var of = $(this).attr('data-of');
+        var route = $(this).attr('data-route');
+         $.ajax({
+             type: "POST",
+             url: route,
+             data: {of:of},
+             context: $(this),
+             success: function(data){
+                 if(data.length === 0)
+                 {
+                     $(this).fadeOut('1000',function(){
+                         $(this).next('.no-more-result').fadeIn().css({'display':'block'});
+                     });
+                 }
+                 else
+                 {
+                     $response = $(data).hide();
+                     $(this).parent('div').before($response);
+                     $response.fadeIn();
+                     $(this).children('span').removeClass('hide-me').addClass('show-me');
+                     $(this).children('i').addClass('hide-me').removeClass('show-me');
+                     of = parseInt(of) + 10;
+                     $(this).attr('data-of',of);
+                 }
+             },
+             complete: function(){
+                 currEvent = true;
+             }
+         });
+         $(this).children('span').toggleClass('hide-me').toggleClass('show-me');
+         $(this).children('i').toggleClass('hide-me').toggleClass('show-me');
+    }
+});
+    
+    
+</script>
+{% endblock %}

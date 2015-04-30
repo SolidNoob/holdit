@@ -1,0 +1,71 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block content %}
+<div class="board violet">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                  <h1><span class="xl-size">Followers</span> de {{ user.firstname }} {{ user.surname }}</h1>
+                </header>
+            </div>
+        </div>
+        <div class="row result-wrapper plank">
+            <div class="col-md-6">
+              {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user': user} %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="board grey">
+    <div class="container pb" id="updatehere">
+        {% include 'NoobUserBundle:Profil:completeListContent.html.twig' with{'itemList': followersList, 'itemType': 'user'} %}
+    </div>
+</section>
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+    var currEvent = true;
+    //display more
+    $('body').on('click', '.load-more', function(e){
+        if(currEvent){
+            currEvent = false;
+            var of = $(this).attr('data-of');
+            $.ajax({
+                type: "POST",
+                url: "{{ path('noob_user_profilcompleteListAjax', {'contentType':'followers'})}}",
+                data: {itemid:{{user.id}}, of:of},
+                context: $(this),
+                success: function(data){
+                    if(data.length === 0)
+                    {
+                        $(this).fadeOut('1000',function(){
+                            $(this).next('.no-more-result').fadeIn().css({'display':'block'});
+                        });
+                    }
+                    else
+                    {
+                        $response = $(data).hide();
+                        $(this).parent('div').before($response);
+                        $response.fadeIn();
+                        $(this).children('span').removeClass('hide-me').addClass('show-me');
+                        $(this).children('i').addClass('hide-me').removeClass('show-me');
+                        of = parseInt(of) + 10;
+                        $(this).attr('data-of',of);
+                    }
+                },
+                complete:function(){
+                    currEvent = true;
+                }
+            });
+            $(this).children('span').toggleClass('hide-me').toggleClass('show-me');
+            $(this).children('i').toggleClass('hide-me').toggleClass('show-me');
+        }
+    });
+});
+</script>
+{% endblock %}

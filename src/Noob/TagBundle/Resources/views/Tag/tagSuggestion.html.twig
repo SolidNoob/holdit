@@ -1,0 +1,22 @@
+{# 
+    NoobTagBundle:Global:tagSuggestion.html.twig
+    
+    Display tags suggestions.
+    This view is rendered in ajax
+
+    Changelog:
+    10/04/2015 21h15: file created
+
+    This template need the following variables:
+    tagList: the collection of tags
+#}
+<span class='text-left'>Suggestions:</span> 
+{% if tagList is not empty %}
+<ul class='tag-cloud'>
+    {% for tag in tagList %}
+    <li><a href='#' class='tag clicktoadd'>{{ tag.name }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Pas de suggestion</p>
+{% endif %}

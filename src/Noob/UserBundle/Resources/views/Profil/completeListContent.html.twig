@@ -1,0 +1,43 @@
+<div class='row result-wrapper plank'>
+{% set itemNumber = itemList|length %}
+{% if itemNumber != 0 %}  
+    {% set firstHalf =  (itemNumber/2)|round(0,'ceil') %}
+    <div class="col-md-6">
+        {% for item in itemList | slice(0,firstHalf)%}
+            {% if itemType == 'user' %}
+                {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':item, 'hideFollowers':true} %}
+            {% else %}
+                {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':item} %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="col-md-6">
+        {% if itemNumber != 1 %}
+            {% for item in itemList | slice(firstHalf,itemNumber)%}
+                {% if itemType == 'user' %}
+                    {% include 'NoobUserBundle:Global:profilpreview.html.twig' with{'user':item, 'hideFollowers':true} %}
+                {% else %}
+                    {% include 'NoobPostBundle:Global:postpreview.html.twig' with{'post':item} %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+  <div class="col-lg-4 col-lg-offset-4 col-md-12">
+      <span class="load-more" data-of="10"> 
+          <span class="show-me">Afficher plus</span>
+          <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
+      </span>
+      <span class="no-more-result hide-me">
+          Aucun résultat
+      </span>
+  </div>
+ {% else %}
+        <div class='row result-wrapper plank'>
+            <div class="col-lg-4 col-lg-offset-4 col-md-12">
+                <span class="no-more-result block-me">
+                    Aucun résultat
+                </span>
+            </div>
+        </div>
+{% endif %}
+</div>

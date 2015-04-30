@@ -1,0 +1,16 @@
+<ul>
+  {% for user in list %}
+    <li>{{ user.id }}.{{ user.username }}: {{ user.role.id }}.{{ user.role.role }}</li>
+  {% endfor %}
+</ul>
+
+{% if is_granted('ROLE_USER') %}
+    USER!!!
+{% endif %}
+{% if is_granted('ROLE_ENTREPRISE') %}
+    ENTREPRISE!!!
+{% endif %}
+{% if is_granted('ROLE_ADMIN') %}
+    ADMIN!!!
+{% endif %}
+</body>
