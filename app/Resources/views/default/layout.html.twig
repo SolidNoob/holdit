@@ -1,0 +1,22 @@
+{# 
+    layout.html.twig:
+    Layout du site public. Etend base.html.twig (pour la structure html et le block body).
+    Etend le block body pour:
+        > insérer le menu principal à toutes les pages
+        > y créer un sous block "content" qui sera utilisé par toutes les vues affichant
+          du contenu.
+
+    Blocks:
+    content : contient le contenu de la page
+
+    Note: Peut être séparer le menu principal en un fichier include? Plus propre.
+#}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    
+    {% include 'NoobSiteBundle:Global:navbar.html.twig' %}
+    {% block content %} {% endblock %}
+
+{% endblock %}

@@ -1,0 +1,48 @@
+noob_messagerie:
+    resource: "@NoobMessagerieBundle/Resources/config/routing.yml"
+    prefix:   /
+
+noob_comment:
+    resource: "@NoobCommentBundle/Resources/config/routing.yml"
+    prefix:   /
+
+noob_site:
+    resource: "@NoobSiteBundle/Resources/config/routing.yml"
+    prefix:   /
+
+noob_post:
+    resource: "@NoobPostBundle/Resources/config/routing.yml"
+    prefix:   /
+
+noob_tag:
+    resource: "@NoobTagBundle/Resources/config/routing.yml"
+    prefix:   /
+
+
+noob_user:
+    resource: "@NoobUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#here were the 3 routes
+   
+
+adminlogin:
+    pattern: /samot/login
+    defaults: {_controller: NoobUserBundle:Security:adminLogin}
+    
+adminlogout:
+    pattern: /samot/logout
+
+adminlogin_check:
+    pattern: /samot/login_check
+    
+#liip_imagine bundle: the savior? 
+#20/03/2015
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
+    
+#FOSJsRoutingBundle: the useless? 
+#20/04/2015 
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    
