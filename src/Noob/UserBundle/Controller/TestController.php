@@ -19,13 +19,11 @@ class TestController extends Controller
     public function listAction()
     {
         $user = $this->getUser();
-        var_dump($user);
         
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository('NoobUserBundle:User');
         
         $list = $repository->getUserListAndRole();
-        var_dump($list);
         return $this->render('NoobUserBundle:Test:list.html.twig', array('list'=>$list));
     }
     /* 

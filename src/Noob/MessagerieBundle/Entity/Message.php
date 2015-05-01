@@ -49,6 +49,34 @@ class Message
      */
     private $isSeen;
     
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isDeletedAuthor", type="boolean")
+     */
+    private $isDeletedAuthor;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isDeletedRecipent", type="boolean")
+     */
+    private $isDeletedRecipent;
+    
+    
+    /**
+   * @ORM\ManyToOne(targetEntity="Noob\UserBundle\Entity\User", cascade={"persist"})
+   * @ORM\JoinColumn(nullable=false)
+   */
+    private $author;
+    
+    
+    /**
+   * @ORM\ManyToOne(targetEntity="Noob\UserBundle\Entity\User", cascade={"persist"})
+   * @ORM\JoinColumn(nullable=false)
+   */
+    private $recipient;
+    
     
 
     /**
@@ -151,5 +179,97 @@ class Message
     public function getIsSeen()
     {
         return $this->isSeen;
+    }
+
+    /**
+     * Set author
+     *
+     * @param \Noob\UserBundle\Entity\User $author
+     * @return Message
+     */
+    public function setAuthor(\Noob\UserBundle\Entity\User $author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \Noob\UserBundle\Entity\User 
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Set recipient
+     *
+     * @param \Noob\UserBundle\Entity\User $recipient
+     * @return Message
+     */
+    public function setRecipient(\Noob\UserBundle\Entity\User $recipient)
+    {
+        $this->recipient = $recipient;
+
+        return $this;
+    }
+
+    /**
+     * Get recipient
+     *
+     * @return \Noob\UserBundle\Entity\User 
+     */
+    public function getRecipient()
+    {
+        return $this->recipient;
+    }
+
+    /**
+     * Set isDeletedAuthor
+     *
+     * @param boolean $isDeletedAuthor
+     * @return Message
+     */
+    public function setIsDeletedAuthor($isDeletedAuthor)
+    {
+        $this->isDeletedAuthor = $isDeletedAuthor;
+
+        return $this;
+    }
+
+    /**
+     * Get isDeletedAuthor
+     *
+     * @return boolean 
+     */
+    public function getIsDeletedAuthor()
+    {
+        return $this->isDeletedAuthor;
+    }
+
+    /**
+     * Set isDeletedRecipent
+     *
+     * @param boolean $isDeletedRecipent
+     * @return Message
+     */
+    public function setIsDeletedRecipent($isDeletedRecipent)
+    {
+        $this->isDeletedRecipent = $isDeletedRecipent;
+
+        return $this;
+    }
+
+    /**
+     * Get isDeletedRecipent
+     *
+     * @return boolean 
+     */
+    public function getIsDeletedRecipent()
+    {
+        return $this->isDeletedRecipent;
     }
 }
