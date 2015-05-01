@@ -22,6 +22,17 @@ class __TwigTemplate_bc048e3817e2b60e5f9835342c515f3a3fdca115ab26417505aceb1299a
 
         var noop = function() {},
 
+            collectionToArray = function (collection) {
+                var length = collection.length || 0,
+                    results = new Array(length);
+
+                while (length--) {
+                    results[length] = collection[length];
+                }
+
+                return results;
+            },
+
             profilerStorageKey = 'sf2/profiler/',
 
             request = function(url, onSuccess, onError, payload, options) {
@@ -88,12 +99,12 @@ class __TwigTemplate_bc048e3817e2b60e5f9835342c515f3a3fdca115ab26417505aceb1299a
             requestStack = [],
 
             renderAjaxRequests = function() {
-                var requestCounter = document.getElementsByClassName('sf-toolbar-ajax-requests');
+                var requestCounter = document.querySelectorAll('.sf-toolbar-ajax-requests');
                 if (!requestCounter.length) {
                     return;
                 }
 
-                var tbodies = document.getElementsByClassName('sf-toolbar-ajax-request-list');
+                var tbodies = document.querySelectorAll('.sf-toolbar-ajax-request-list');
                 var state = 'ok';
                 if (tbodies.length) {
                     var tbody = tbodies[0];
@@ -149,20 +160,20 @@ class __TwigTemplate_bc048e3817e2b60e5f9835342c515f3a3fdca115ab26417505aceb1299a
                                 }
                             } else if (request.loading) {
                                 requestState = 'loading';
-                                state = 'loading'
+                                state = 'loading';
                             }
                             row.className = 'sf-ajax-request sf-ajax-request-' + requestState;
                         }
 
-                        var infoSpan = document.getElementsByClassName(\"sf-toolbar-ajax-info\")[0];
-                        var children = Array.prototype.slice.call(tbody.children);
+                        var infoSpan = document.querySelectorAll(\".sf-toolbar-ajax-info\")[0];
+                        var children = collectionToArray(tbody.children);
                         for (var i = 0; i < children.length; i++) {
                             tbody.removeChild(children[i]);
                         }
                         tbody.appendChild(rows);
 
                         if (infoSpan) {
-                            var text = requestStack.length + ' calls';
+                            var text = requestStack.length + ' call' + (requestStack.length > 1 ? 's' : '');
                             infoSpan.textContent = text;
                         }
                     } else {
@@ -189,50 +200,65 @@ class __TwigTemplate_bc048e3817e2b60e5f9835342c515f3a3fdca115ab26417505aceb1299a
                 requestCounter[0].className = className;
             };
 
+        var addEventListener;
+
+        var el = document.createElement('div');
+        if (!'addEventListener' in el) {
+            addEventListener = function (element, eventName, callback) {
+                element.attachEvent('on' + eventName, callback);
+            };
+        } else {
+            addEventListener = function (element, eventName, callback) {
+                element.addEventListener(eventName, callback, false);
+            };
+        }
+
         ";
-        // line 174
+        // line 198
         if (array_key_exists("excluded_ajax_paths", $context)) {
-            // line 175
-            echo "            var proxied = XMLHttpRequest.prototype.open;
+            // line 199
+            echo "            if (window.XMLHttpRequest && XMLHttpRequest.addEventListener) {
+                var proxied = XMLHttpRequest.prototype.open;
 
-            XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
-                var self = this;
+                XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
+                    var self = this;
 
-                /* prevent logging AJAX calls to static and inline files, like templates */
-                if (url.substr(0, 1) === '/' && !url.match(new RegExp(\"";
-            // line 181
+                    /* prevent logging AJAX calls to static and inline files, like templates */
+                    if (url.substr(0, 1) === '/' && !url.match(new RegExp(\"";
+            // line 206
             echo twig_escape_filter($this->env, $this->getContext($context, "excluded_ajax_paths"), "html", null, true);
             echo "\"))) {
-                    var stackElement = {
-                        loading: true,
-                        error: false,
-                        url: url,
-                        method: method,
-                        start: new Date()
-                    };
+                        var stackElement = {
+                            loading: true,
+                            error: false,
+                            url: url,
+                            method: method,
+                            start: new Date()
+                        };
 
-                    requestStack.push(stackElement);
+                        requestStack.push(stackElement);
 
-                    this.addEventListener(\"readystatechange\", function() {
-                        if (self.readyState == 4) {
-                            stackElement.duration = new Date() - stackElement.start;
-                            stackElement.loading = false;
-                            stackElement.error = self.status < 200 || self.status >= 400;
-                            stackElement.profile = self.getResponseHeader(\"X-Debug-Token\");
-                            stackElement.profilerUrl = self.getResponseHeader(\"X-Debug-Token-Link\");
+                        this.addEventListener('readystatechange', function() {
+                            if (self.readyState == 4) {
+                                stackElement.duration = new Date() - stackElement.start;
+                                stackElement.loading = false;
+                                stackElement.error = self.status < 200 || self.status >= 400;
+                                stackElement.profile = self.getResponseHeader(\"X-Debug-Token\");
+                                stackElement.profilerUrl = self.getResponseHeader(\"X-Debug-Token-Link\");
 
-                            Sfjs.renderAjaxRequests();
-                        }
-                    }, false);
+                                Sfjs.renderAjaxRequests();
+                            }
+                        }, false);
 
-                    Sfjs.renderAjaxRequests();
-                }
+                        Sfjs.renderAjaxRequests();
+                    }
 
-                proxied.apply(this, Array.prototype.slice.call(arguments));
-            };
+                    proxied.apply(this, Array.prototype.slice.call(arguments));
+                };
+            }
         ";
         }
-        // line 210
+        // line 236
         echo "
         return {
             hasClass: hasClass,
@@ -244,6 +270,8 @@ class __TwigTemplate_bc048e3817e2b60e5f9835342c515f3a3fdca115ab26417505aceb1299a
             getPreference: getPreference,
 
             setPreference: setPreference,
+
+            addEventListener: addEventListener,
 
             request: request,
 
@@ -271,9 +299,7 @@ class __TwigTemplate_bc048e3817e2b60e5f9835342c515f3a3fdca115ab26417505aceb1299a
             },
 
             toggle: function(selector, elOn, elOff) {
-                var i,
-                    style,
-                    tmp = elOn.style.display,
+                var tmp = elOn.style.display,
                     el = document.getElementById(selector);
 
                 elOn.style.display = elOff.style.display;
@@ -303,6 +329,6 @@ class __TwigTemplate_bc048e3817e2b60e5f9835342c515f3a3fdca115ab26417505aceb1299a
 
     public function getDebugInfo()
     {
-        return array (  236 => 210,  204 => 181,  196 => 175,  194 => 174,  19 => 1,);
+        return array (  262 => 236,  229 => 206,  220 => 199,  218 => 198,  19 => 1,);
     }
 }

@@ -19,7 +19,10 @@ class __TwigTemplate_0488f85638d36edd72b3365d1244e65227f65d22450472cd47ebe89874c
         echo "<!DOCTYPE html>
 <html>
     <head>
-        <meta charset=\"UTF-8\" />
+        <meta charset=\"";
+        // line 4
+        echo twig_escape_filter($this->env, $this->env->getCharset(), "html", null, true);
+        echo "\" />
         <title>An Error Occurred: ";
         // line 5
         echo twig_escape_filter($this->env, $this->getContext($context, "status_text"), "html", null, true);
@@ -55,6 +58,6 @@ class __TwigTemplate_0488f85638d36edd72b3365d1244e65227f65d22450472cd47ebe89874c
 
     public function getDebugInfo()
     {
-        return array (  32 => 9,  25 => 5,  19 => 1,);
+        return array (  35 => 9,  28 => 5,  24 => 4,  19 => 1,);
     }
 }

@@ -85,11 +85,35 @@ class __TwigTemplate_8eadbda2bad968fe4fa3a1d5601443f306f9cdceee7a7054c59c20fc20c
                 }
 
                 Sfjs.renderAjaxRequests();
+
+                /* Handle toolbar-info position */
+                var toolbarBlocks = document.querySelectorAll('.sf-toolbar-block');
+                for (var i = 0; i < toolbarBlocks.length; i += 1) {
+                    toolbarBlocks[i].onmouseover = function () {
+                        var toolbarInfo = this.querySelectorAll('.sf-toolbar-info')[0];
+                        var pageWidth = document.body.clientWidth;
+                        var elementWidth = toolbarInfo.offsetWidth;
+                        var leftValue = (elementWidth + this.offsetLeft) - pageWidth;
+                        var rightValue = (elementWidth + (pageWidth - this.offsetLeft)) - pageWidth;
+
+                        /* Reset right and left value, useful on window resize */
+                        toolbarInfo.style.right = '';
+                        toolbarInfo.style.left = '';
+
+                        if (leftValue > 0 && rightValue > 0) {
+                            toolbarInfo.style.right = (rightValue * -1) + 'px';
+                        } else if (leftValue < 0) {
+                            toolbarInfo.style.left = 0;
+                        } else {
+                            toolbarInfo.style.right = '-1px';
+                        }
+                    };
+                }
             },
             function(xhr) {
                 if (xhr.status !== 0) {
                     confirm('An error occurred while loading the web debug toolbar (' + xhr.status + ': ' + xhr.statusText + ').\\n\\nDo you want to open the profiler?') && (window.location = '";
-        // line 37
+        // line 61
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("_profiler", array("token" => $this->getContext($context, "token"))), "html", null, true);
         echo "');
                 }
@@ -113,6 +137,6 @@ class __TwigTemplate_8eadbda2bad968fe4fa3a1d5601443f306f9cdceee7a7054c59c20fc20c
 
     public function getDebugInfo()
     {
-        return array (  93 => 37,  83 => 30,  79 => 29,  75 => 28,  70 => 26,  66 => 25,  62 => 24,  50 => 15,  46 => 14,  42 => 12,  32 => 6,  30 => 5,  26 => 3,  24 => 2,  19 => 1,);
+        return array (  117 => 61,  83 => 30,  79 => 29,  75 => 28,  70 => 26,  66 => 25,  62 => 24,  50 => 15,  46 => 14,  42 => 12,  32 => 6,  30 => 5,  26 => 3,  24 => 2,  19 => 1,);
     }
 }

@@ -175,80 +175,91 @@ class __TwigTemplate_45cec6f1cc8515cd96336228960cf75f1621f3aa73e6fb6d070f40514dc
         }
     </style>
 
-    <ul class=\"alt\">
-        ";
-        // line 73
-        $context['_parent'] = (array) $context;
-        $context['_seq'] = twig_ensure_traversable($this->getAttribute($this->getContext($context, "collector"), "getDumps", array(0 => "html"), "method"));
-        foreach ($context['_seq'] as $context["_key"] => $context["dump"]) {
-            // line 74
-            echo "        <li class=\"sf-dump sf-reset\">
-            in
+    ";
+        // line 72
+        if ($this->getAttribute($this->getContext($context, "collector"), "dumpsCount", array())) {
+            // line 73
+            echo "        <ul class=\"alt\">
             ";
-            // line 76
-            if ($this->getAttribute($context["dump"], "line", array())) {
-                // line 77
-                echo "                ";
-                $context["link"] = $this->env->getExtension('code')->getFileLink($this->getAttribute($context["dump"], "file", array()), $this->getAttribute($context["dump"], "line", array()));
-                // line 78
-                echo "                ";
-                if ($this->getContext($context, "link")) {
-                    // line 79
-                    echo "                    <a href=\"";
-                    echo twig_escape_filter($this->env, $this->getContext($context, "link"), "html", null, true);
-                    echo "\" title=\"";
-                    echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "file", array()), "html", null, true);
-                    echo "\">";
-                    echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "name", array()), "html", null, true);
-                    echo "</a>
+            // line 74
+            $context['_parent'] = (array) $context;
+            $context['_seq'] = twig_ensure_traversable($this->getAttribute($this->getContext($context, "collector"), "getDumps", array(0 => "html"), "method"));
+            foreach ($context['_seq'] as $context["_key"] => $context["dump"]) {
+                // line 75
+                echo "            <li class=\"sf-dump sf-reset\">
+                in
                 ";
+                // line 77
+                if ($this->getAttribute($context["dump"], "line", array())) {
+                    // line 78
+                    echo "                    ";
+                    $context["link"] = $this->env->getExtension('code')->getFileLink($this->getAttribute($context["dump"], "file", array()), $this->getAttribute($context["dump"], "line", array()));
+                    // line 79
+                    echo "                    ";
+                    if ($this->getContext($context, "link")) {
+                        // line 80
+                        echo "                        <a href=\"";
+                        echo twig_escape_filter($this->env, $this->getContext($context, "link"), "html", null, true);
+                        echo "\" title=\"";
+                        echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "file", array()), "html", null, true);
+                        echo "\">";
+                        echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "name", array()), "html", null, true);
+                        echo "</a>
+                    ";
+                    } else {
+                        // line 82
+                        echo "                        <abbr title=\"";
+                        echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "file", array()), "html", null, true);
+                        echo "\">";
+                        echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "name", array()), "html", null, true);
+                        echo "</abbr>
+                    ";
+                    }
+                    // line 84
+                    echo "                ";
                 } else {
-                    // line 81
-                    echo "                    <abbr title=\"";
-                    echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "file", array()), "html", null, true);
-                    echo "\">";
+                    // line 85
+                    echo "                    ";
                     echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "name", array()), "html", null, true);
-                    echo "</abbr>
+                    echo "
                 ";
                 }
-                // line 83
-                echo "            ";
-            } else {
-                // line 84
-                echo "                ";
-                echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "name", array()), "html", null, true);
-                echo "
-            ";
-            }
-            // line 86
-            echo "            line ";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "line", array()), "html", null, true);
-            echo ":
-            <a onclick=\"Sfdump.toggle(this)\">▶</a>
-            <span class=\"sf-dump-compact\">
-            ";
-            // line 89
-            if ($this->getAttribute($context["dump"], "fileExcerpt", array())) {
-                echo $this->getAttribute($context["dump"], "fileExcerpt", array());
-            } else {
-                echo $this->env->getExtension('code')->fileExcerpt($this->getAttribute($context["dump"], "file", array()), $this->getAttribute($context["dump"], "line", array()));
-            }
-            // line 90
-            echo "            </span>
+                // line 87
+                echo "                line ";
+                echo twig_escape_filter($this->env, $this->getAttribute($context["dump"], "line", array()), "html", null, true);
+                echo ":
+                <a onclick=\"var s = this.nextElementSibling; if ('sf-dump-compact' == s.className) {this.innerHTML = '&#9660;'; s.className = 'sf-dump-expanded';} else {this.innerHTML = '&#9654;'; s.className = 'sf-dump-compact';}\">&#9654;</a>
+                <span class=\"sf-dump-compact\">
+                ";
+                // line 90
+                if ($this->getAttribute($context["dump"], "fileExcerpt", array())) {
+                    echo $this->getAttribute($context["dump"], "fileExcerpt", array());
+                } else {
+                    echo $this->env->getExtension('code')->fileExcerpt($this->getAttribute($context["dump"], "file", array()), $this->getAttribute($context["dump"], "line", array()));
+                }
+                // line 91
+                echo "                </span>
 
+                ";
+                // line 93
+                echo $this->getAttribute($context["dump"], "data", array());
+                echo "
+            </li>
             ";
-            // line 92
-            echo $this->getAttribute($context["dump"], "data", array());
-            echo "
-        </li>
-        ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['dump'], $context['_parent'], $context['loop']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 96
+            echo "        </ul>
+    ";
+        } else {
+            // line 98
+            echo "        <p>
+            <em>No dumped variable</em>
+        </p>
+    ";
         }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['dump'], $context['_parent'], $context['loop']);
-        $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 95
-        echo "    </ul>
-";
     }
 
     public function getTemplateName()
@@ -263,6 +274,6 @@ class __TwigTemplate_45cec6f1cc8515cd96336228960cf75f1621f3aa73e6fb6d070f40514dc
 
     public function getDebugInfo()
     {
-        return array (  250 => 95,  241 => 92,  237 => 90,  231 => 89,  224 => 86,  218 => 84,  215 => 83,  207 => 81,  197 => 79,  194 => 78,  191 => 77,  189 => 76,  185 => 74,  181 => 73,  161 => 55,  158 => 54,  150 => 49,  145 => 46,  143 => 45,  141 => 44,  139 => 43,  136 => 41,  133 => 40,  128 => 37,  126 => 36,  123 => 35,  119 => 33,  110 => 30,  105 => 29,  99 => 27,  96 => 26,  88 => 24,  78 => 22,  75 => 21,  72 => 20,  70 => 19,  66 => 17,  62 => 16,  57 => 13,  55 => 12,  52 => 11,  47 => 9,  44 => 8,  41 => 7,  39 => 6,  36 => 5,  33 => 4,  30 => 3,);
+        return array (  258 => 98,  254 => 96,  245 => 93,  241 => 91,  235 => 90,  228 => 87,  222 => 85,  219 => 84,  211 => 82,  201 => 80,  198 => 79,  195 => 78,  193 => 77,  189 => 75,  185 => 74,  182 => 73,  180 => 72,  161 => 55,  158 => 54,  150 => 49,  145 => 46,  143 => 45,  141 => 44,  139 => 43,  136 => 41,  133 => 40,  128 => 37,  126 => 36,  123 => 35,  119 => 33,  110 => 30,  105 => 29,  99 => 27,  96 => 26,  88 => 24,  78 => 22,  75 => 21,  72 => 20,  70 => 19,  66 => 17,  62 => 16,  57 => 13,  55 => 12,  52 => 11,  47 => 9,  44 => 8,  41 => 7,  39 => 6,  36 => 5,  33 => 4,  30 => 3,);
     }
 }

@@ -155,6 +155,6 @@
   'SensioDistributionBundle:Configurator/Step:doctrine.html.twig' => 'C:\\wamp\\www\\interfaceieps\\vendor\\sensio\\distribution-bundle\\Sensio\\Bundle\\DistributionBundle/Resources/views/Configurator/Step/doctrine.html.twig',
   'SensioDistributionBundle:Configurator/Step:secret.html.twig' => 'C:\\wamp\\www\\interfaceieps\\vendor\\sensio\\distribution-bundle\\Sensio\\Bundle\\DistributionBundle/Resources/views/Configurator/Step/secret.html.twig',
   'SensioDistributionBundle:Configurator:steps.html.twig' => 'C:\\wamp\\www\\interfaceieps\\vendor\\sensio\\distribution-bundle\\Sensio\\Bundle\\DistributionBundle/Resources/views/Configurator/steps.html.twig',
-  '::base.html.twig' => 'C:/wamp/www/interfaceieps/app/Resources\\views/base.html.twig',
-  ':default:layout.html.twig' => 'C:/wamp/www/interfaceieps/app/Resources\\views/default/layout.html.twig',
+  '::base.html.twig' => 'C:\\wamp\\www\\interfaceieps\\app/Resources\\views/base.html.twig',
+  ':default:layout.html.twig' => 'C:\\wamp\\www\\interfaceieps\\app/Resources\\views/default/layout.html.twig',
 );

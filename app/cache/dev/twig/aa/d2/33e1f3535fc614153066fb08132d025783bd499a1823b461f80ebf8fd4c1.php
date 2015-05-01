@@ -53,7 +53,7 @@ class __TwigTemplate_aad233e1f3535fc614153066fb08132d025783bd499a1823b461f80ebf8
         echo "        </select>
         <div class=\"clear-fix\"></div>
         <label for=\"url\">URL</label>
-        <input type=\"url\" name=\"url\" id=\"url\" value=\"";
+        <input type=\"text\" name=\"url\" id=\"url\" value=\"";
         // line 18
         echo twig_escape_filter($this->env, $this->getContext($context, "url"), "html", null, true);
         echo "\" placeholder=\"e.g. ";
@@ -71,7 +71,7 @@ class __TwigTemplate_aad233e1f3535fc614153066fb08132d025783bd499a1823b461f80ebf8
         // line 24
         echo twig_escape_filter($this->env, $this->getContext($context, "start"), "html", null, true);
         echo "\" placeholder=\"e.g. ";
-        echo twig_escape_filter($this->env, twig_date_format_filter($this->env, "-2days", "dd.mm.YYYY"), "html", null, true);
+        echo twig_escape_filter($this->env, twig_date_format_filter($this->env, "-2days", "d.m.Y"), "html", null, true);
         echo "\">
         <div class=\"clear-fix\"></div>
         <label for=\"end\">Until</label>
@@ -79,7 +79,7 @@ class __TwigTemplate_aad233e1f3535fc614153066fb08132d025783bd499a1823b461f80ebf8
         // line 27
         echo twig_escape_filter($this->env, $this->getContext($context, "end"), "html", null, true);
         echo "\" placeholder=\"e.g. ";
-        echo twig_escape_filter($this->env, twig_date_format_filter($this->env, "now", "dd.mm.YYYY"), "html", null, true);
+        echo twig_escape_filter($this->env, twig_date_format_filter($this->env, "now", "d.m.Y"), "html", null, true);
         echo "\">
         <div class=\"clear-fix\"></div>
         <label for=\"limit\">Limit</label>

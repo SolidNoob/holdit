@@ -70,7 +70,7 @@ class __TwigTemplate_ff9b1fb025900de68ea014f3fd5470553fac2d9d0f6fc3612826feb22c5
 <div id=\"sfToolbarMainContent-";
         // line 27
         echo twig_escape_filter($this->env, $this->getContext($context, "token"), "html", null, true);
-        echo "\" class=\"sf-toolbarreset\" data-no-turbolink>
+        echo "\" class=\"sf-toolbarreset clear-fix\" data-no-turbolink>
     ";
         // line 28
         $context['_parent'] = (array) $context;

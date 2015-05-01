@@ -48,7 +48,6 @@ class __TwigTemplate_90d77b01c4e7a02d695d2d1ece103c03c40bb402b9211253f33df560e94
     background-color: #f7f7f7;
     left: 0;
     right: 0;
-    height: 38px;
     margin: 0;
     padding: 0 40px 0 0;
     z-index: 6000000;
@@ -69,14 +68,25 @@ class __TwigTemplate_90d77b01c4e7a02d695d2d1ece103c03c40bb402b9211253f33df560e94
     cursor: help;
 }
 .sf-toolbarreset span,
-.sf-toolbarreset div {
+.sf-toolbarreset div,
+.sf-toolbarreset td,
+.sf-toolbarreset th {
     font-size: 11px;
 }
 .sf-toolbarreset img {
     width: auto;
     display: inline;
 }
-
+.sf-toolbarreset table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    table-layout: auto;
+}
 .sf-toolbarreset .hide-button {
     display: block;
     position: absolute;
@@ -95,6 +105,7 @@ class __TwigTemplate_90d77b01c4e7a02d695d2d1ece103c03c40bb402b9211253f33df560e94
     color: #2f2f2f;
     display: block;
     min-height: 28px;
+    border-bottom: 1px solid #e4e4e4;
     border-right: 1px solid #e4e4e4;
     padding: 0;
     float: left;
@@ -155,10 +166,6 @@ class __TwigTemplate_90d77b01c4e7a02d695d2d1ece103c03c40bb402b9211253f33df560e94
     border-bottom-width: 0;
     border-bottom: 1px solid #bbb;
     border-radius: 4px 4px 0 0;
-}
-
-.sf-toolbarreset > div:last-of-type .sf-toolbar-info {
-    right: -1px;
 }
 
 .sf-toolbar-block .sf-toolbar-info:empty {
@@ -307,12 +314,11 @@ class __TwigTemplate_90d77b01c4e7a02d695d2d1ece103c03c40bb402b9211253f33df560e94
     overflow-y: auto;
 }
 
-table.sf-toolbar-ajax-requests {
-    border-collapse: collapse;
-}
 .sf-toolbar-ajax-requests th, .sf-toolbar-ajax-requests td {
     border-bottom: 1px solid #ddd;
     padding: 0 4px;
+    color: #2f2f2f;
+    background-color: #fff;
 }
 .sf-toolbar-ajax-requests th {
     background-color: #eee;
@@ -358,9 +364,9 @@ table.sf-toolbar-ajax-requests {
 
 /***** Override the setting when the toolbar is on the top *****/
 ";
-        // line 342
+        // line 348
         if (($this->getContext($context, "position") == "top")) {
-            // line 343
+            // line 349
             echo "    .sf-minitoolbar {
         top: 0;
         bottom: auto;
@@ -402,12 +408,12 @@ table.sf-toolbar-ajax-requests {
     }
 ";
         }
-        // line 383
+        // line 389
         echo "
 ";
-        // line 384
+        // line 390
         if ((!$this->getContext($context, "floatable"))) {
-            // line 385
+            // line 391
             echo "    .sf-toolbarreset {
         position: static;
         background: #cbcbcb;
@@ -419,7 +425,7 @@ table.sf-toolbar-ajax-requests {
     }
 ";
         }
-        // line 395
+        // line 401
         echo "
 /***** Media query *****/
 @media screen and (max-width: 779px) {
@@ -479,6 +485,6 @@ table.sf-toolbar-ajax-requests {
 
     public function getDebugInfo()
     {
-        return array (  423 => 395,  411 => 385,  409 => 384,  406 => 383,  364 => 343,  362 => 342,  19 => 1,);
+        return array (  429 => 401,  417 => 391,  415 => 390,  412 => 389,  370 => 349,  368 => 348,  19 => 1,);
     }
 }

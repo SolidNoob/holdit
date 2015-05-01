@@ -21,9 +21,9 @@ class __TwigTemplate_0118ce53a92549887eef21177327a3334d4130685ef82fbb396707b008b
 
 The server returned a \"";
         // line 4
-        echo twig_escape_filter($this->env, $this->getContext($context, "status_code"), "html", null, true);
+        echo $this->getContext($context, "status_code");
         echo " ";
-        echo twig_escape_filter($this->env, $this->getContext($context, "status_text"), "html", null, true);
+        echo $this->getContext($context, "status_text");
         echo "\".
 
 Something is broken. Please let us know what you were doing when this error occurred.

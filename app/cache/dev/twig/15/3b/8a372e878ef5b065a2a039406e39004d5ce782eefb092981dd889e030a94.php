@@ -19,9 +19,9 @@ class __TwigTemplate_153b8a372e878ef5b065a2a039406e39004d5ce782eefb092981dd889e0
         if ($this->getAttribute($this->getContext($context, "trace"), "function", array())) {
             // line 2
             echo "    at ";
-            echo twig_escape_filter($this->env, (($this->getAttribute($this->getContext($context, "trace"), "class", array()) . $this->getAttribute($this->getContext($context, "trace"), "type", array())) . $this->getAttribute($this->getContext($context, "trace"), "function", array())), "html", null, true);
+            echo (($this->getAttribute($this->getContext($context, "trace"), "class", array()) . $this->getAttribute($this->getContext($context, "trace"), "type", array())) . $this->getAttribute($this->getContext($context, "trace"), "function", array()));
             echo "(";
-            echo twig_escape_filter($this->env, $this->env->getExtension('code')->formatArgsAsText($this->getAttribute($this->getContext($context, "trace"), "args", array())), "html", null, true);
+            echo $this->env->getExtension('code')->formatArgsAsText($this->getAttribute($this->getContext($context, "trace"), "args", array()));
             echo ")
 ";
         } else {
@@ -33,9 +33,9 @@ class __TwigTemplate_153b8a372e878ef5b065a2a039406e39004d5ce782eefb092981dd889e0
         if (($this->getAttribute($this->getContext($context, "trace", true), "file", array(), "any", true, true) && $this->getAttribute($this->getContext($context, "trace", true), "line", array(), "any", true, true))) {
             // line 7
             echo "        in ";
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "trace"), "file", array()), "html", null, true);
+            echo $this->getAttribute($this->getContext($context, "trace"), "file", array());
             echo " line ";
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "trace"), "line", array()), "html", null, true);
+            echo $this->getAttribute($this->getContext($context, "trace"), "line", array());
             echo "
 ";
         }
