@@ -38,6 +38,39 @@ body{
 .linkedin-button{
     @include setLogo('linkedinlogo.png', 28px, 24px);
 }
+.font-bold {
+    font-weight: bold;
+}
+.errorpagewrapper{
+    margin-top: 50px;
+    h1{
+        font-weight: 300;
+        margin-bottom: 30px;
+        color:$black-main;
+    }
+    h2{
+        font-weight: 300;
+        margin-bottom: 30px;
+        color: $grey-dark;
+    }
+    .content{
+        padding: 30px;
+        background: $grey-main;
+        border-radius: 4px;
+    }
+    p{
+        margin-bottom: 30px;
+    }
+}
+.breadcrumb{
+    margin: 0;
+    a{
+        color: $violet-main;
+    }
+}
+.bg-danger,.bg-success{
+    padding: 8px;
+}
 .no-more-result{
     width:100%;
     background: $grey-light-border;
@@ -170,7 +203,7 @@ a.seek{
     display:inline-block;
     font-size: $font-size-main;
     font-weight: 300;
-    color:$white-main;
+    color:$white-main !important;
     border:none;
     padding: 3px 6px;
     @include transition(all, 0.3s, ease-in-out);
@@ -549,6 +582,12 @@ a.post-detail-url{
         border-top: 1px solid $grey-light-border;
         opacity: 0.7;
     }
+}
+
+.message-content{
+    padding:10px;
+    background: $grey-main;
+    border-radius: 3px;
 }
 
 // --- Main Nav bar (the smallest): ------------------------------------------------------------------------------------------ // 

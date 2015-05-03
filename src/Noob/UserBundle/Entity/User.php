@@ -190,6 +190,19 @@ class User implements UserInterface, \Serializable
     private $postsLiked;
     
     
+    
+      /**
+   * @ORM\OneToMany(targetEntity="Noob\MessagerieBundle\Entity\Message", mappedBy="author",fetch="EXTRA_LAZY")
+   */
+    private $messagesSent;
+    /**
+   * @ORM\OneToMany(targetEntity="Noob\MessagerieBundle\Entity\Message", mappedBy="recipient",fetch="EXTRA_LAZY")
+   */
+    private $messagesReceived;
+    
+    
+    
+    
     /**
      * @var string
      *
@@ -1091,5 +1104,73 @@ class User implements UserInterface, \Serializable
     public function getSection()
     {
         return $this->section;
+    }
+
+    /**
+     * Add messagesSent
+     *
+     * @param \Noob\MessagerieBundle\Entity\Message $messagesSent
+     * @return User
+     */
+    public function addMessagesSent(\Noob\MessagerieBundle\Entity\Message $messagesSent)
+    {
+        $this->messagesSent[] = $messagesSent;
+        $messagesSent->setAuthor($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove messagesSent
+     *
+     * @param \Noob\MessagerieBundle\Entity\Message $messagesSent
+     */
+    public function removeMessagesSent(\Noob\MessagerieBundle\Entity\Message $messagesSent)
+    {
+        $this->messagesSent->removeElement($messagesSent);
+    }
+
+    /**
+     * Get messagesSent
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMessagesSent()
+    {
+        return $this->messagesSent;
+    }
+
+    /**
+     * Add messagesReceived
+     *
+     * @param \Noob\MessagerieBundle\Entity\Message $messagesReceived
+     * @return User
+     */
+    public function addMessagesReceived(\Noob\MessagerieBundle\Entity\Message $messagesReceived)
+    {
+        $this->messagesReceived[] = $messagesReceived;
+        $messagesReceived->setRecipient($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove messagesReceived
+     *
+     * @param \Noob\MessagerieBundle\Entity\Message $messagesReceived
+     */
+    public function removeMessagesReceived(\Noob\MessagerieBundle\Entity\Message $messagesReceived)
+    {
+        $this->messagesReceived->removeElement($messagesReceived);
+    }
+
+    /**
+     * Get messagesReceived
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMessagesReceived()
+    {
+        return $this->messagesReceived;
     }
 }

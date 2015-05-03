@@ -13,6 +13,12 @@
 
 {% extends 'NoobPostBundle:Global:postDetail.html.twig' %}
 
+{% block title %}
+{{ item.name }}
+|{{ parent() }}
+{% endblock %}
+
+
 {% block content %}
 
 

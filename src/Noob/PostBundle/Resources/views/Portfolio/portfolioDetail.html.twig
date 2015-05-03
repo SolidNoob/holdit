@@ -16,10 +16,13 @@
 
 {% extends 'NoobPostBundle:Global:postDetail.html.twig' %}
 
+{% block title %}
+{{ item.name }}
+|{{ parent() }}
+{% endblock %}
+
+
 {% block content %}
-
-
-
 <div class="board violet">
     <div class="container">
         <div class="row">

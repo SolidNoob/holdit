@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Noob\CommentBundle\Entity\Comment;
 
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CommentController extends Controller
 {
@@ -52,7 +53,9 @@ class CommentController extends Controller
         
         $comment = new Comment();
         $form = $this->createFormBuilder($comment)
-            ->add('content', 'textarea')
+            ->add('content', 'textarea', array(
+                    'constraints' => array(new NotBlank()))
+            )
             ->add('recaptcha', 'ewz_recaptcha', array(
                 'attr'        => array(
                     'options' => array(

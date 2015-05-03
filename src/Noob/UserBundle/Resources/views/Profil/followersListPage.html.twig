@@ -1,5 +1,11 @@
 {% extends ':default:layout.html.twig' %}
 
+{% block title %}
+Followers de {{ user.firstname }} {{ user.surname }}
+|{{ parent() }}
+{% endblock %}
+
+
 {% block content %}
 <div class="board violet">
     <div class="container">

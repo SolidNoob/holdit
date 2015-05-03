@@ -1,5 +1,10 @@
 {% extends ':default:layout.html.twig' %}
 
+{% block title %}
+{{ user.firstname }} {{ user.surname }} - Profil
+|{{ parent() }}
+{% endblock %}
+
 {% block content %}
 
 {% if user.cover %}
@@ -108,7 +113,9 @@ Paralax method
                         </p>
                         <div class='result-wrapper'>
                           {% include 'NoobUserBundle:Buttons:followme.html.twig' with{ 'userToFollow': user } %}
-                          <button type="button" class='mp-me'><i class="fa fa-envelope"></i> Envoyer un message privé</button>
+                          {% if app.user.id != user.id %}
+                          <a class='mp-me' href='{{path('noob_messagerie_sendOne', {'idRecipient':user.id})}}' target='_blank'><i class="fa fa-envelope"></i> Envoyer un message privé</a>
+                          {% endif %}
                         </div>
                       </div>
                   </div>

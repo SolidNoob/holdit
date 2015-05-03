@@ -8,5 +8,9 @@
 {% endif %}
 <div class='wrapper'>
     <button type="button" class='like-me {{ class }}' data-post-id='{{post.id}}'><i class="fa fa-heart"></i></button>
-    <a href='#' data-post-id='{{post.id}}' class='post-likers'><span class='nb-likes'>{{ post.likers|length }}</span> coup(s) de coeur</a>
+    {% if hideLikers is defined %}
+        {# Dat solution... #}
+    {% else %}
+        <a href='#' data-post-id='{{post.id}}' class='post-likers'><span class='nb-likes'>{{ post.likers|length }}</span> coup(s) de coeur</a>
+    {% endif %}
 </div>

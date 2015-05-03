@@ -1,0 +1,38 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %} {{ status_text }} | {{ parent() }}{% endblock %}
+{% block content %} 
+<div class='container'>
+    <div class='row'>
+        <div class='col-xs-12'>
+            {% set randomNumber = random(4) %}
+            {% if randomNumber == 0 %}
+                {% set randomPhrase = "There was a PAGE here. It's gone now." %}
+                {% set randomMoto = '404 Error' %}
+            {% elseif randomNumber == 1 %}
+                {% set randomPhrase = "Bravo! Vous avez trouvé la page cachée du site!" %}
+                {% set randomMoto = "Non enfait, il s'agit juste une erreur 404..." %}
+            {% elseif randomNumber == 2 %}
+                {% set randomPhrase = "La page demandée est introuvable..." %}
+                {% set randomMoto = "Et croyez-nous, on a cherché partout!" %}
+            {% elseif randomNumber == 3 %}
+                {% set randomPhrase = "404 Error: Link not found... " %}
+                {% set randomMoto = '(but Zelda is fine)' %}
+            {% elseif randomNumber == 4 %}
+                {% set randomPhrase = "throw $this->createNotFoundException('La page n'existe pas!');" %}
+                {% set randomMoto = "$user->isSneaky(true);" %}
+            {% endif %}
+            <div class='errorpagewrapper'>
+                <h1>{{ randomPhrase }}</h1>
+                <h2>{{ randomMoto }}</h2>
+                <div class='content'>
+                    <p>Oups...</p>
+                    <p>Il semblerait que la page à laquelle vous essayez d'accéder n'existe pas ou plus.</p>
+                    <p>Pas de panique, nous travaillons déjà sur le problème.</p>
+                    <p>Retourner sur le site pour continuer votre navigation: <a href='{{ path('noob_site_homepage') }}' class='violet-me'>retourner sur le site</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}
+Messagerie privée
+|{{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+<div class="board grey">
+    <div class="container pb">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                    <h1>Messagerie privée</h1>
+                </header>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-md-12'>
+                
+                <div class='mb planked suggest-wrapper'>
+                    <ol class="breadcrumb">
+                        <li><a href="{{ path('noob_site_dashboard_index') }}">Tableau de bord</a></li>
+                        <li><a href="{{ path('noob_messagerie_index') }}">Messagerie privée</a></li>
+                    </ol>
+                </div>
+                
+                <div class='mb planked suggest-wrapper'>
+                    <div class="heading">
+                        <h4>Vos messages reçus:</h4>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                        <div class="bg-success">{{ flashMessage }}</div>
+                        {% endfor %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th><i class="fa fa-reply"></i> </th>
+                                        <th><i class="fa fa-trash"></i> </th>
+                                        <th>Auteur</th>
+                                        <th>Objet</th>
+                                        <th>Envoyé le</th>
+                                        <th>Message</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% include 'NoobMessagerieBundle:Global:messagesTabRows.html.twig' with {'messages': messages} %}
+                                </tbody>
+                            </table>
+                            <div>
+                                <span class="load-more" data-of="20" data-route="{{ path('noob_messagerie_load')}}"> 
+                                    <span class="show-me">Afficher plus de message</span>
+                                    <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
+                                </span>
+                                <span class="no-more-result hide-me">
+                                    Aucun résultat
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+var currEvent = true;
+$('body').on('click','.deletemessage', function(e){
+    e.preventDefault();
+    if(currEvent){
+        currEvent = false;
+        var id = $(this).attr('data-id');
+        var mythis = $(this);
+        bootbox.confirm({
+            title: "Confirmer la suppression de ce message?",
+            message: "Cette action entrainera la suppression du message. Confirmer la suppression?",
+            buttons: {
+                cancel: {
+                    label: "Annuler la suppression",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Confirmer la suppression",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                currEvent = true;
+                if (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: Routing.generate('noob_messagerie_deleteMessage', { 'idMessage': id }),
+                        success: function(data){
+                            $(mythis).closest('tr').fadeOut();
+                        }
+                    });
+                }
+            }
+        });
+    }
+});
+
+
+
+//display more
+$('body').on('click', '.load-more', function(e){
+    if(currEvent){
+        currEvent = false;
+        var of = $(this).attr('data-of');
+        var route = $(this).attr('data-route');
+         $.ajax({
+             type: "POST",
+             url: route,
+             data: {of:of},
+             context: $(this),
+             success: function(data){
+                 if(data.length === 0)
+                 {
+                     $(this).fadeOut('1000',function(){
+                         $(this).next('.no-more-result').fadeIn().css({'display':'block'});
+                     });
+                 }
+                 else
+                 {
+                     $response = $(data).hide();
+                     $('.message-row').last().after($response);
+                     $response.fadeIn();
+                     $(this).children('span').removeClass('hide-me').addClass('show-me');
+                     $(this).children('i').addClass('hide-me').removeClass('show-me');
+                     of = parseInt(of) + 20;
+                     $(this).attr('data-of',of);
+                 }
+             },
+             complete: function(){
+                 currEvent = true;
+             }
+         });
+         $(this).children('span').toggleClass('hide-me').toggleClass('show-me');
+         $(this).children('i').toggleClass('hide-me').toggleClass('show-me');
+    }
+});
+    
+    
+</script>
+{% endblock %}

@@ -1,3 +1,24 @@
-noob_messagerie_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: NoobMessagerieBundle:Default:index }
+noob_messagerie_index:
+    path:     /user/messagerie
+    defaults: { _controller: NoobMessagerieBundle:Message:messagerieIndex }
+
+noob_messagerie_load:
+    path:     /user/messagerie/load
+    defaults: { _controller: NoobMessagerieBundle:Message:messagerieLoad }
+    options:
+        expose: true
+        
+noob_messagerie_deleteMessage:
+    path:     /user/messagerie/delete-{idMessage}
+    defaults: { _controller: NoobMessagerieBundle:Message:deleteUserMessage }
+    options:
+        expose: true
+        
+noob_messagerie_readOne:
+    path:   /user/messagerie/read/{idMessage}
+    defaults: { _controller: NoobMessagerieBundle:Message:readOne }
+    
+noob_messagerie_sendOne:
+    path: /user/sendOne/{idRecipient}
+    defaults: { _controller: NoobMessagerieBundle:Message:sendOne }
+    

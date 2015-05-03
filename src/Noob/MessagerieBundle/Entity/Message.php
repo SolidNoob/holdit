@@ -65,14 +65,14 @@ class Message
     
     
     /**
-   * @ORM\ManyToOne(targetEntity="Noob\UserBundle\Entity\User", cascade={"persist"})
+   * @ORM\ManyToOne(targetEntity="Noob\UserBundle\Entity\User", cascade={"persist"}, inversedBy="messagesSent"))
    * @ORM\JoinColumn(nullable=false)
    */
     private $author;
     
     
     /**
-   * @ORM\ManyToOne(targetEntity="Noob\UserBundle\Entity\User", cascade={"persist"})
+   * @ORM\ManyToOne(targetEntity="Noob\UserBundle\Entity\User", cascade={"persist"}, inversedBy="messagesReceived"))
    * @ORM\JoinColumn(nullable=false)
    */
     private $recipient;

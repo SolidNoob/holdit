@@ -1,0 +1,15 @@
+{# Assuming there is a <tbody> in the parent view... #}
+{% for message in messages %}
+    {% set cssClass = '' %}
+    {% if message.isSeen == 0 %}
+        {% set cssClass = 'font-bold' %}
+    {% endif %}
+<tr class="message-row">
+    <td><a href='{{ path('noob_messagerie_readOne', {'idMessage':message.id}) }}' class='violet-me'>Lire/Répondre</a></td>
+    <td><a href='#' class='deletemessage violet-me' data-id='{{ message.id }}'>Supprimer</a></td>
+    <td class='{{ cssClass }}'>{{ message.author.firstname }} {{ message.author.surname }}</td>
+    <td class='{{ cssClass }}'>{{ message.title|slice(0,30) }}</td>
+    <td class='{{ cssClass }}'>{{ message.pubDate|date('d/m/Y à H:i') }}</td>
+    <td class='{{ cssClass }}'>{{ message.content|slice(0,30) }}</td>
+</tr>
+{% endfor %}

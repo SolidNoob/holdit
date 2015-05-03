@@ -1,7 +1,12 @@
 {% extends ":default:layout.html.twig" %}
 
-{% block content %}
+{% block title %}
+Tableau de bord
+|{{ parent() }}
+{% endblock %}
 
+
+{% block content %}
 <div class="board grey">
     <div class="container pb">
         <div class="row">
@@ -19,7 +24,7 @@
                     </div>
                     <ul class='default'>
                         <li><a href='{{ path('noob_user_userPostsLiked', {'slug': app.user.slug}) }}'><i class="fa fa-heart"></i> Mes coups de coeur</a></li>
-                        <li><a href='#'><i class="fa fa-envelope"></i> Ma messagerie</a></li>
+                        <li><a href='{{ path('noob_messagerie_index') }}'><i class="fa fa-envelope"></i> Ma messagerie</a></li>
                         <li><a href='#'><i class="fa fa-pencil-square-o"></i> Gérer mes posts</a></li>
                         <li><a href='#'><i class="fa fa-refresh"></i> Modifier mes paramètres</a></li>
                         <li><a href='{{ path('noob_user_userprofilepage', {'slug': app.user.slug}) }}'><i class="fa fa-user"></i> Voir mon profil</a></li>
@@ -29,9 +34,9 @@
                     <div class="heading">
                         <h4>Vos tags:</h4>
                     </div>
-                    <ul class="tag-cloud">
+                    <ul class="tag-cloud no-stripe">
                         {% for tag in app.user.tags %}
-                          <li><a href='{{ path('noob_site_searchContent', {'search': tag.name}) }}'  class="deletetag">{{ tag.name }}</a></li>
+                          <li><a href='{{ path('noob_site_searchContent', {'search': tag.name}) }}'  >{{ tag.name }}</a></li>
                         {% endfor %}
                     </ul>
                     <a href='#' class='violet-me'>Modifier mes tags</a>
@@ -42,7 +47,7 @@
                     </div>
                     {% include 'NoobSiteBundle:DashBoard:commentsListDashboard.html.twig' with {'comments': comments} %}
                     <div>
-                        <span href="#" class="load-more" data-of="10" data-route="{{ path('noob_comment_getUserLastCommentAjax')}}"> 
+                        <span class="load-more" data-of="10" data-route="{{ path('noob_comment_getUserLastCommentAjax')}}"> 
                             <span class="show-me">Afficher plus</span>
                             <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
                         </span>
@@ -60,7 +65,7 @@
                         <h4>Les membres que vous suivez ont posté les éléments suivants:</h4>
                     </div>
                     {% include 'NoobSiteBundle:DashBoard:friendsPosts.html.twig' with {'friendsPosts': friendsPosts} %}<div>
-                    <span href="#" class="load-more" data-of="10" data-route="{{ path('noob_comment_getUserFriendsPostsAjax')}}"> 
+                    <span class="load-more" data-of="10" data-route="{{ path('noob_comment_getUserFriendsPostsAjax')}}"> 
                             <span class="show-me">Afficher plus</span>
                             <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
                         </span>

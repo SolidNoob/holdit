@@ -44,7 +44,7 @@
         <p>Publication: {{ post.pubDate|date('d/m/Y') }}</p>
         {% include 'NoobTagBundle:Global:tagList.html.twig' with{ 'tagList': post.tags } %}
         <div class='previewbottom wrapper'>
-        {% include 'NoobPostBundle:Global:likePost.html.twig' with{ 'post': post } %}
+        {% include 'NoobPostBundle:Global:likePost.html.twig' with{ 'post': post, 'hideLikers':true} %}
         </div>
     </div>
 </article>

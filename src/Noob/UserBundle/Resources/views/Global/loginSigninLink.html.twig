@@ -14,13 +14,14 @@
 {% if app.user %}
   <div class="btn-group myprofilbutton">
       <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">
+        {{ render(controller('NoobMessagerieBundle:Message:getNbUnreadMessage')) }}
         {{ app.user.firstname }} {{ app.user.surname }} <span class="caret"></span>
       </a>
       <ul class="dropdown-menu" role="menu">
         <li><a href="{{ path('noob_site_dashboard_index') }}" class="hvr-sweep-to-right"> <i class="fa fa-tachometer"></i> Tableau de bord</a></li>
         <li class="divider"></li>
         <li><a href="{{ path('noob_user_userPostsLiked', {'slug': app.user.slug}) }}"> <i class="fa fa-heart"></i> Mes coups de coeur</a></li>
-        <li><a href="#"> <i class="fa fa-envelope"></i> Ma messagerie</a></li>
+        <li><a href="{{ path('noob_messagerie_index') }}"> <i class="fa fa-envelope"></i> Ma messagerie</a></li>
         <li><a href="#"> <i class="fa fa-pencil-square-o"></i> Gérer mes posts</a></li>
         <li><a href="#"> <i class="fa fa-refresh"></i> Modifier mes paramètres</a></li>
         <li class="divider"></li>

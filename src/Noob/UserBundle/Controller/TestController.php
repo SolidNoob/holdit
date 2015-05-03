@@ -4,6 +4,7 @@ namespace Noob\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Noob\UserBundle\Entity\User;
+use Noob\MessagerieBundle\Entity\Message;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -120,18 +121,28 @@ class TestController extends Controller
     
     public function testLotOfFollowingsAction(){
          $em = $this->getDoctrine()->getManager();
-         /*
+         
         $repository = $em->getRepository('NoobUserBundle:User');
         
         $jean = $repository->findOneBySurname('Gervasi');
         $others = $repository->findAll();
         
         foreach($others as $o){
-        $jean->addUsersIFollow($o);
+            $i = 0;
+            for($i=0;$i<3;$i++){
+                $message = new Message();
+                $message->setAuthor($o);
+                $message->setRecipient($jean);
+                $message->setContent('Contenu du message');
+                $message->setTitle('Titre du message');
+                $message->setpubDate(new \DateTime);
+                $message->setIsSeen(0);
+                $message->setIsDeletedAuthor(0);
+                $message->setIsDeletedRecipent(0);
+            }
+            $em->persist($message);
         }
-        $em->persist($jean);
-        $em->flush();*/
-         $repo = $em->getRepository('NoobPostBundle:Post');
+        $em->flush();
         return new Response('</body>');
     }
 }

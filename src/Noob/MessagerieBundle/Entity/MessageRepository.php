@@ -12,4 +12,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class MessageRepository extends EntityRepository
 {
+    public function getNbUnreadMessage($user){
+        $q = $this->createQueryBuilder('m')
+                  ->select('count(m.id)')
+                  ->where('m.recipient = :id')->setParameter('id', $user->getId())
+                  ->andWhere('m.isSeen = 0')
+                  ->getQuery()
+                  ->getSingleScalarResult();
+        return $q;
+    }
+    
+    public function getMessageByAuthor($user, $limit = 20, $offset = 0, $order = 'desc'){
+        $q = $this->createQueryBuilder('m')
+                  ->where('m.recipient = :id')->setParameter('id', $user->getId())
+                  ->andWhere('m.isDeletedRecipent = 0')
+                  ->orderBy('m.pubDate', $order)
+                  ->setFirstResult($offset)
+                  ->setMaxResults($limit)
+                  ->getQuery()
+                  ->getResult();
+        return $q;
+    }
 }

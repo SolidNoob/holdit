@@ -34,7 +34,6 @@ class DashBoardController extends Controller
         
         $comments = $commentRepo->getLastCommentsFromUser($user->getId(), 10, 0);
         
-        
         return $this->render('NoobSiteBundle:DashBoard:dashboardIndex.html.twig',array(
             'friendsPosts' => $recentsFriendsPost,
             'tagsPosts' => $recentsPostLikeMyTags,
