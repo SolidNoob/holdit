@@ -7,6 +7,7 @@ use Noob\UserBundle\Entity\User;
 use Noob\MessagerieBundle\Entity\Message;
 
 use Symfony\Component\HttpFoundation\Response;
+use Noob\UserBundle\Form\StudentParametersType;
 
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 
@@ -120,29 +121,25 @@ class TestController extends Controller
     }
     
     public function testLotOfFollowingsAction(){
-         $em = $this->getDoctrine()->getManager();
-         
+        //$user = new User();
+        $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository('NoobUserBundle:User');
+        $user = $repository->findOneBySurname('Gervasi');
         
-        $jean = $repository->findOneBySurname('Gervasi');
-        $others = $repository->findAll();
+        $form = $this->createForm(new StudentParametersType(), $user);
+        $request = $this->getRequest();
         
-        foreach($others as $o){
-            $i = 0;
-            for($i=0;$i<3;$i++){
-                $message = new Message();
-                $message->setAuthor($o);
-                $message->setRecipient($jean);
-                $message->setContent('Contenu du message');
-                $message->setTitle('Titre du message');
-                $message->setpubDate(new \DateTime);
-                $message->setIsSeen(0);
-                $message->setIsDeletedAuthor(0);
-                $message->setIsDeletedRecipent(0);
+        if($request->isMethod('POST')) 
+        {
+            $form->handleRequest($request);
+            if($form->isValid()) 
+            {
+                
             }
-            $em->persist($message);
         }
-        $em->flush();
-        return new Response('</body>');
+        return $this->render('NoobUserBundle:Test:testFormUser.html.twig',array(
+            'user' => $user,
+            'form' => $form->createView(),
+        ));
     }
 }

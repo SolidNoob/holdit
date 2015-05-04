@@ -42,9 +42,10 @@
             <div>{{ type }}, par <a href='{{ path('noob_user_userprofilepage', {'slug': post.author.slug})  }}' class='violet-me'>{{ post.author.firstname }} {{ post.author.surname }}</a></div>
         </header>
         <p>Publication: {{ post.pubDate|date('d/m/Y') }}</p>
+        <div>{% if post.description|length > 100 %}{{ post.description|slice(0,100) }}...{% else %} {{ post.description }} {% endif %}</div>
         {% include 'NoobTagBundle:Global:tagList.html.twig' with{ 'tagList': post.tags } %}
         <div class='previewbottom wrapper'>
-        {% include 'NoobPostBundle:Global:likePost.html.twig' with{ 'post': post, 'hideLikers':true} %}
+        {% include 'NoobPostBundle:Global:likePost.html.twig' with{ 'post': post} %}
         </div>
     </div>
 </article>

@@ -151,8 +151,7 @@ class MessageController extends Controller
                 $em->flush();
                  
                 $this->get('session')->getFlashBag()->add(
-                    'notice',
-                    'Le message a été envoyé'
+                    'notice', 'Le message a été envoyé'
                 );
                  
                 return $this->redirect($this->generateUrl('noob_messagerie_index'));

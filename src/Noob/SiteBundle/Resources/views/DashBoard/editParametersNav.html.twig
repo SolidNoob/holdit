@@ -1,0 +1,14 @@
+<div class='col-md-4'>
+    <div class='mb planked suggest-wrapper'>
+        <div class="heading">
+            <h4>{{ app.user.firstname }} {{ app.user.surname }}:</h4>
+        </div>
+        <ul class='default'>
+            <li><a href='{{ path('noob_user_userPostsLiked', {'slug': app.user.slug}) }}'><i class="fa fa-heart"></i> Mes coups de coeur</a></li>
+            <li><a href='{{ path('noob_messagerie_index') }}'><i class="fa fa-envelope"></i> Ma messagerie</a></li>
+            <li><a href='#'><i class="fa fa-pencil-square-o"></i> Gérer mes posts</a></li>
+            <li><a href='#'><i class="fa fa-refresh"></i> Modifier mes paramètres</a></li>
+            <li><a href='{{ path('noob_user_userprofilepage', {'slug': app.user.slug}) }}'><i class="fa fa-user"></i> Voir mon profil</a></li>
+        </ul>
+    </div>
+</div>

@@ -41,6 +41,24 @@ body{
 .font-bold {
     font-weight: bold;
 }
+.form-textarea{
+    min-height: 190px;
+}
+.help-block{
+    font-weight: 300;
+    color: $violet-main;
+}
+.form-spacer{
+    margin-top: 40px;
+    padding-bottom: 5px;
+    border-bottom:1px solid $grey-light-border;
+    margin-bottom:15px;
+    display:block;
+    color: $violet-main;
+}
+.form-spacer:first-child{
+    margin-top: 0;
+}
 .errorpagewrapper{
     margin-top: 50px;
     h1{

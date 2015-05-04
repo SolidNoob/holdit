@@ -6,14 +6,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-        
+
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * User
  *
  * @ORM\Table()
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="Noob\UserBundle\Entity\UserRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(fields="email", message="Cette adresse e-mail est déjà utilisée")
+ * @ORM\Entity(repositoryClass="Noob\UserBundle\Entity\UserRepository")
  */
 class User implements UserInterface, \Serializable
 {
@@ -97,10 +99,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="picture", type="string", length=50, nullable=true)
      */
     private $picture;
-    /**
-     * @Assert\File(maxSize="6000000")
-     */
-    public $file;
+    
     
     
     
@@ -143,7 +142,7 @@ class User implements UserInterface, \Serializable
     
     /**
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
     
@@ -151,14 +150,14 @@ class User implements UserInterface, \Serializable
     /**
      * @var boolean
      *
-     * @ORM\Column(name="lookingForInternship", type="boolean")
+     * @ORM\Column(name="lookingForInternship", type="boolean", nullable=true)
      */
     private $lookingForInternship;
     
     /**
      * @var boolean
      *
-     * @ORM\Column(name="lookingForJob", type="boolean")
+     * @ORM\Column(name="lookingForJob", type="boolean", nullable=true)
      */
     private $lookingForJob;
     
@@ -233,9 +232,16 @@ class User implements UserInterface, \Serializable
      /**
      * @var boolean
      *
-     * @ORM\Column(name="jury", type="boolean")
+     * @ORM\Column(name="jury", type="boolean", nullable=true)
      */
     private $jury;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
+     */
+    private $updatedAt;
     
     
     /**
@@ -993,27 +999,38 @@ class User implements UserInterface, \Serializable
     /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
     /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
     /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    public function getAbsolutePath()
+    /**
+      * @Assert\File(
+     * maxSize="5M",
+     * mimeTypes={"image/png", "image/jpeg", "image/gif"}
+     * )
+     */
+    public $fileProfil;
+    public $oldPicture;
+    
+    public function getAbsolutePathPicture()
     {
-        return null === $this->picture ? null : $this->getUploadRootDir().'/'.$this->picture;
+        return null === $this->picture ? null : $this->getUploadRootDirPicture().'/'.$this->picture;
     }
+    
 
-    public function getWebPath()
+    public function getWebPathPicture()
     {
-        return null === $this->picture ? null : $this->getUploadDir().'/'.$this->picture;
+        return null === $this->picture ? null : $this->getUploadDirPicture().'/'.$this->picture;
     }
+    
 
-    protected function getUploadRootDir()
+    protected function getUploadRootDirPicture()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+        return __DIR__.'/../../../../web/'.$this->getUploadDirPicture();
     }
 
-    protected function getUploadDir()
+    protected function getUploadDirPicture()
     {
         // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
         // le document/image dans la vue.
-        return 'uploads/documents';
+        return 'img/userpic230';
     }
     
     
@@ -1023,11 +1040,16 @@ class User implements UserInterface, \Serializable
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function preUpload()
+    public function preUploadPicture()
     {
-        if (null !== $this->file) {
+        // Sauvegarde temporaire de l'ancienne image pour la supprimer en postUpdate
+        if ($this->getPicture() !== null) {
+            $this->oldPicture = $this->getPicture();
+        }
+        
+        if (null !== $this->fileProfil) {
             // faites ce que vous voulez pour générer un nom unique
-            $this->picture = sha1(uniqid(mt_rand(), true)).'.'.$this->file->guessExtension();
+            $this->picture = sha1(uniqid(mt_rand(), true)).'.'.$this->fileProfil->guessExtension();
         }
     }
 
@@ -1035,27 +1057,32 @@ class User implements UserInterface, \Serializable
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
      */
-    public function upload()
+    public function uploadPicture()
     {
-        if (null === $this->file) {
+        if (null === $this->fileProfil) {
             return;
+        }
+        
+        // Si l'utilisateur avait déjà une image, on la supprime
+        if ($this->oldPicture != null) {
+            unlink($this->getUploadRootDirPicture().'/'.$this->oldPicture);
         }
 
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si
         // erreur il y a
-        $this->file->move($this->getUploadRootDir(), $this->picture);
+        $this->fileProfil->move($this->getUploadRootDirPicture(), $this->picture);
 
-        unset($this->file);
+        unset($this->fileProfil);
     }
 
     /**
      * @ORM\PostRemove()
      */
-    public function removeUpload()
+    public function removeUploadPicture()
     {
-        if ($file = $this->getAbsolutePath()) {
+        if ($file = $this->getAbsolutePathPicture()) {
             unlink($file);
         }
     }
@@ -1173,4 +1200,13 @@ class User implements UserInterface, \Serializable
     {
         return $this->messagesReceived;
     }
+    
+    public function setUpdatedAt($updatedAt){
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+    public function getUpdatedAt(){
+        return $this->updatedAt;
+    }
+    
 }

@@ -17,6 +17,16 @@ $(document).ready(function(){
         }
     });
     
+    $('.profil-description .showmore').click(function(e){
+        e.preventDefault();
+        $(this).parent('.profil-description').find('.hide-me').fadeToggle();
+        if($(this).text() === 'Agrandir la description'){
+            $(this).text('Réduire la description');
+        }else{
+            $(this).text('Agrandir la description');
+        }
+    });
+    
     
     var currEvent = true;
     //Follow User AjaxCall

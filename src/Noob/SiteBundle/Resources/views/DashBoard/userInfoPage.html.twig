@@ -1,0 +1,139 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}
+Modifier mes paramètres
+|{{ parent() }}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="board grey">
+    <div class="container pb">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                    <h1>Modifier mes paramètres</h1>
+                </header>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-xs-12'>
+                <div class='mb planked suggest-wrapper'>
+                    <ol class="breadcrumb">
+                        <li><a href="{{ path('noob_site_dashboard_index') }}">Tableau de bord</a></li>
+                        <li class="active">Modifier mes paramètres</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class='mb planked suggest-wrapper'>
+                    <form action="{{ path('noob_comment_userInfoPage') }}" method="post"  {{ form_enctype(form) }}>
+                        {% if not form.vars.valid %}
+                        <div class="bg-danger">
+                            <p>Le formulaire est incorrect:</p>
+                            {{ form_errors(form) }}
+                        </div>
+                        {% endif %}
+
+                        <strong class='form-spacer'>Votre profil:</strong>
+                        <div class="form-group">
+                         {{ form_label(form.firstname, 'Votre prénom: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.firstname, {'attr':{'class':'form-control'}})}}
+                        </div>
+
+                        <div class="form-group">
+                         {{ form_label(form.surname, 'Votre nom de famille: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.surname, {'attr':{'class':'form-control'}})}}
+                        </div>
+
+                        <div class="form-group">
+                         {{ form_label(form.section, 'Votre section: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.section, {'attr':{'class':'form-control'} } )}}
+                         </div>
+
+                        <div class="form-group">
+                         {{ form_label(form.description, "Votre description:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                          <span class="help-block"><i class="fa fa-question-circle"></i> Présentez-vous en quelques mots pour aider vos visiteurs à vous connaître.</span>
+                         {{ form_widget(form.description, {'attr':{'class':'form-control form-textarea'}})}}
+                         </div>
+                        
+                        <div class="form-group">
+                         {{ form_label(form.fileProfil, "Image de profil:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.fileProfil)}}
+                         </div>
+
+
+                        <strong class='form-spacer'>Options du profil:</strong>
+                        <div class="checkbox">
+                            <label>
+                                {{ form_widget(form.visibleInfo)}}
+                                Afficher mes informations de contact sur mon profil
+                            </label>
+                            <span class="help-block"><i class="fa fa-question-circle"></i> Décochez cette case si vous ne souhaitez pas que vos coordonnées (e-mail, téléphone, site personnel) apparaissent sur votre profil.</span>
+                        </div>
+
+                        <strong class='form-spacer'>Informations de contact:</strong>
+                        <div class="form-group">
+                         {{ form_label(form.email, 'Votre adresse e-mail: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.email, {'attr':{'class':'form-control'}})}}
+                         </div>
+
+
+                        <div class="form-group">
+                         {{ form_label(form.phoneNumber, 'Votre numéro de téléphone:', { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.phoneNumber, {'attr':{'class':'form-control'}})}}
+                         </div>
+
+                        <div class="form-group">
+                         {{ form_label(form.websiteurl, "L'adresse URL de votre site personnel:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                         <span class="help-block"><i class="fa fa-question-circle"></i> Blog personnel, page Github, ...</span>
+                         {{ form_widget(form.websiteurl, {'attr':{'class':'form-control'}})}}
+                         </div>
+
+                        <strong class='form-spacer'>Réseaux sociaux:</strong>
+
+                        <div class="form-group">
+                         {{ form_label(form.fblink, "L'adresse URL de votre page Facebook:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.fblink, {'attr':{'class':'form-control'}})}}
+                         </div>
+
+                        <div class="form-group">
+                         {{ form_label(form.twitterlink, "L'adresse URL de votre page Twitter:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.twitterlink, {'attr':{'class':'form-control'}})}}
+                         </div>
+
+                        <div class="form-group">
+                         {{ form_label(form.linkedinlink, "L'adresse URL de votre page LinkedIn:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.linkedinlink, {'attr':{'class':'form-control'}})}}
+                         </div>
+
+
+                        <strong class='form-spacer'>Recherche de stage et d'emploi:</strong>
+                        <div class="checkbox">
+                            <label>
+                                {{ form_widget(form.lookingForInternship)}}
+                                Je recherche un stage
+                            </label>
+                         </div>
+
+                        <div class="checkbox">
+                            <label>
+                                {{ form_widget(form.lookingForJob)}}
+                                Je recherche un emploi
+                            </label>
+                         </div>
+
+                        <br/><br/>
+                         {{ form_widget(form.save, { 'attr': {'class': 'btn btn-default'},'label': 'Valider'  }) }}
+                         {{form_widget(form._token)}}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            
+{% endblock %}

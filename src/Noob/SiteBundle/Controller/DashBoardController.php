@@ -5,7 +5,11 @@ namespace Noob\SiteBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Noob\SiteBundle\CustomClass\PaginatorHelper;
+
 use Symfony\Component\HttpFoundation\Response;
+
+use Noob\UserBundle\Form\StudentParametersType;
+use Noob\UserBundle\Entity\User;
 
 class DashBoardController extends Controller
 {
@@ -80,6 +84,30 @@ class DashBoardController extends Controller
                 'friendsPosts' => $recentsFriendsPost
             ))->getContent();
         return new Response(json_encode($response),200, array('Content-Type'=>'application/json'));
+    }
+    
+    public function userInfoPageAction(){
+        $user = $this->getUser();
+        
+        $form = $this->createForm(new StudentParametersType(), $user);
+        $request = $this->getRequest();
+        
+        if($request->isMethod('POST')) 
+        {
+            $form->handleRequest($request);
+            if($form->isValid()) 
+            {
+                $user = $form->getData();
+                $em = $this->getDoctrine()->getManager();
+                $user->setUpdatedAt(new \Datetime);
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+        return $this->render('NoobSiteBundle:DashBoard:userInfoPage.html.twig',array(
+            'user' => $user,
+            'form' => $form->createView(),
+        ));
     }
 }
  

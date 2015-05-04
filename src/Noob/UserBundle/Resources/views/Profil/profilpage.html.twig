@@ -113,8 +113,10 @@ Paralax method
                         </p>
                         <div class='result-wrapper'>
                           {% include 'NoobUserBundle:Buttons:followme.html.twig' with{ 'userToFollow': user } %}
-                          {% if app.user.id != user.id %}
-                          <a class='mp-me' href='{{path('noob_messagerie_sendOne', {'idRecipient':user.id})}}' target='_blank'><i class="fa fa-envelope"></i> Envoyer un message privé</a>
+                          {% if not app.user %} 
+                                <a class='mp-me notco' href='#'><i class="fa fa-envelope"></i> Envoyer un message privé</a>
+                          {% elseif app.user.id != user.id  %}
+                                <a class='mp-me' href='{{path('noob_messagerie_sendOne', {'idRecipient':user.id})}}' target='_blank'><i class="fa fa-envelope"></i> Envoyer un message privé</a>
                           {% endif %}
                         </div>
                       </div>
@@ -123,10 +125,16 @@ Paralax method
                 <div class="row">
                     <article class="col-md-4 text-justify">
                         <div class="planked">
-                            <div class="heading">Description</div>
+                            <div class="heading">Description personnelle</div>
                             <p class="profil-description">
                                 {% if user.description %}
-                                    {{ user.description }}
+                                    {% if user.description|length > 150 %}
+                                        {{user.description|slice(0,150)}}<span class='hide-me'>{{user.description|slice(150,user.description|length)}}</span>
+                                        <br/>
+                                        <a href='#' class='violet-me showmore'>Agrandir la description</a>
+                                    {% else %}
+                                        {{ user.description }}
+                                    {% endif %}
                                 {% else %}
                                     {{ user.firstname }} {{ user.surname }} n'a pas encore rempli sa description.
                                 {% endif %}
@@ -296,4 +304,24 @@ Paralax method
         </div>
     </div>
 </div>
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+var currEvent = true;
+$('body').on('click','.mp-me.notco', function(e){
+    e.preventDefault();
+    if(currEvent){
+        currEvent = false;
+        
+        bootbox.alert({
+            title: "Information",
+            message: "Vous devez vous connecter pour contacter ce membre"
+        });
+        currEvent = true;
+    }
+});
+
+</script>
 {% endblock %}

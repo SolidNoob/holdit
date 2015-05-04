@@ -35,4 +35,8 @@ noob_comment_getUserLastCommentAjax:
 noob_comment_getUserFriendsPostsAjax:
     path:     /user/dashboard/getFriendsPost
     defaults: { _controller: NoobSiteBundle:DashBoard:getUserFriendsPostsAjax }
+    
+noob_comment_userInfoPage:
+    path:     /user/dashboard/user-info
+    defaults: { _controller: NoobSiteBundle:DashBoard:userInfoPage }
 

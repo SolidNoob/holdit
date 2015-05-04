@@ -34,6 +34,7 @@
         </header>
         {% if user.role.slug == 'etudiant' %}
             <div class="lookingfor">
+                <p>
                 {% if user.lookingForInternship %}
                     Recherche un stage
                     {% if user.lookingForJob %}
@@ -43,9 +44,10 @@
                 {% if user.lookingForJob %}
                     Recherche un emploi
                 {% endif %}
+                </p>
             </div>
         {% endif %}
-        <div class="visible-lg visible-md">{{ user.description }} </div>
+        <div class="visible-lg visible-md">{% if user.description|length > 100 %}{{ user.description|slice(0,100) }}...{% else %} {{ user.description }} {% endif %}</div>
         {% include 'NoobTagBundle:Global:tagList.html.twig' with{ 'tagList': user.tags } %}
         <div class='previewbottom wrapper'>
             {% include 'NoobUserBundle:Buttons:followme.html.twig' with{ 'userToFollow': user } %}
