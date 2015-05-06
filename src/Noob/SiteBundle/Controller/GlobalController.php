@@ -48,5 +48,6 @@ class GlobalController extends Controller
             'lastTFE' => $lastTFE
         ));
     }
+    
 }
  

@@ -13,6 +13,13 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class UserRepository extends EntityRepository implements UserProviderInterface
 {
+    
+    public function findLastBySlugLike($slug){
+        $q = $this->createQueryBuilder('u')->where('u.slug like :slug')->setParameter('slug', '%'.$slug.'%')->orderBy('u.id','desc')
+            ->setMaxResults(1);
+        return  $q->getQuery()->getResult();
+    }
+    
     public function getUserListAndRole(){
         $q = $this
             ->createQueryBuilder('u')

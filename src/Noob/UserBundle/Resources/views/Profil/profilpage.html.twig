@@ -100,7 +100,7 @@ Paralax method
                               {% if user.role.slug == 'etudiant'%}
                               <br/>
                               <span>
-                                <i class="fa fa-bookmark"></i>
+                                <i class="fa fa-bookmark"></i> 
                                 {% if user.websiteurl is not null and user.websiteurl is not empty %}
                                      <a href='{{ user.websiteurl }}' target='_blank' rel="nofollow">{{ user.websiteurl }}</a>
                                 {% else %}
@@ -116,7 +116,7 @@ Paralax method
                           {% if not app.user %} 
                                 <a class='mp-me notco' href='#'><i class="fa fa-envelope"></i> Envoyer un message privé</a>
                           {% elseif app.user.id != user.id  %}
-                                <a class='mp-me' href='{{path('noob_messagerie_sendOne', {'idRecipient':user.id})}}' target='_blank'><i class="fa fa-envelope"></i> Envoyer un message privé</a>
+                                <a class='mp-me' href='{{path('noob_messagerie_sendOne', {'slugRecipient':user.slug})}}' target='_blank'><i class="fa fa-envelope"></i> Envoyer un message privé</a>
                           {% endif %}
                         </div>
                       </div>

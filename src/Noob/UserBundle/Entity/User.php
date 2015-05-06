@@ -15,6 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields="email", message="Cette adresse e-mail est déjà utilisée")
+ * @UniqueEntity(fields="username", message="Ce login est déjà utilisé")
  * @ORM\Entity(repositoryClass="Noob\UserBundle\Entity\UserRepository")
  */
 class User implements UserInterface, \Serializable

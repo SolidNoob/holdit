@@ -40,3 +40,6 @@ noob_comment_userInfoPage:
     path:     /user/dashboard/user-info
     defaults: { _controller: NoobSiteBundle:DashBoard:userInfoPage }
 
+noob_comment_userEditTags:
+    path:     /user/dashboard/user-tags
+    defaults: { _controller: NoobSiteBundle:DashBoard:editUserTags }

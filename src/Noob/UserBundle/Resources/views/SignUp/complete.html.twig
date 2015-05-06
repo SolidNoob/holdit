@@ -1,0 +1,194 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %} Inscription - Etape 3 | {{ parent() }} {% endblock %}
+
+{% block content %}
+<div class="board violet">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                  <h1><span class="xl-size">Créer un compte</span></h1>
+                </header>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grey">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-xs-12">
+                <div class='form-signin-wrapper'>
+                    <div class="form-signin">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class='text-right'>Créer un compte: étape 3/3</div>
+                                <h4>La création de votre compte est terminée! <br/>Bienvenue, {{ app.user.firstname }}!</h4>
+                                <p>Vous pouvez compléter les informations suivantes pour personnaliser votre profil.</p>
+                                <p>Cette étape est <strong>facultative</strong>, vous pourrez vous en occuper à tout moment en accédant aux paramètres de votre compte.</p>
+                                <p class='text-right'>
+                                    <a href='{{ path('noob_site_dashboard_index') }}' class='btn btn-danger'>Je souhaite passer cette étape</a>
+                                    <br/><br/>
+                                </p>
+                                <form action="{{ path('user_signup_complete') }}" method="post"  {{ form_enctype(form) }} >
+                                    {% if not form.vars.valid %}
+                                    <div class="bg-danger">
+                                        <p>Le formulaire est incorrect:</p>
+                                        {{ form_errors(form) }}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <strong class='form-spacer'>Vos tags:</strong>
+                                    <div class="form-group">
+                                        <span class="help-block"><i class="fa fa-question-circle"></i> Les tags représentent vos centres d'intérêt ou vos compétences. Vous pouvez choisir jusqu'à 5 tags au maximum.</span>
+                                        Vos tags: 
+                                        <div id='actualtags'>
+                                            {% for tag in tags %}
+                                            <a href='#' class="deletetag">{{ tag.name }}</a>
+                                            {% endfor %}
+                                        </div>
+                                        <p class='form-inline'>
+                                            <input type='text' class='form-control form-small' id='tagField'/>
+                                            <button type='button' id='tagbutton' class='btn btn-primary'>Ajouter à mes tags</button>
+                                        </p>
+                                        <div id='tag-suggestions'></div>
+                                        {{ form_widget(form.tags, {'attr':{'class':'form-control truefield'}})}}
+                                     </div>
+                                    
+                                    <strong class='form-spacer'>Personnalisez votre profil:</strong>
+                                    <div class="form-group">
+                                     {{ form_label(form.fileProfil, "Image de profil:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                                     {{ form_widget(form.fileProfil)}}
+                                     </div>
+                                    
+                                    <div class="form-group">
+                                     {{ form_label(form.description, "Votre description:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                                      <span class="help-block"><i class="fa fa-question-circle"></i> Présentez-vous en quelques mots pour aider vos visiteurs à vous connaître.</span>
+                                     {{ form_widget(form.description, {'attr':{'class':'form-control form-textarea'}})}}
+                                     </div>
+                                    
+                                    <strong class='form-spacer'>Informations de contact:</strong>
+                                    {% if app.user.role.slug == 'etudiant' %}
+                                        {% set labelPhone = "Votre numéro de téléphone:" %}
+                                        {% set labelURL = "L'adresse URL de votre site personnel:" %}
+                                        {% set infoUrl = " Blog personnel, page Github, ..." %}
+                                    {% else %}
+                                        {% set labelPhone = "Numéro de téléphone de votre entreprise/société:" %}
+                                        {% set labelURL = "Adresse URL du site de votre entreprise:" %}
+                                    {% endif %}
+                                    <div class="form-group">
+                                     {{ form_label(form.phoneNumber, labelPhone, { 'label_attr': {'class': 'maclasse'} }) }} 
+                                     {{ form_widget(form.phoneNumber, {'attr':{'class':'form-control'}})}}
+                                     </div>
+
+                                    <div class="form-group">
+                                     {{ form_label(form.websiteurl, labelURL, { 'label_attr': {'class': 'maclasse'} }) }} 
+                                    {% if infoUrl is defined %}
+                                     <span class="help-block"><i class="fa fa-question-circle"></i> {{ infoUrl }}</span>
+                                     {% endif %}
+                                     {{ form_widget(form.websiteurl, {'attr':{'class':'form-control'}})}}
+                                     </div>
+
+                                    <strong class='form-spacer'>Réseaux sociaux:</strong>
+
+                                    <div class="form-group">
+                                     {{ form_label(form.fblink, "L'adresse URL de votre page Facebook:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                                     {{ form_widget(form.fblink, {'attr':{'class':'form-control'}})}}
+                                     </div>
+
+                                    <div class="form-group">
+                                     {{ form_label(form.twitterlink, "L'adresse URL de votre page Twitter:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                                     {{ form_widget(form.twitterlink, {'attr':{'class':'form-control'}})}}
+                                     </div>
+
+                                    <div class="form-group">
+                                     {{ form_label(form.linkedinlink, "L'adresse URL de votre page LinkedIn:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                                     {{ form_widget(form.linkedinlink, {'attr':{'class':'form-control'}})}}
+                                     </div>
+
+                                    {{ form_widget(form.save, { 'attr': {'class': 'btn btn-default'},'label': 'Enregistrer'  }) }}
+                                    {{form_widget(form._token)}}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+    
+    updateTrueField();
+    
+    var timer = null;
+    $("#tagField").keyup(function(e){
+        if(timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(getSuggestions, 300);
+    });
+    function getSuggestions(){
+        var searchString = $("#tagField").val();
+        if(searchString.length > 1){
+            $.ajax({
+                type: "POST",
+                url: "{{ path('noob_tag_ajax_suggestion')}}",
+                data: {searchString: searchString},
+                success: function(data){
+                    $("#tag-suggestions").html(data);
+                }
+            });
+        }
+    }
+    
+    
+    $('#tagField').submit(function(e){
+        e.preventDefault;
+        if($('#tagField').val().length > 0){
+            var newTag = $('#tagField').val().replace(/ /g,"");;
+            $('#actualtags').append(' <a class="deletetag" href="#">'+newTag+'</a>');
+            $('#tagField').val('');
+            $("#tag-suggestions").html('');
+            updateTrueField();
+        }
+    });
+    
+    $('#tagbutton').click(function(){
+        if($('#tagField').val().length > 0){
+            var newTag = $('#tagField').val().replace(/ /g,"");;
+            $('#actualtags').append(' <a class="deletetag" href="#">'+newTag+'</a>');
+            $('#tagField').val('');
+            $("#tag-suggestions").html('');
+            updateTrueField();
+        }
+    });
+    $('body').on('click', '.deletetag', function(e){ 
+        e.preventDefault();
+        $(this).fadeOut().remove();
+        updateTrueField();
+    });
+    $('body').on('click', '.clicktoadd', function(e){ 
+        e.preventDefault();
+        var newTag = $(this).text();
+        $('#tagField').val('');
+        $("#tag-suggestions").html('');
+        $('#actualtags').append(' <a class="deletetag" href="#">'+newTag+'</a>');
+        updateTrueField();
+    });
+    
+    function updateTrueField(){
+        var searchString = '';
+        $('.deletetag').each(function(){
+            searchString = searchString + ' ' + $(this).text();
+        });
+        $('.truefield').val(searchString.trim());
+    }
+});
+</script>
+{% endblock %}

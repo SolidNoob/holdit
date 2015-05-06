@@ -30,6 +30,8 @@ noob_user_profilcompleteListAjax:
     path: profil-complete-list-ajax/{contentType}
     defaults: {_controller: NoobUserBundle:Profil:getCompleteListAjax}
 
+
+
 #login routes
 user_login:
     pattern: /login
@@ -43,8 +45,33 @@ user_login_check:
 #end login routes
     
     
+
+#signUp mechanism routes
+user_signup_page:
+    pattern: /signup
+    defaults: {_controller: NoobUserBundle:SignUp:signUpPage}
+    
+user_signup_firstStep:
+    pattern: /signup/first-step/{accountTypeSlug}
+    defaults: {_controller: NoobUserBundle:SignUp:firstStep}
+    
+user_signup_emailconfirm:
+    pattern: /signup/confirm
+    defaults: {_controller: NoobUserBundle:SignUp:emailConfirm}
+    
+user_signup_validRegister:
+    pattern: /signup/validRegister/{key}
+    defaults: {_controller: NoobUserBundle:SignUp:validRegister}
+    
+user_signup_complete:
+    pattern: /signup/complete
+    defaults: {_controller: NoobUserBundle:SignUp:complete}
+
+
+
     
 
+#Please master delete me
 
 noob_user_list:
     path:   /userlist

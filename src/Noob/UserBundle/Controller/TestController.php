@@ -9,6 +9,8 @@ use Noob\MessagerieBundle\Entity\Message;
 use Symfony\Component\HttpFoundation\Response;
 use Noob\UserBundle\Form\StudentParametersType;
 
+use Noob\SiteBundle\CustomClass\Slugify;
+
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 
 class TestController extends Controller
@@ -122,7 +124,7 @@ class TestController extends Controller
     
     public function testLotOfFollowingsAction(){
         //$user = new User();
-        $em = $this->getDoctrine()->getManager();
+        /*$em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository('NoobUserBundle:User');
         $user = $repository->findOneBySurname('Gervasi');
         
@@ -140,6 +142,22 @@ class TestController extends Controller
         return $this->render('NoobUserBundle:Test:testFormUser.html.twig',array(
             'user' => $user,
             'form' => $form->createView(),
-        ));
+        ));*/
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('NoobUserBundle:User');
+        $user = $repository->findOneByUsername('E22222');
+        
+        $slugify = new Slugify();
+        $slug = $slugify->stringToSlug($user->getFirstname())."-".$slugify->stringToSlug($user->getSurname());
+        $listSameSlug = $em->getRepository('NoobUserBundle:User')->findBy(array('slug'=>$slug));
+        /*
+        if(!$listSameSlug){
+            $user->setSlug($slug);
+        }else{
+            $count = count($listSameSlug);
+            $user->setSlug($slug."-".$count);
+        }*/
+        var_dump(count($listSameSlug));
+        return new Response();
     }
 }

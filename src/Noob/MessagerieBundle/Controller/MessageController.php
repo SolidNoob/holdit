@@ -129,11 +129,11 @@ class MessageController extends Controller
         ));
     }
     
-    public function sendOneAction($idRecipient){
+    public function sendOneAction($slugRecipient){
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-        $recipient =  $em->getRepository('NoobUserBundle:User')->findOneById($idRecipient);
-        if(!$recipient || $idRecipient == $user->getId()){
+        $recipient =  $em->getRepository('NoobUserBundle:User')->findOneBySlug($slugRecipient);
+        if(!$recipient || $recipient->getId() == $user->getId()){
             throw $this->createNotFoundException('Membre introuvable');
         }
         

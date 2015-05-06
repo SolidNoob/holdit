@@ -19,6 +19,6 @@ noob_messagerie_readOne:
     defaults: { _controller: NoobMessagerieBundle:Message:readOne }
     
 noob_messagerie_sendOne:
-    path: /user/sendOne/{idRecipient}
+    path: /user/sendOne/{slugRecipient}
     defaults: { _controller: NoobMessagerieBundle:Message:sendOne }
     

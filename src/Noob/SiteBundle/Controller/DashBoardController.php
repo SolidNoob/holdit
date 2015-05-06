@@ -91,7 +91,6 @@ class DashBoardController extends Controller
         
         $form = $this->createForm(new StudentParametersType(), $user);
         $request = $this->getRequest();
-        
         if($request->isMethod('POST')) 
         {
             $form->handleRequest($request);
@@ -106,6 +105,63 @@ class DashBoardController extends Controller
         }
         return $this->render('NoobSiteBundle:DashBoard:userInfoPage.html.twig',array(
             'user' => $user,
+            'form' => $form->createView(),
+        ));
+    }
+    
+    public function editUserTagsAction(){
+        $em = $this->getDoctrine()->getEntityManager();
+        $me = $em->getRepository('NoobUserBundle:User')->findOneById($this->getUser()->getId());
+        $form = $this->createFormBuilder($me)
+                ->add('tags', "hidden", array(
+                        'mapped' => false,
+                ))->add('save', 'submit')
+        ->getForm();
+        $tags = $me->getTags();
+        
+        $request = $this->getRequest();
+        if($request->isMethod('POST')) 
+        {
+            $form->handleRequest($request);
+            if($form->isValid()) 
+            {   
+                $me = $form->getData();
+                $me->setUpdatedAt(new \DateTime);
+               
+                $formTags = $form->get('tags')->getData();
+                if(!empty($formTags)){
+                    $formTags = explode(' ',$formTags);
+                    $formTags = array_slice($formTags, 0,5);
+                    $formTags = array_unique($formTags);
+                    
+                    foreach($tags as $t){
+                        $me->removeTag($t);
+                    }
+
+                    $slugify = new \Noob\SiteBundle\CustomClass\Slugify();
+                    foreach($formTags as $t){
+                        $newTag = $em->getRepository('NoobTagBundle:Tag')->findOneByName($slugify->stringToSlug($t));
+                        if(!$newTag){
+                            $newTag = new \Noob\TagBundle\Entity\Tag;
+                            $newTag->setName($slugify->stringToSlug($t));
+                            $em->persist($newTag);
+                        }
+                        $me->addTag($newTag);
+                    }
+                }
+                $this->get('session')->getFlashBag()->add(
+                    'notice',
+                    'Vos changements ont été pris en compte'
+                );
+                
+                $em->persist($me);
+                $em->flush();
+            }
+        }
+        
+        
+        return $this->render('NoobSiteBundle:DashBoard:editUserTags.html.twig',array(
+            'user' => $me,
             'form' => $form->createView(),
         ));
     }

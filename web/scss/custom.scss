@@ -41,6 +41,9 @@ body{
 .font-bold {
     font-weight: bold;
 }
+.form-small{
+    max-width:  180px;
+}
 .form-textarea{
     min-height: 190px;
 }
@@ -48,13 +51,20 @@ body{
     font-weight: 300;
     color: $violet-main;
 }
+.formuserinfo{
+    .form-group{
+        padding:0 30px;
+    }
+}
+#actualtags{display:inline-block;}
 .form-spacer{
     margin-top: 40px;
     padding-bottom: 5px;
     border-bottom:1px solid $grey-light-border;
     margin-bottom:15px;
     display:block;
-    color: $violet-main;
+    font-weight: 300;
+    font-size: $font-size-main + 2px;
 }
 .form-spacer:first-child{
     margin-top: 0;
@@ -577,6 +587,7 @@ a.post-detail-url{
     ul.default{
         padding-left:15px;
         margin:0;
+        padding:0;
         li{
             list-style: none;
             margin-bottom: 10px;
@@ -587,6 +598,12 @@ a.post-detail-url{
                     text-decoration: none;
                     color: $black-main;
                 }
+            }
+        }
+        &.bordered{
+            li{
+                border-bottom: 1px solid $grey-light-border;
+                padding-bottom: 8px;
             }
         }
     }
@@ -839,6 +856,9 @@ a.post-detail-url{
     color: $black-main;
     background: $grey-main;
     border-bottom: 1px solid $grey-light-border;
+    .profil-description{
+        word-break: break-all;
+    }
     .profil-header{
         margin-bottom: 15px;
     }

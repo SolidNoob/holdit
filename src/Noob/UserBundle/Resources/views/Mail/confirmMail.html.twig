@@ -1,0 +1,10 @@
+<p>Bonjour {{ user.firstname }} {{ user.surname }},</p>
+<br/>
+<p>vous avez presque finalisé la création de votre compte sur notre site, avec le login <em>{{ user.username }}</em></p>
+<p>Merci de <a href='{{ path('user_signup_validRegister', {'key':key}) }}'>confirmer votre inscription en cliquant ici</a>, ou via le lien suivant:  <a href='{{ path('user_signup_validRegister', {'key':key}) }}'>{{ path('user_signup_validRegister', {'key':key}) }}</a></p>
+<br/>
+<p>Merci de ne pas répondre à cet e-mail.<br/>
+Celui-ci ayant été généré automatiquement, nous ne pourrons traiter votre réponse. <br/>
+<br/>
+A très bientôt sur notre site.
+</p>

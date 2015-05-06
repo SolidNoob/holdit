@@ -1,0 +1,80 @@
+<form action="{{ path('user_signup_firstStep', {'accountTypeSlug':app.session.get('roleSlug') }) }}" method="post"  {{ form_enctype(form) }} >
+    {% if not form.vars.valid %}
+    <div class="bg-danger">
+        <p>Le formulaire est incorrect:</p>
+        {{ form_errors(form) }}
+    </div>
+    {% endif %}
+
+    <strong class='form-spacer'>Votre compte:</strong>
+    <div class="form-group">
+     {{ form_label(form.username, 'Votre login: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+        <span class="help-block"><i class="fa fa-question-circle"></i> Entrez le nom d'utilisateur à 6 caractères, fournis lors de votre inscription</span>
+     {{ form_widget(form.username, {'attr':{'class':'form-control'}})}}
+    </div>
+    
+
+    <div class="form-group">
+     {{ form_label(form.email, 'Votre adresse e-mail: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.email, {'attr':{'class':'form-control'}})}}
+     </div>
+    
+    <div class="form-group">
+        {{ form_label(form.password.first, 'Votre mot de passe: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+        {{ form_widget(form.password.first, { 'attr': {'class':'form-control'}})}}
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(form.password.second, 'Confirmation du mot de passe: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+        {{ form_widget(form.password.second, { 'attr': {'class':'form-control'}})}}
+    </div>
+
+    <strong class='form-spacer'>Votre profil:</strong>
+    
+    <div class="form-group">
+     {{ form_label(form.section, 'Votre section: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.section, {'attr':{'class':'form-control'} } )}}
+     </div>
+    
+    <div class="form-group">
+     {{ form_label(form.firstname, 'Votre prénom: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.firstname, {'attr':{'class':'form-control'}})}}
+    </div>
+
+    <div class="form-group">
+     {{ form_label(form.surname, 'Votre nom de famille: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.surname, {'attr':{'class':'form-control'}})}}
+    </div>
+    
+    
+    <strong class='form-spacer'>Options du profil:</strong>
+    <div class="form-group">
+        <div class="checkbox">
+            <span class="help-block"><i class="fa fa-question-circle"></i> Décochez cette case si vous ne souhaitez pas que vos informations de contact apparaissent sur votre profil.</span>
+            <label>
+                {{ form_widget(form.visibleInfo)}}
+                Afficher mes informations de contact sur mon profil
+            </label>
+        </div>
+    </div>
+    
+    <strong class='form-spacer'>Conditions d'utilisation:</strong>
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                {{ form_widget(form.iagree)}}
+                J'ai lu et j'accepte les conditions d'utilisations du site.
+            </label>
+        </div>
+    </div>
+
+    <strong class='form-spacer'>Sécurité:</strong>
+    <div class="form-group">
+     {{ form_label(form.recaptcha, 'Captcha: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.recaptcha, {'attr':{'class':'form-control'}})}}
+    </div>
+
+
+     {{ form_widget(form.save, { 'attr': {'class': 'btn btn-default'},'label': 'Etape suivante'  }) }}
+     {{form_widget(form._token)}}
+</form>

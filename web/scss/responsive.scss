@@ -83,6 +83,10 @@
 }
 
 @media screen and (max-width: 768px){
+    .form-signin .col-left{
+        border-right: none;
+        border-bottom: 1px solid $grey-light-border;
+    }
     // --- Global: ------------------------------------------------------------------------------------------ // 
     .search-bar{
         &.form-control{

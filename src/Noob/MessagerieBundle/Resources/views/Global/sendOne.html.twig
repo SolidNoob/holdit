@@ -27,7 +27,7 @@
                         <h4>Votre message:</h4>
                     </div>
                     <div>
-                        <form action="{{ path('noob_messagerie_sendOne',{'idRecipient': recipient.id}) }}" method="post"  {{ form_enctype(form) }} id='replyForm' >
+                        <form action="{{ path('noob_messagerie_sendOne',{'slugRecipient': recipient.slug}) }}" method="post"  {{ form_enctype(form) }} id='replyForm' >
                             {% if not form.vars.valid %}
                             <div class="bg-danger">
                                 <p>Le message n'a pas été envoyé:</p>

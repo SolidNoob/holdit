@@ -100,7 +100,7 @@ class StudentParametersType extends AbstractType
 
     public function getName()
     {
-        return 'user_parameters';
+        return 'user_studentparameters';
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver)

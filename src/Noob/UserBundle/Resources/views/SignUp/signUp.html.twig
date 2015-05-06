@@ -1,0 +1,43 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %} Inscription | {{ parent() }} {% endblock %}
+
+{% block content %}
+<div class="board violet">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                  <h1><span class="xl-size">Créer un compte</span></h1>
+                </header>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grey">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-xs-12">
+                <div class='form-signin-wrapper'>
+                    <div class="form-signin">
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 col-left text-center">
+                                <i class="fa fa-graduation-cap fa-2x"></i> 
+                                <h4>Je suis un étudiant</h4>
+                                <p class='text-justify'>Activez tout de suite votre compte pour pouvoir créer votre profil, contacter des professionnels et des entreprises, accéder aux offres de stage et aux offres d'emploi et personnaliser votre portfolio.</p>
+                                <a class="btn btn-primary" href="{{ path('user_signup_firstStep', {'accountTypeSlug':'etudiant'}) }}"><i class="fa fa-sign-in"></i> Activer mon compte étudiant</a>
+                            </div>
+                            <div class="col-sm-6 col-xs-12 col-right text-center">
+                                <i class="fa fa-user fa-2x"></i> 
+                                <h4>Je suis un professionnel</h4>
+                                <p class='text-justify'>Créer gratuitement et rapidement votre compte pour entrer en contact avec nos étudiants, poster des offres de stage et des offres d'emploi et devenir membre de jury d'épreuves intégrées.</p>
+                                <a class="btn btn-primary" href="{{ path('user_signup_firstStep', {'accountTypeSlug':'entreprise'}) }}"><i class="fa fa-sign-in"></i> Créer mon compte entreprise</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock %}

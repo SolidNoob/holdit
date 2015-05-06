@@ -28,9 +28,16 @@ Modifier mes paramètres
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-5">
+                <div class='suggest-wrapper bordered-panel border-violet'>
+                    <ul class='default bordered'>
+                        
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-7">
                 <div class='mb planked suggest-wrapper'>
-                    <form action="{{ path('noob_comment_userInfoPage') }}" method="post"  {{ form_enctype(form) }}>
+                    <form action="{{ path('noob_comment_userInfoPage') }}" method="post"  {{ form_enctype(form) }} class="formuserinfo">
                         {% if not form.vars.valid %}
                         <div class="bg-danger">
                             <p>Le formulaire est incorrect:</p>
@@ -67,12 +74,14 @@ Modifier mes paramètres
 
 
                         <strong class='form-spacer'>Options du profil:</strong>
-                        <div class="checkbox">
-                            <label>
-                                {{ form_widget(form.visibleInfo)}}
-                                Afficher mes informations de contact sur mon profil
-                            </label>
-                            <span class="help-block"><i class="fa fa-question-circle"></i> Décochez cette case si vous ne souhaitez pas que vos coordonnées (e-mail, téléphone, site personnel) apparaissent sur votre profil.</span>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    {{ form_widget(form.visibleInfo)}}
+                                    Afficher mes informations de contact sur mon profil
+                                </label>
+                                <span class="help-block"><i class="fa fa-question-circle"></i> Décochez cette case si vous ne souhaitez pas que vos coordonnées (e-mail, téléphone, site personnel) apparaissent sur votre profil.</span>
+                            </div>
                         </div>
 
                         <strong class='form-spacer'>Informations de contact:</strong>
@@ -112,19 +121,21 @@ Modifier mes paramètres
 
 
                         <strong class='form-spacer'>Recherche de stage et d'emploi:</strong>
-                        <div class="checkbox">
-                            <label>
-                                {{ form_widget(form.lookingForInternship)}}
-                                Je recherche un stage
-                            </label>
-                         </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    {{ form_widget(form.lookingForInternship)}}
+                                    Je recherche un stage
+                                </label>
+                             </div>
 
-                        <div class="checkbox">
-                            <label>
-                                {{ form_widget(form.lookingForJob)}}
-                                Je recherche un emploi
-                            </label>
-                         </div>
+                            <div class="checkbox">
+                                <label>
+                                    {{ form_widget(form.lookingForJob)}}
+                                    Je recherche un emploi
+                                </label>
+                             </div>
+                        </div>
 
                         <br/><br/>
                          {{ form_widget(form.save, { 'attr': {'class': 'btn btn-default'},'label': 'Valider'  }) }}

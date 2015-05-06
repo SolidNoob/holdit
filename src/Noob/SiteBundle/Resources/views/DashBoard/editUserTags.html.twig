@@ -1,0 +1,151 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}
+Modifier mes tags
+|{{ parent() }}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="board grey">
+    <div class="container pb">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                    <h1>Modifier mes tags</h1>
+                </header>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-xs-12'>
+                <div class='mb planked suggest-wrapper'>
+                    <ol class="breadcrumb">
+                        <li><a href="{{ path('noob_site_dashboard_index') }}">Tableau de bord</a></li>
+                        <li class="active">Modifier mes tags</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class='suggest-wrapper bordered-panel border-violet'>
+                    <ul class='default bordered'>
+                        mdr abon toi
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class='mb planked suggest-wrapper'>
+                    {% for flashMessage in app.session.flashbag.get('notice') %}
+                        <div class="bg-success">{{ flashMessage }}</div>
+                    {% endfor %}
+                    <form action="{{ path('noob_comment_userEditTags') }}" method="post"  {{ form_enctype(form) }} >
+                        {% if not form.vars.valid %}
+                        <div class="bg-danger">
+                            <p>Le formulaire est incorrect:</p> 
+                           {{ form_errors(form) }}
+                        </div>
+                        {% endif %}
+
+                        <strong class='form-spacer'>Vos tags:</strong>
+                        <div class="form-group">
+                            <span class="help-block"><i class="fa fa-question-circle"></i> Les tags représentent vos centres d'intérêt ou vos compétences. Vous pouvez choisir jusqu'à 5 tags au maximum.</span>
+                            Vos tags: 
+                            <div id='actualtags'>
+                                {% for tag in user.tags %}
+                                <a href='#' class="deletetag">{{ tag.name }}</a>
+                                {% endfor %}
+                            </div>
+                            <p class='form-inline'>
+                                <input type='text' class='form-control form-small' id='tagField'/>
+                                <button type='button' id='tagbutton' class='btn btn-primary'>Ajouter à mes tags</button>
+                            </p>
+                            <div id='tag-suggestions'></div>
+                            {{ form_widget(form.tags, {'attr':{'class':'form-control truefield'}})}}
+                         </div>
+
+                        {{ form_widget(form.save, { 'attr': {'class': 'btn btn-default'},'label': 'Enregistrer'  }) }}
+                        {{form_widget(form._token)}}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+    
+    updateTrueField();
+    
+    var timer = null;
+    $("#tagField").keyup(function(e){
+        if(timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(getSuggestions, 300);
+    });
+    function getSuggestions(){
+        var searchString = $("#tagField").val();
+        if(searchString.length > 1){
+            $.ajax({
+                type: "POST",
+                url: "{{ path('noob_tag_ajax_suggestion')}}",
+                data: {searchString: searchString},
+                success: function(data){
+                    $("#tag-suggestions").html(data);
+                }
+            });
+        }
+    }
+    
+    
+    $('#tagField').submit(function(e){
+        e.preventDefault;
+        if($('#tagField').val().length > 0){
+            var newTag = $('#tagField').val().replace(/ /g,"");;
+            $('#actualtags').append(' <a class="deletetag" href="#">'+newTag+'</a>');
+            $('#tagField').val('');
+            $("#tag-suggestions").html('');
+            updateTrueField();
+        }
+    });
+    
+    $('#tagbutton').click(function(){
+        if($('#tagField').val().length > 0){
+            var newTag = $('#tagField').val().replace(/ /g,"");;
+            $('#actualtags').append(' <a class="deletetag" href="#">'+newTag+'</a>');
+            $('#tagField').val('');
+            $("#tag-suggestions").html('');
+            updateTrueField();
+        }
+    });
+    $('body').on('click', '.deletetag', function(e){ 
+        e.preventDefault();
+        $(this).fadeOut().remove();
+        updateTrueField();
+    });
+    $('body').on('click', '.clicktoadd', function(e){ 
+        e.preventDefault();
+        var newTag = $(this).text();
+        $('#tagField').val('');
+        $("#tag-suggestions").html('');
+        $('#actualtags').append(' <a class="deletetag" href="#">'+newTag+'</a>');
+        updateTrueField();
+    });
+    
+    function updateTrueField(){
+        var searchString = '';
+        $('.deletetag').each(function(){
+            searchString = searchString + ' ' + $(this).text();
+        });
+        $('.truefield').val(searchString.trim());
+    }
+});
+</script>
+{% endblock %}

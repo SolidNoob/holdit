@@ -18,15 +18,15 @@ Tableau de bord
         </div>
         <div class="row">
             <div class='col-md-4'>
-                <div class='mb planked suggest-wrapper'>
+                <div class='suggest-wrapper bordered-panel border-violet'>
                     <div class="heading">
                         <h4>{{ app.user.firstname }} {{ app.user.surname }}:</h4>
                     </div>
-                    <ul class='default'>
+                    <ul class='default bordered'>
                         <li><a href='{{ path('noob_user_userPostsLiked', {'slug': app.user.slug}) }}'><i class="fa fa-heart"></i> Mes coups de coeur</a></li>
                         <li><a href='{{ path('noob_messagerie_index') }}'><i class="fa fa-envelope"></i> Ma messagerie</a></li>
                         <li><a href='#'><i class="fa fa-pencil-square-o"></i> Gérer mes posts</a></li>
-                        <li><a href='#'><i class="fa fa-refresh"></i> Modifier mes paramètres</a></li>
+                        <li><a href="{{ path('noob_comment_userInfoPage') }}"> <i class="fa fa-cog"></i> Modifier mes paramètres</a></li>
                         <li><a href='{{ path('noob_user_userprofilepage', {'slug': app.user.slug}) }}'><i class="fa fa-user"></i> Voir mon profil</a></li>
                     </ul>
                 </div>
@@ -39,12 +39,15 @@ Tableau de bord
                           <li><a href='{{ path('noob_site_searchContent', {'search': tag.name}) }}'  >{{ tag.name }}</a></li>
                         {% endfor %}
                     </ul>
-                    <a href='#' class='violet-me'>Modifier mes tags</a>
+                    <a href='{{ path('noob_comment_userEditTags') }}' class='violet-me'>Modifier mes tags</a>
                 </div>
                 <div class='mb planked  suggest-wrapper'>
                     <div class="heading">
                         <h4>Vos derniers commentaires:</h4>
                     </div>
+                    {% if comments|length == 0 %}
+                        Vous n'avez pas encore posté de commentaire.
+                    {% else %}
                     {% include 'NoobSiteBundle:DashBoard:commentsListDashboard.html.twig' with {'comments': comments} %}
                     <div>
                         <span class="load-more" data-of="10" data-route="{{ path('noob_comment_getUserLastCommentAjax')}}"> 
@@ -55,6 +58,7 @@ Tableau de bord
                             Aucun résultat
                         </span>
                     </div>
+                    {% endif %}
                 </div>
             </div>
             
@@ -64,7 +68,11 @@ Tableau de bord
                     <div class="heading">
                         <h4>Les membres que vous suivez ont posté les éléments suivants:</h4>
                     </div>
-                    {% include 'NoobSiteBundle:DashBoard:friendsPosts.html.twig' with {'friendsPosts': friendsPosts} %}<div>
+                    {% if friendsPosts|length == 0 %}
+                        Pas de résultats.
+                    {% else %}
+                    {% include 'NoobSiteBundle:DashBoard:friendsPosts.html.twig' with {'friendsPosts': friendsPosts} %}
+                    <div>
                     <span class="load-more" data-of="10" data-route="{{ path('noob_comment_getUserFriendsPostsAjax')}}"> 
                             <span class="show-me">Afficher plus</span>
                             <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
@@ -73,11 +81,12 @@ Tableau de bord
                             Aucun résultat
                         </span>
                     </div>
+                    {% endif %}
                 </div>
             </div>
             
             <div class="col-md-4">
-                <div class="suggest-wrapper bordered-panel border-violet">
+                <div class="mb planked  suggest-wrapper">
                     <div class="heading">
                         <h4>Ces profils pourraient vous intéresser:</h4>
                     </div>
@@ -108,7 +117,7 @@ Tableau de bord
                             <a href='#' class='violet-me showmore'>Agrandir la liste</a>
                         {% endif %}
                 </div>
-                <div class="suggest-wrapper bordered-panel border-violet">
+                <div class="mb planked  suggest-wrapper">
                     <div class="heading">
                         <h4>Éléments qui pourraient vous correspondent:</h4>
                     </div>

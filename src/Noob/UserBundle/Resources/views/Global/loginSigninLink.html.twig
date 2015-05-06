@@ -23,7 +23,7 @@
         <li><a href="{{ path('noob_user_userPostsLiked', {'slug': app.user.slug}) }}"> <i class="fa fa-heart"></i> Mes coups de coeur</a></li>
         <li><a href="{{ path('noob_messagerie_index') }}"> <i class="fa fa-envelope"></i> Ma messagerie</a></li>
         <li><a href="#"> <i class="fa fa-pencil-square-o"></i> Gérer mes posts</a></li>
-        <li><a href="#"> <i class="fa fa-refresh"></i> Modifier mes paramètres</a></li>
+        <li><a href="{{ path('noob_comment_userInfoPage') }}"> <i class="fa fa-cog"></i> Modifier mes paramètres</a></li>
         <li class="divider"></li>
         <li><a href="{{ path('noob_user_userprofilepage', {'slug': app.user.slug}) }}"> <i class="fa fa-user"></i> Voir mon profil</a></li>
         <li class="divider"></li>
@@ -31,5 +31,5 @@
       </ul>
   </div>
 {% else %}
-  <a href="{{path('user_login')}}">Connexion</a>|<a href="#">Inscription</a>
+  <a href="{{path('user_login')}}">Connexion</a>|<a href="{{ path('user_signup_page') }}">Inscription</a>
 {% endif %}

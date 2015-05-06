@@ -1,0 +1,38 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %} Inscription - Etape 2 | {{ parent() }} {% endblock %}
+
+{% block content %}
+<div class="board violet">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <header>
+                  <h1><span class="xl-size">Créer un compte</span></h1>
+                </header>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grey">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-xs-12">
+                <div class='form-signin-wrapper'>
+                    <div class="form-signin">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class='text-right'>Créer un compte: étape 2/3</div>
+                                <strong class='form-spacer'>Confirmer la création du compte:</strong>
+                                <p>Un e-mail contenant un lien de confirmation a été envoyé à l'adresse suivante: {{ app.session.get('email') }}</p>
+                                <p><strong>Pour continuer votre inscription, veuillez cliquer sur ce lien.</strong></p>
+                                <p>Si vous ne recevez pas le mail, vérifier dans vos courriers indésirables.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock %}
