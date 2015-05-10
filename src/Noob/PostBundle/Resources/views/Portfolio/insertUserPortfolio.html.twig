@@ -1,7 +1,7 @@
 {% extends ":default:layout.html.twig" %}
 
 {% block title %}
-Modifier mes tags
+Publier dans mon portfolio
 |{{ parent() }}
 {% endblock %}
 
@@ -13,7 +13,7 @@ Modifier mes tags
         <div class="row">
             <div class="col-lg-12">
                 <header>
-                    <h1>Modifier mes tags</h1>
+                    <h1>Publier dans mon portfolio</h1>
                 </header>
             </div>
         </div>
@@ -22,55 +22,82 @@ Modifier mes tags
                 <div class='mb planked suggest-wrapper'>
                     <ol class="breadcrumb">
                         <li><a href="{{ path('noob_site_dashboard_index') }}">Tableau de bord</a></li>
-                        <li class="active">Modifier mes tags</li>
+                        <li><a href="#">Gérer mes publications</a></li>
+                        <li class="active">Publier dans mon portfolio</li>
                     </ol>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-12">
                 <div class='mb planked suggest-wrapper'>
                     {% for flashMessage in app.session.flashbag.get('notice') %}
                         <div class="bg-success">{{ flashMessage }}</div>
                     {% endfor %}
-                    {% for flashMessage in app.session.flashbag.get('bad-notice') %}
-                        <div class="bg-danger">{{ flashMessage }}</div>
-                    {% endfor %}
-                    <form action="{{ path('noob_comment_userEditTags') }}" method="post"  {{ form_enctype(form) }} >
+                    <form action="{{ path('noob_post_insertPortfolio') }}" method="post"  {{ form_enctype(form) }} class="formuserinfo" id='my-form'>
                         {% if not form.vars.valid %}
                         <div class="bg-danger">
-                            <p>Le formulaire est incorrect:</p> 
-                           {{ form_errors(form) }}
+                            <p>Le formulaire est incorrect:</p>
+                            {{ form_errors(form) }}
                         </div>
                         {% endif %}
 
-                        <strong class='form-spacer'>Vos tags:</strong>
+                        <strong class='form-spacer'>Publier un élément dans votre portfolio:</strong>
                         <div class="form-group">
-                            <span class="help-block"><i class="fa fa-question-circle"></i> Les tags représentent vos centres d'intérêt ou vos compétences. Vous pouvez choisir jusqu'à 5 tags au maximum.</span>
-                            Vos tags: 
+                         {{ form_label(form.name, "Titre:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.name, {'attr':{'class':'form-control'}})}}
+                        </div>
+
+                        <div class="form-group">
+                         {{ form_label(form.description, 'Description: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.description, {'attr':{'class':'form-control form-textarea'}})}}
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                         {{ form_label(form.url, "URL associée:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_widget(form.url, {'attr':{'class':'form-control'} } )}}
+                         </div>
+                        
+                        
+                        <div class="form-group">
+                            {% if 4 == 3 %}
+                            <div class="media-left">
+                                {% include 'NoobUserBundle:Global:userImage.html.twig' with{ 'mode':'minithumb', 'picturename': user.picture, 'alt': user.firstname ~ user.surname } %}
+                            
+                            </div>
+                            {% endif %}
+                            <div class="media-body">
+                            {{ form_label(form.filePicture, "Image:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                            {{ form_widget(form.filePicture)}}
+                            </div>
+                         </div>
+                        
+                        <strong class='form-spacer'>Tags:</strong>
+                        <div class="form-group">
+                            Tags de l'élément: 
                             <div id='actualtags'>
-                                {% for tag in user.tags %}
+                                {% for tag in post.tags %}
                                 <a href='#' class="deletetag">{{ tag.name }}</a>
                                 {% endfor %}
                             </div>
                             <p class='form-inline'>
                                 <input type='text' class='form-control form-small' id='tagField'/>
-                                <button type='button' id='tagbutton' class='btn btn-primary'>Ajouter à mes tags</button>
+                                <button type='button' id='tagbutton' class='btn btn-primary'>Ajouter aux tags</button>
                             </p>
                             <div id='tag-suggestions'></div>
                             {{ form_widget(form.tags, {'attr':{'class':'form-control truefield'}})}}
                          </div>
-
-                        {{ form_widget(form.save, { 'attr': {'class': 'btn btn-success'},'label': 'Enregistrer'  }) }}
-                        {{form_widget(form._token)}}
+                        
+                        <br/><br/>
+                         {{ form_widget(form.save, { 'attr': {'class': 'btn btn-success'},'label': 'Enregistrer'  }) }}
+                         {{form_widget(form._token)}}
                     </form>
                 </div>
             </div>
-            {% include 'NoobSiteBundle:DashBoard:editParametersNav.html.twig' %}
         </div>
     </div>
 </div>
-            
 {% endblock %}
 
 
@@ -79,6 +106,10 @@ Modifier mes tags
 $(document).ready(function(){
     
     updateTrueField();
+    
+    $('input[type=file]').change(function(e){
+        $(this).parent('.media-body').parent('.form-group').children('.media-left').hide();
+    });
     
     var timer = null;
     $("#tagField").keyup(function(e){
@@ -143,6 +174,21 @@ $(document).ready(function(){
         });
         $('.truefield').val(searchString.trim());
     }
+    
+    $( '#my-form' ).submit(function(e){
+        e.preventDefault();
+        $.ajax({
+          url: "{{ path('noob_post_insertPortfolio') }}",
+          type: 'POST',
+          data: new FormData( this ),
+          processData: false,
+          contentType: false,
+          success: function(data){
+              console.log(data);
+          }
+        });
+    });
+
 });
 </script>
 {% endblock %}

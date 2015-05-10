@@ -1,0 +1,11 @@
+<p>{{ me.firstname }},
+<br/>{{ sender.firstname }} {{ sender.surname }} vous a envoyé un message privé:</p>
+<div style='border-top:1px solid #c8c8c8;'><strong>Objet</strong>: {{ message.title }}<br/>
+<div style='border-bottom:1px solid #c8c8c8;'><strong>Contenu du message:</strong><br/>{{ message.content|nl2br }}</div>
+</div>
+<br/>
+<p>Pour lui répondre, connectez-vous dès maintenant sur votre messagerie privée en <a href='{{ url('noob_messagerie_index') }}'>cliquant sur ce lien</a>.</p>
+<p>Merci de ne pas répondre à cet e-mail.<br/>
+Celui-ci ayant été généré automatiquement, nous ne pourrons traiter votre réponse. <br/>
+A très bientôt sur notre site.
+</p>

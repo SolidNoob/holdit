@@ -2,12 +2,15 @@
 
 namespace Noob\PostBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Post
  *
  * @ORM\Table()
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Noob\PostBundle\Entity\PostRepository")
  */
 class Post
@@ -51,7 +54,7 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", length=200)
+     * @ORM\Column(name="url", type="string", length=200, nullable=true)
      */
     private $url;
     
@@ -64,6 +67,24 @@ class Post
     private $pubDate;
     
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+    
+    
+    public function setUpdatedAt($updatedAt){
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+    public function getUpdatedAt(){
+        return $this->updatedAt;
+    }
+    
+    
+    
     /**
      * Get id
      *
@@ -98,12 +119,6 @@ class Post
     */
     private $comments;
     
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="attachedFile", type="string", length=50, nullable=true)
-     */
-    private $attachedFile;
     
     /**
      * @var slug
@@ -359,28 +374,6 @@ class Post
         return $this->likers;
     }
 
-    /**
-     * Set attachedFile
-     *
-     * @param string $attachedFile
-     * @return Post
-     */
-    public function setAttachedFile($attachedFile)
-    {
-        $this->attachedFile = $attachedFile;
-
-        return $this;
-    }
-
-    /**
-     * Get attachedFile
-     *
-     * @return string 
-     */
-    public function getAttachedFile()
-    {
-        return $this->attachedFile;
-    }
 
     /**
      * Add comments
@@ -414,4 +407,94 @@ class Post
     {
         return $this->comments;
     }
+    
+    /*Picture-------------------------------------------------------------------------------------------------------------------------------------*/
+    /**
+     * @Assert\File(
+     * maxSize="2000k",
+     * mimeTypes={"image/png", "image/jpeg", "image/gif"},
+     * mimeTypesMessage="L'image doit être au format png, jpg ou gif",
+     * maxSizeMessage="L'image ne peut pas faire plus de 2 Mo"
+     * )
+     */
+    public $filePicture;
+    public $oldPicture;
+    
+    public function getAbsolutePathPicture()
+    {
+        return null === $this->picture ? null : $this->getUploadRootDirPicture().'/'.$this->picture;
+    }
+    
+
+    public function getWebPathPicture()
+    {
+        return null === $this->picture ? null : $this->getUploadDirPicture().'/'.$this->picture;
+    }
+    
+
+    protected function getUploadRootDirPicture()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __DIR__.'/../../../../web/'.$this->getUploadDirPicture();
+    }
+
+    protected function getUploadDirPicture()
+    {
+        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
+        // le document/image dans la vue.
+        return 'img/postpicoriginal';
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUploadPicture()
+    {
+        // Sauvegarde temporaire de l'ancienne image pour la supprimer en postUpdate
+        if ($this->getPicture() !== null) {
+            $this->oldPicture = $this->getPicture();
+        }
+        
+        if (null !== $this->filePicture) {
+            // faites ce que vous voulez pour générer un nom unique
+            $this->picture = sha1(uniqid(mt_rand(), true)).'.'.$this->filePicture->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function uploadPicture()
+    {
+        if (null === $this->filePicture) {
+            return;
+        }
+        
+        // Si l'utilisateur avait déjà une image, on la supprime
+        if ($this->oldPicture != null) {
+            unlink($this->getUploadRootDirPicture().'/'.$this->oldPicture);
+        }
+
+        // s'il y a une erreur lors du déplacement du fichier, une exception
+        // va automatiquement être lancée par la méthode move(). Cela va empêcher
+        // proprement l'entité d'être persistée dans la base de données si
+        // erreur il y a
+        $this->filePicture->move($this->getUploadRootDirPicture(), $this->picture);
+
+        unset($this->filePicture);
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUploadPicture()
+    {
+        if ($file = $this->getAbsolutePathPicture()) {
+            unlink($file);
+        }
+    }
+    
+    
 }

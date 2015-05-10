@@ -51,12 +51,19 @@ body{
     font-weight: 300;
     color: $violet-main;
 }
+.row-spacer{
+    border-bottom:1px solid $grey-light-border;
+    margin-bottom: 20px;
+}
 .formuserinfo{
     .form-group{
         padding:0 30px;
     }
 }
-#actualtags{display:inline-block;}
+#message_content{
+    height: 280px;
+}
+#actualtags{display:inline-block; margin-bottom: 9px;}
 .form-spacer{
     margin-top: 40px;
     padding-bottom: 5px;
@@ -68,6 +75,16 @@ body{
 }
 .form-spacer:first-child{
     margin-top: 0;
+}
+.btn-violet{
+    background: $violet-main;
+    color: $white-main;
+    border: 1px solid transparent;
+    &:hover{
+        background: $white-main;  
+        color: $violet-main;
+        border: 1px solid $violet-main;
+    }
 }
 .errorpagewrapper{
     margin-top: 50px;
@@ -98,6 +115,7 @@ body{
 }
 .bg-danger,.bg-success{
     padding: 8px;
+    margin:8px 0;
 }
 .no-more-result{
     width:100%;
@@ -271,6 +289,8 @@ a.seek{
 .preview-pic{
     max-width: 131px;
     max-height: 131px;
+    min-width: 131px;
+    min-height: 131px;
 }
 .previewbottom{
     border-top: 1px solid $grey-light-border;
@@ -468,7 +488,6 @@ a.black-strong-me:hover{color:$violet-main; text-decoration: none;}
     font-size: $font-size-main - 1px;
 }
 .portfolio-navigation{
-    border-top:1px solid $grey-light-border;
     padding-top: 5px; 
     margin-top: 13px;
     .portfolio-navprev{
@@ -605,6 +624,9 @@ a.post-detail-url{
                 border-bottom: 1px solid $grey-light-border;
                 padding-bottom: 8px;
             }
+            li:last-child{
+                border-bottom: none;
+            }
         }
     }
     .date-limiter{
@@ -630,6 +652,9 @@ a.post-detail-url{
     background: $violet-nav;
     color:$white-main;
     padding-bottom: 10px;
+    .dropdown-menu > li > a{
+        color: $violet-main;
+    }
     a{
         color: inherit;
         display:inline-block;

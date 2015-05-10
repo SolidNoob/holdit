@@ -1,7 +1,7 @@
 {% extends ":default:layout.html.twig" %}
 
 {% block title %}
-Modifier mes paramètres
+Modifier les informations de mon compte
 |{{ parent() }}
 {% endblock %}
 
@@ -13,7 +13,7 @@ Modifier mes paramètres
         <div class="row">
             <div class="col-lg-12">
                 <header>
-                    <h1>Modifier mes paramètres</h1>
+                    <h1>Modifier les informations de mon compte</h1>
                 </header>
             </div>
         </div>
@@ -22,21 +22,17 @@ Modifier mes paramètres
                 <div class='mb planked suggest-wrapper'>
                     <ol class="breadcrumb">
                         <li><a href="{{ path('noob_site_dashboard_index') }}">Tableau de bord</a></li>
-                        <li class="active">Modifier mes paramètres</li>
+                        <li class="active">Modifier les informations de mon compte</li>
                     </ol>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
-                <div class='suggest-wrapper bordered-panel border-violet'>
-                    <ul class='default bordered'>
-                        
-                    </ul>
-                </div>
-            </div>
             <div class="col-md-7">
                 <div class='mb planked suggest-wrapper'>
+                    {% for flashMessage in app.session.flashbag.get('notice') %}
+                        <div class="bg-success">{{ flashMessage }}</div>
+                    {% endfor %}
                     <form action="{{ path('noob_comment_userInfoPage') }}" method="post"  {{ form_enctype(form) }} class="formuserinfo">
                         {% if not form.vars.valid %}
                         <div class="bg-danger">
@@ -55,9 +51,20 @@ Modifier mes paramètres
                          {{ form_label(form.surname, 'Votre nom de famille: ', { 'label_attr': {'class': 'maclasse'} }) }} 
                          {{ form_widget(form.surname, {'attr':{'class':'form-control'}})}}
                         </div>
-
+                        
+                        
+                        
+                        {% if user.role.slug == 'etudiant' %}
+                            {% set label = "Votre section:" %}
+                        {% else %}
+                            <div class="form-group">
+                             {{ form_label(form.society, "Le nom de l'entreprise ou de la société que vous représentez:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                             {{ form_widget(form.society, {'attr':{'class':'form-control'} } )}}
+                             </div>
+                            {% set label = "Son domaine professionnel:" %}
+                        {% endif %}
                         <div class="form-group">
-                         {{ form_label(form.section, 'Votre section: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_label(form.section, label, { 'label_attr': {'class': 'maclasse'} }) }} 
                          {{ form_widget(form.section, {'attr':{'class':'form-control'} } )}}
                          </div>
 
@@ -68,19 +75,58 @@ Modifier mes paramètres
                          </div>
                         
                         <div class="form-group">
-                         {{ form_label(form.fileProfil, "Image de profil:", { 'label_attr': {'class': 'maclasse'} }) }} 
-                         {{ form_widget(form.fileProfil)}}
+                            {% if user.picture is not null and  user.picture is not empty %}
+                            <div class="media-left">
+                                {% include 'NoobUserBundle:Global:userImage.html.twig' with{ 'mode':'minithumb', 'picturename': user.picture, 'alt': user.firstname ~ user.surname } %}
+                            
+                            </div>
+                            {% endif %}
+                            <div class="media-body">
+                            {{ form_label(form.fileProfil, "Modifier votre image de profil:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                            {{ form_widget(form.fileProfil)}}
+                            </div>
                          </div>
+                        
+                        <div class="form-group">
+                            {% if user.cover is not null and  user.cover is not empty %}
+                            <div class="media-left">
+                                <img src="{{('img/cover/' ~ user.cover)|imagine_filter('mini')}}" alt="Couverture"/>
+                            </div> 
+                            {% endif %}
+                            <div class="media-body">
+                                {{ form_label(form.fileCover, "Modifier votre image de couverture:", { 'label_attr': {'class': 'maclasse'} }) }} 
+                                {{ form_widget(form.fileCover)}}
+                            </div>
+                         </div>
+                        
+                        {% if user.role.slug == 'etudiant' %}
+                        <div class="form-group">
+                            {{ form_label(form.fileCv, "Votre CV (format pdf):", { 'label_attr': {'class': 'maclasse'} }) }} 
+                            {{ form_widget(form.fileCv)}}
+                         </div>
+                        {% endif %}
 
 
                         <strong class='form-spacer'>Options du profil:</strong>
+                        {% if user.role.slug == 'entreprise' %}
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    {{ form_widget(form.jury)}}
+                                    Je désire être éventuellement contacté pour participer à un jury de TFE
+                                </label>
+                                <span class="help-block"><i class="fa fa-question-circle"></i> Cochez cette case pour être éventuellement contacté pour participer à un jury de TFE</span>
+                            </div>
+                        </div>
+                        <br/>
+                        {% endif %}
                         <div class="form-group">
                             <div class="checkbox">
                                 <label>
                                     {{ form_widget(form.visibleInfo)}}
                                     Afficher mes informations de contact sur mon profil
                                 </label>
-                                <span class="help-block"><i class="fa fa-question-circle"></i> Décochez cette case si vous ne souhaitez pas que vos coordonnées (e-mail, téléphone, site personnel) apparaissent sur votre profil.</span>
+                                <span class="help-block"><i class="fa fa-question-circle"></i> Décochez cette case si vous ne souhaitez pas que vos coordonnées (e-mail, téléphone, site web) apparaissent sur votre profil.</span>
                             </div>
                         </div>
 
@@ -92,13 +138,12 @@ Modifier mes paramètres
 
 
                         <div class="form-group">
-                         {{ form_label(form.phoneNumber, 'Votre numéro de téléphone:', { 'label_attr': {'class': 'maclasse'} }) }} 
+                         {{ form_label(form.phoneNumber, 'Numéro de téléphone:', { 'label_attr': {'class': 'maclasse'} }) }} 
                          {{ form_widget(form.phoneNumber, {'attr':{'class':'form-control'}})}}
                          </div>
 
                         <div class="form-group">
-                         {{ form_label(form.websiteurl, "L'adresse URL de votre site personnel:", { 'label_attr': {'class': 'maclasse'} }) }} 
-                         <span class="help-block"><i class="fa fa-question-circle"></i> Blog personnel, page Github, ...</span>
+                         {{ form_label(form.websiteurl, "Adresse URL de votre site:", { 'label_attr': {'class': 'maclasse'} }) }} 
                          {{ form_widget(form.websiteurl, {'attr':{'class':'form-control'}})}}
                          </div>
 
@@ -119,7 +164,8 @@ Modifier mes paramètres
                          {{ form_widget(form.linkedinlink, {'attr':{'class':'form-control'}})}}
                          </div>
 
-
+                        
+                        {% if user.role.slug == 'etudiant' %}
                         <strong class='form-spacer'>Recherche de stage et d'emploi:</strong>
                         <div class="form-group">
                             <div class="checkbox">
@@ -136,15 +182,27 @@ Modifier mes paramètres
                                 </label>
                              </div>
                         </div>
+                        {% endif %}
 
                         <br/><br/>
-                         {{ form_widget(form.save, { 'attr': {'class': 'btn btn-default'},'label': 'Valider'  }) }}
+                         {{ form_widget(form.save, { 'attr': {'class': 'btn btn-success'},'label': 'Valider'  }) }}
                          {{form_widget(form._token)}}
                     </form>
                 </div>
             </div>
+            {% include 'NoobSiteBundle:DashBoard:editParametersNav.html.twig' %}
         </div>
     </div>
 </div>
-            
+{% endblock %}
+
+
+
+{% block javascripts %}
+<script>
+$('input[type=file]').change(function(e){
+    $(this).parent('.media-body').parent('.form-group').children('.media-left').hide();
+});
+
+</script>
 {% endblock %}

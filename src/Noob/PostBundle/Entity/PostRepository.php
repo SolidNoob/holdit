@@ -30,6 +30,36 @@ class PostRepository extends EntityRepository
             return $paginator;
     }
     
+    public function getUserTfe($user){
+        $q = $this->createQueryBuilder('p')
+                ->leftJoin('p.author','a')
+                ->leftJoin('p.type','t')
+                ->where('a.id = :authorId')->setParameter('authorId', $user->getId())
+                ->andWhere('t.name = :name')->setParameter('name', 'tfe');
+        try {
+            return $q->getQuery()->getSingleResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e){
+            return null;
+        }
+    }
+    
+    public function getNextTfeByDate($limit = 10, $order = 'desc'){
+        $q = $this->createQueryBuilder('p')
+                    ->leftJoin('p.type', 'ty')
+                    ->andWhere('ty.name like :type')->setParameter('type', 'tfe')
+                    ->addSelect('ty')
+                  ->leftJoin('p.author','a')
+                    ->addSelect('a')
+                  ->leftJoin('p.tags', 't')
+                    ->addSelect('t')
+                  ->leftJoin('p.likers','l')
+                    ->addSelect('l')
+                  ->orderBy('p.pubDate',$order)
+                  ->setMaxResults($limit);
+        return new Paginator($q, $fetchJoinCollection = true);
+    }
+    
     /*  getOneByFullSlug: retourne un post en fonction de son id ET de son slug.
      *  Utilisation de jointure pour retourner en une seule requête:
      *  > le post (table post)
@@ -162,17 +192,16 @@ class PostRepository extends EntityRepository
         return new Paginator($query, $fetchJoinCollection = true);
     }
     
-    public function getUserFullPosts($user, $postType){
+    public function getUserFullPosts($user, $postType,$limit = 9, $offset = 0){
         $q = $this->createQueryBuilder('p')
                   ->where('p.author = :user')
                         ->setParameter('user', $user)
                     ->leftJoin('p.type', 'ty')
                     ->andWhere('ty.name = :postType')->setParameter('postType', $postType)
                     ->addSelect('ty')
-                  ->leftJoin('p.tags','t')
-                  ->addSelect('t')
-                  ->leftJoin('p.likers', 'l')
-                  ->addSelect('l'); 
+                    ->orderBy('p.id',"desc");
+        $q->setFirstResult($offset)->setMaxResults($limit);
+        //return new Paginator($q, $fetchJoinCollection = true);
         return $q->getQuery()->getResult();
     }
     
@@ -232,14 +261,14 @@ class PostRepository extends EntityRepository
         return $paginator;
     }
     
-    public function getUserOffres($author){
+    public function getUserOffres($author,$limit = 9, $offset = 0){
         $q = $this->createQueryBuilder('p')
                   ->where('p.author = :author')->setParameter('author', $author)
                   ->leftJoin('p.type', 'ty')
                   ->andWhere('ty.name like :offre')->setParameter('offre', '%offre%')
                   ->addSelect('ty')
-                  ->leftJoin('p.tags', 't')
-                  ->addSelect('t');
+                  ->orderBy('p.id','desc');
+        $q->setFirstResult($offset)->setMaxResults($limit);
         return $q->getQuery()->getResult();
     }
     

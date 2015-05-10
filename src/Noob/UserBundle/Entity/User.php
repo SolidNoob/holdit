@@ -987,107 +987,6 @@ class User implements UserInterface, \Serializable
         return $this->postsLiked;
     }
     
-    
-    
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
-    /**
-      * @Assert\File(
-     * maxSize="5M",
-     * mimeTypes={"image/png", "image/jpeg", "image/gif"}
-     * )
-     */
-    public $fileProfil;
-    public $oldPicture;
-    
-    public function getAbsolutePathPicture()
-    {
-        return null === $this->picture ? null : $this->getUploadRootDirPicture().'/'.$this->picture;
-    }
-    
-
-    public function getWebPathPicture()
-    {
-        return null === $this->picture ? null : $this->getUploadDirPicture().'/'.$this->picture;
-    }
-    
-
-    protected function getUploadRootDirPicture()
-    {
-        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __DIR__.'/../../../../web/'.$this->getUploadDirPicture();
-    }
-
-    protected function getUploadDirPicture()
-    {
-        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
-        // le document/image dans la vue.
-        return 'img/userpic230';
-    }
-    
-    
-    
-    
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
-    public function preUploadPicture()
-    {
-        // Sauvegarde temporaire de l'ancienne image pour la supprimer en postUpdate
-        if ($this->getPicture() !== null) {
-            $this->oldPicture = $this->getPicture();
-        }
-        
-        if (null !== $this->fileProfil) {
-            // faites ce que vous voulez pour générer un nom unique
-            $this->picture = sha1(uniqid(mt_rand(), true)).'.'.$this->fileProfil->guessExtension();
-        }
-    }
-
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
-    public function uploadPicture()
-    {
-        if (null === $this->fileProfil) {
-            return;
-        }
-        
-        // Si l'utilisateur avait déjà une image, on la supprime
-        if ($this->oldPicture != null) {
-            unlink($this->getUploadRootDirPicture().'/'.$this->oldPicture);
-        }
-
-        // s'il y a une erreur lors du déplacement du fichier, une exception
-        // va automatiquement être lancée par la méthode move(). Cela va empêcher
-        // proprement l'entité d'être persistée dans la base de données si
-        // erreur il y a
-        $this->fileProfil->move($this->getUploadRootDirPicture(), $this->picture);
-
-        unset($this->fileProfil);
-    }
-
-    /**
-     * @ORM\PostRemove()
-     */
-    public function removeUploadPicture()
-    {
-        if ($file = $this->getAbsolutePathPicture()) {
-            unlink($file);
-        }
-    }
-
     /**
      * Set jury
      *
@@ -1208,6 +1107,298 @@ class User implements UserInterface, \Serializable
     }
     public function getUpdatedAt(){
         return $this->updatedAt;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    /*FILE--------------------------------------------------------------------------------------------------------------------------------------*/
+    
+    /*Picture-------------------------------------------------------------------------------------------------------------------------------------*/
+    /**
+      * @Assert\File(
+     * maxSize="2000k",
+     * mimeTypes={"image/png", "image/jpeg", "image/gif"},
+     * mimeTypesMessage="L'image de profil doit être au format png, jpg ou gif",
+     * maxSizeMessage="L'image de profil ne peut pas faire plus de 2 Mo"
+     * )
+     */
+    public $fileProfil;
+    public $oldPicture;
+    
+    public function getAbsolutePathPicture()
+    {
+        return null === $this->picture ? null : $this->getUploadRootDirPicture().'/'.$this->picture;
+    }
+    
+
+    public function getWebPathPicture()
+    {
+        return null === $this->picture ? null : $this->getUploadDirPicture().'/'.$this->picture;
+    }
+    
+
+    protected function getUploadRootDirPicture()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __DIR__.'/../../../../web/'.$this->getUploadDirPicture();
+    }
+
+    protected function getUploadDirPicture()
+    {
+        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
+        // le document/image dans la vue.
+        return 'img/userpic230';
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUploadPicture()
+    {
+        // Sauvegarde temporaire de l'ancienne image pour la supprimer en postUpdate
+        if ($this->getPicture() !== null) {
+            $this->oldPicture = $this->getPicture();
+        }
+        
+        if (null !== $this->fileProfil) {
+            // faites ce que vous voulez pour générer un nom unique
+            $this->picture = sha1(uniqid(mt_rand(), true)).'.'.$this->fileProfil->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function uploadPicture()
+    {
+        if (null === $this->fileProfil) {
+            return;
+        }
+        
+        // Si l'utilisateur avait déjà une image, on la supprime
+        if ($this->oldPicture != null) {
+            unlink($this->getUploadRootDirPicture().'/'.$this->oldPicture);
+        }
+
+        // s'il y a une erreur lors du déplacement du fichier, une exception
+        // va automatiquement être lancée par la méthode move(). Cela va empêcher
+        // proprement l'entité d'être persistée dans la base de données si
+        // erreur il y a
+        $this->fileProfil->move($this->getUploadRootDirPicture(), $this->picture);
+
+        unset($this->fileProfil);
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUploadPicture()
+    {
+        if ($file = $this->getAbsolutePathPicture()) {
+            unlink($file);
+        }
+    }
+    
+    
+    /*Cover-------------------------------------------------------------------------------------------------------------------------------------*/
+    
+    /**
+      * @Assert\File(
+     * maxSize="2000k",
+     * mimeTypes={"image/png", "image/jpeg", "image/gif"},
+     * mimeTypesMessage="L'image de couverture doit être au format png, jpg ou gif",
+     * maxSizeMessage="L'image de couverture ne peut pas faire plus de 2 Mo"
+     * )
+     */
+    public $fileCover;
+    public $oldCover;
+    
+    public function getAbsolutePathCover()
+    {
+        return null === $this->cover ? null : $this->getUploadRootDirCover().'/'.$this->cover;
+    }
+    
+
+    public function getWebPathCover()
+    {
+        return null === $this->cover ? null : $this->getUploadDirCover().'/'.$this->cover;
+    }
+    
+
+    protected function getUploadRootDirCover()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __DIR__.'/../../../../web/'.$this->getUploadDirCover();
+    }
+
+    protected function getUploadDirCover()
+    {
+        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
+        // le document/image dans la vue.
+        return 'img/cover';
+    }
+    
+    
+    
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUploadCover()
+    {
+        // Sauvegarde temporaire de l'ancienne image pour la supprimer en postUpdate
+        if ($this->getCover() !== null) {
+            $this->oldCover = $this->getCover();
+        }
+        
+        if (null !== $this->fileCover) {
+            // faites ce que vous voulez pour générer un nom unique
+            $this->cover = sha1(uniqid(mt_rand(), true)).'.'.$this->fileCover->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function uploadCover()
+    {
+        if (null === $this->fileCover) {
+            return;
+        }
+        
+        // Si l'utilisateur avait déjà une image, on la supprime
+        if ($this->oldCover != null) {
+            unlink($this->getUploadRootDirCover().'/'.$this->oldCover);
+        }
+
+        // s'il y a une erreur lors du déplacement du fichier, une exception
+        // va automatiquement être lancée par la méthode move(). Cela va empêcher
+        // proprement l'entité d'être persistée dans la base de données si
+        // erreur il y a
+        $this->fileCover->move($this->getUploadRootDirCover(), $this->cover);
+
+        unset($this->fileCover);
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUploadCover()
+    {
+        if ($file = $this->getAbsolutePathCover()) {
+            unlink($file);
+        }
+    }
+    
+    
+    /*CV pdf-------------------------------------------------------------------------------------------------------------------------------------*/
+    
+    
+    /**
+      * @Assert\File(
+     * maxSize="2000k",
+     * mimeTypes={"application/pdf", "application/x-pdf"},
+     * mimeTypesMessage="Votre CV doit être au format pdf",
+     * maxSizeMessage="Le CV ne peut pas faire plus de 2Mo"
+     * )
+     */
+    public $fileCv;
+    public $oldCv;
+    
+    public function getAbsolutePathCv()
+    {
+        return null === $this->cv ? null : $this->getUploadRootDirCv().'/'.$this->cv;
+    }
+    
+
+    public function getWebPathCv()
+    {
+        return null === $this->cv ? null : $this->getUploadDirCv().'/'.$this->cv;
+    }
+    
+
+    protected function getUploadRootDirCv()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __DIR__.'/../../../../web/'.$this->getUploadDirCv();
+    }
+
+    protected function getUploadDirCv()
+    {
+        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
+        // le document/image dans la vue.
+        return 'cv';
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUploadCv()
+    {
+        // Sauvegarde temporaire de l'ancienne image pour la supprimer en postUpdate
+        if ($this->getCv() !== null) {
+            $this->oldCv = $this->getCv();
+        }
+        
+        if (null !== $this->fileCv) {
+            // faites ce que vous voulez pour générer un nom unique
+            $this->cv = sha1(uniqid(mt_rand(), true)).'.'.$this->fileCv->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function uploadCv()
+    {
+        if (null === $this->fileCv) {
+            return;
+        }
+        
+        // Si l'utilisateur avait déjà une image, on la supprime
+        if ($this->oldCv != null) {
+            unlink($this->getUploadRootDirCv().'/'.$this->oldCv);
+        }
+
+        // s'il y a une erreur lors du déplacement du fichier, une exception
+        // va automatiquement être lancée par la méthode move(). Cela va empêcher
+        // proprement l'entité d'être persistée dans la base de données si
+        // erreur il y a
+        $this->fileCv->move($this->getUploadRootDirCv(), $this->cv);
+
+        unset($this->fileCv);
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUploadCv()
+    {
+        if ($file = $this->getAbsolutePathCv()) {
+            unlink($file);
+        }
     }
     
 }

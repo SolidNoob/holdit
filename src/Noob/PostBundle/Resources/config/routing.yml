@@ -21,3 +21,43 @@ noob_post_ajax_get_likers:
     defaults: {_controller: NoobPostBundle:Global:getLikers}
     options:
         expose: true
+        
+        
+        
+noob_post_insertPortfolio:
+    path: user/insert-portfolio
+    defaults: {_controller: NoobPostBundle:Portfolio:insertUserPortfolio}
+    
+noob_post_updateUserPortfolio:
+    path: user/update-portfolio/{postId}
+    defaults: {_controller: NoobPostBundle:Portfolio:updateUserPortfolio}
+    options:
+        expose: true
+    
+noob_post_ajax_deleteUserPost:
+    path: user/delete-post/{postId}
+    defaults: {_controller: NoobPostBundle:Global:deleteUserPostAjax}
+    options:
+        expose: true
+    
+    
+
+noob_post_insertOffre:
+    path: user/insert-offre
+    defaults: {_controller: NoobPostBundle:Offre:insertUserOffre}
+    
+noob_post_updateUserOffre:
+    path: user/update-offre/{postId}
+    defaults: {_controller: NoobPostBundle:Offre:updateUserOffre}
+    options:
+        expose: true
+        
+noob_post_insertUserTfe:
+    path: user/insert-tfe
+    defaults: {_controller: NoobPostBundle:Tfe:insertUserTfe}
+    
+noob_post_updateUserTfe:
+    path: user/update-tfe/{postId}
+    defaults: {_controller: NoobPostBundle:Tfe:updateUserTfe}
+    options:
+        expose: true

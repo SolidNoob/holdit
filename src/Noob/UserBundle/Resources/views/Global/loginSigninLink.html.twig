@@ -19,13 +19,18 @@
       </a>
       <ul class="dropdown-menu" role="menu">
         <li><a href="{{ path('noob_site_dashboard_index') }}" class="hvr-sweep-to-right"> <i class="fa fa-tachometer"></i> Tableau de bord</a></li>
-        <li class="divider"></li>
-        <li><a href="{{ path('noob_user_userPostsLiked', {'slug': app.user.slug}) }}"> <i class="fa fa-heart"></i> Mes coups de coeur</a></li>
         <li><a href="{{ path('noob_messagerie_index') }}"> <i class="fa fa-envelope"></i> Ma messagerie</a></li>
-        <li><a href="#"> <i class="fa fa-pencil-square-o"></i> Gérer mes posts</a></li>
-        <li><a href="{{ path('noob_comment_userInfoPage') }}"> <i class="fa fa-cog"></i> Modifier mes paramètres</a></li>
         <li class="divider"></li>
-        <li><a href="{{ path('noob_user_userprofilepage', {'slug': app.user.slug}) }}"> <i class="fa fa-user"></i> Voir mon profil</a></li>
+        <li><a href="{{ path('noob_user_userprofilepage', {'slug': app.user.slug}) }}"> <i class="fa fa-pencil-square-o"></i> Publier dans mon profil</a></li>
+        <li class="divider"></li>
+        <li><a href="{{ path('noob_comment_userInfoPage') }}"> <i class="fa fa-cog"></i> Modifier mes paramètres</a></li>
+        <li class="divider"></li> {#
+        {% if app.user.role.slug == 'entreprise' %}
+        <li><a href="#"> <i class="fa fa-pencil-square-o"></i> Publier une offre</a></li>
+        {% endif %}
+        <li><a href="{{ path('noob_post_insertPortfolio') }}"> <i class="fa fa-pencil-square-o"></i> Publier dans mon portfolio</a></li>
+        <li class="divider"></li> #}
+        <li><a href="{{ path('noob_user_userPostsLiked', {'slug': app.user.slug}) }}"> <i class="fa fa-heart"></i> Mes coups de coeur</a></li>
         <li class="divider"></li>
         <li><a href="{{path('user_logout')}}"> <i class="fa fa-power-off"></i> Se déconnecter</a></li>
       </ul>

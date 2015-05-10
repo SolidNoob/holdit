@@ -27,7 +27,24 @@ class Type
      * @ORM\Column(name="name", type="string", length=30)
      */
     private $name;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slug", type="string", length=30)
+     */
+    private $slug;
 
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
 
     /**
      * Get id

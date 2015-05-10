@@ -1,0 +1,6 @@
+<div class="row">
+    {% for project in posts %}
+        {% include 'NoobPostBundle:Global:postsInProfil.html.twig' with{ 'project': project } %}
+    {% endfor %}
+</div>
+<div class='row-spacer'></div>

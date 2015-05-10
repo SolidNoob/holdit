@@ -1,6 +1,8 @@
 $(document).ready(function(){
     $('.fade-on-load').hide().fadeIn();
     
+    
+    
     $('#homesearch .tag').click(function(){
         var search = $('#mainsearchbar');
         search.val(search.val() + $(this).html() + ' ');

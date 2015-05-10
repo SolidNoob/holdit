@@ -1,0 +1,36 @@
+<article class='col-md-4 col-xs-4 p{{ project.id }}'>
+    {% if project.type.name == 'portfolio' %}
+        <a href='{{ path('noob_portfolio_detail',{'id':project.id,'slug':project.slug}) }}'>
+            {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'preview', 'picturename': project.picture, 'alt': project.name } %}
+        </a>
+        <div class='portfolio-title'>
+            <a href='{{ path('noob_portfolio_detail',{'id':project.id,'slug':project.slug}) }}'>
+                    {{ project.name|length > 20 ? project.name|slice(0, 20) ~ '...' : project.name }}
+            </a>
+            {% if app.user == project.author %}
+                <p>
+                    <a href="#" class="remove violet-me" data-id="{{ project.id }}"><i class="fa fa-times"></i> Supprimer</a> -
+                    <a href="#" class="edit violet-me" data-id="{{ project.id }}"><i class="fa fa-pencil-square-o"></i> Editer</a>
+                </p>
+            {% endif %}
+        </div>
+    
+    {% else %}
+    
+        <a href='{{ path('noob_offre_detail',{'id':project.id,'slug':project.slug}) }}'>
+            {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'preview', 'picturename': project.picture, 'alt': project.name } %}
+        </a>
+        <div class='portfolio-title'>
+            <a href='{{ path('noob_offre_detail',{'id':project.id,'slug':project.slug}) }}'>
+                {{ project.name|length > 20 ? project.name|slice(0, 20) ~ '...' : project.name }}
+            </a>
+            {% if app.user == project.author %}
+                <p>
+                    <a href="#" class="remove violet-me" data-id="{{ project.id }}"><i class="fa fa-times"></i> Supprimer</a> -
+                    <a href="#" class="edit-offre violet-me" data-id="{{ project.id }}"><i class="fa fa-pencil-square-o"></i> Editer</a>
+                </p>
+            {% endif %}
+        </div>
+
+    {% endif %}
+</article>

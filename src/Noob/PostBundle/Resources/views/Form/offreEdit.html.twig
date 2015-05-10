@@ -1,0 +1,90 @@
+<form action="{{ path('noob_post_insertOffre') }}" method="post"  {{ form_enctype(form) }} class="formuserinfo" id='my-form-offre-edit' data-id='{{ post.id }}'>
+    
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        <div class="bg-success">{{ flashMessage }}</div>
+    {% endfor %}
+        
+        
+    {% for flashMessage in app.session.flashbag.get('bad-notice') %}
+        <div class="bg-danger">{{ flashMessage }}</div>
+    {% endfor %}
+                        
+    {% if not form.vars.valid %}
+    <div class="bg-danger">
+        <p>Le formulaire est incorrect:</p>
+        {{ form_errors(form) }}
+    </div>
+    {% endif %}
+
+    <strong class='form-spacer'>Modifier une offre:</strong>
+    <div class="form-group">
+     {{ form_label(form.type, "Type de l'offre:", { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.type, {'attr':{'class':'form-control'}})}}
+    </div>
+    
+    <div class="form-group">
+     {{ form_label(form.name, "Titre:", { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.name, {'attr':{'class':'form-control'}})}}
+    </div>
+
+    <div class="form-group">
+     {{ form_label(form.description, 'Description: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.description, {'attr':{'class':'form-control form-textarea'}})}}
+    </div>
+
+
+    <div class="form-group">
+     {{ form_label(form.url, "URL associée:", { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.url, {'attr':{'class':'form-control'} } )}}
+     </div>
+
+
+    <div class="form-group">
+        {{ form_label(form.filePicture, "Image:", { 'label_attr': {'class': 'maclasse'} }) }} 
+        {{ form_widget(form.filePicture)}}
+     </div>
+
+    <strong class='form-spacer'>Tags:</strong>
+    <div class="form-group">
+        Tags de l'élément: 
+        <div id='actualtags'>
+            {% for tag in post.tags %}
+            <a href='#' class="deletetag">{{ tag.name }}</a>
+            {% endfor %}
+        </div>
+        <p class='form-inline'>
+            <input type='text' class='form-control form-small' id='tagField'/>
+            <button type='button' id='tagbutton' class='btn btn-primary'>Ajouter aux tags</button>
+        </p>
+        <div id='tag-suggestions'></div>
+        {{ form_widget(form.tags, {'attr':{'class':'form-control truefield'}})}}
+     </div>
+    
+    <strong class='form-spacer'>Sécurité:</strong>
+    <div class="form-group">
+     {{ form_label(form.recaptcha, 'Captcha: ', { 'label_attr': {'class': 'maclasse'} }) }} 
+     {{ form_widget(form.recaptcha, {'attr':{'class':'form-control'}})}}
+    </div>
+
+    <br/>
+     {{ form_widget(form.save, { 'attr': {'class': 'btn btn-success'},'label': 'Enregistrer'  }) }}
+     {{form_widget(form._token)}}
+</form>
+    
+    
+<script>
+$(document).ready(function(){
+    
+    updateTrueField();
+    
+    
+    function updateTrueField(){
+        var searchString = '';
+        $('.deletetag').each(function(){
+            searchString = searchString + ' ' + $(this).text();
+        });
+        $('.truefield').val(searchString.trim());
+    }
+    
+});
+</script>

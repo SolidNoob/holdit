@@ -76,20 +76,39 @@ class UserParametersType extends AbstractType
             'required' => false,
             'error_bubbling' => true
         ));
+        $builder->add('section', 'entity', array(
+            'class' => 'NoobUserBundle:Section',
+            'query_builder' => function($repository) { return $repository->createQueryBuilder('s')->orderBy('s.name', 'ASC'); },
+            'property' => 'name',
+            'error_bubbling' => true
+        ));
+        $builder->add('fileProfil','file',array(
+            'required' => false, 
+            'error_bubbling' => true
+        ));
+        $builder->add('fileCover','file',array(
+            'required' => false, 
+            'error_bubbling' => true
+        ));
+        $builder->add('fileCv','file',array(
+            'required' => false, 
+            'error_bubbling' => true
+        ));
+        $builder->add('jury','checkbox', array(
+            'required' => false,
+            'error_bubbling' => true
+        ));
+        $builder->add('society','text', array(
+            'required' => false,
+            'error_bubbling' => true
+        ));
         
         $builder->add('save', 'submit');
-        //cv
-        //picture
-        
-        //section_id
-        
-        //society
-        //jury
     }
 
     public function getName()
     {
-        return 'user_parameters';
+        return 'user_studentparameters';
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver)

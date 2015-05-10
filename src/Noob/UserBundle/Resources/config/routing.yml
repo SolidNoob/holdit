@@ -20,6 +20,13 @@ noob_user_ajax_followUser:
     options:
         expose: true
         
+noob_user_ajax_getMore_portfolio:
+    path: /getMorePortfolio
+    defaults: {_controller: NoobUserBundle:Profil:loadMorePortfolioAjax}
+noob_user_ajax_getMore_offre:
+    path: /getMoreOffre
+    defaults: {_controller: NoobUserBundle:Profil:loadMoreOffreAjax}
+
 noob_user_ajax_get_followers:
     path: get-followers-ajax
     defaults: {_controller: NoobUserBundle:Profil:getFollowers}

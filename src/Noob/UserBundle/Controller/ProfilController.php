@@ -32,7 +32,6 @@ class ProfilController extends Controller
         }
         shuffle($usersFollowers);
         
-        //ndm: on peut limiter facilement le nombre de projet pour cette requete
         $portfolioElements = $em->getRepository('NoobPostBundle:Post')->getUserFullPosts($user, 'portfolio');
         $postsLiked= $em->getRepository('NoobPostBundle:Post')->getUserProjectsLiked($user, 15);
         
@@ -55,8 +54,10 @@ class ProfilController extends Controller
             ));
         }
         else{
+            $tfe = $em->getRepository('NoobPostBundle:Post')->getUserTfe($user);
             return $this->render('NoobUserBundle:Profil:profilpage.html.twig', array(
                 'user' => $user, 
+                'tfe' => $tfe,
                 'portfolioElements'=>$portfolioElements,
                 'postsLiked' =>$randomPostsLiked,
                 'usersIFollow' => $usersIFollow,
@@ -116,6 +117,58 @@ class ProfilController extends Controller
             'postsLiked' => $postsLiked,
         ));
     }
+    
+    
+    
+    public function loadMorePortfolioAjaxAction(){
+        $request = $this->container->get('request');
+        if(!$request->isXmlHttpRequest())
+        {
+            return new Response();
+        }
+        $userid = intval($request->get('userid'));
+        $offset = intval($request->request->get("of"));
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('NoobUserBundle:User')->findOneById($userid);
+        if(!$user){
+            return new Response();
+        }
+        $portfolioElements = $em->getRepository('NoobPostBundle:Post')->getUserFullPosts($user, 'portfolio',9,$offset);
+        if(!$portfolioElements){
+            return new Response(json_encode(false),200, array('Content-Type'=>'application/json'));
+        }
+        $response = $this->render('NoobPostBundle:Global:postsInProfilList.html.twig', array(
+            'posts' => $portfolioElements,
+        ))->getContent();
+        return new Response(json_encode($response),200, array('Content-Type'=>'application/json'));
+    }
+    
+    
+    
+    public function loadMoreOffreAjaxAction(){
+        $request = $this->container->get('request');
+        if(!$request->isXmlHttpRequest())
+        {
+            return new Response();
+        }
+        $userid = intval($request->get('userid'));
+        $offset = intval($request->request->get("of"));
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('NoobUserBundle:User')->findOneById($userid);
+        if(!$user){
+            return new Response();
+        }
+        $offres = $em->getRepository('NoobPostBundle:Post')->getUserOffres($user, 9,$offset);
+        if(!$offres){
+            return new Response(json_encode(false),200, array('Content-Type'=>'application/json'));
+        }
+        $response = $this->render('NoobPostBundle:Global:postsInProfilList.html.twig', array(
+            'posts' => $offres,
+        ))->getContent();
+        return new Response(json_encode($response),200, array('Content-Type'=>'application/json'));
+    }
+    
+    
     
     public function getCompleteListAjaxAction($contentType){
         $request = $this->container->get('request');
@@ -226,6 +279,5 @@ class ProfilController extends Controller
         $data['title'] = $user->getFirstName();
         return new Response(json_encode($data),200, array('Content-Type'=>'application/json'));
     }
-
     
 }

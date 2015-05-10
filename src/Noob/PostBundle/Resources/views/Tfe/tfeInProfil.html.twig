@@ -1,0 +1,22 @@
+<article class='col-md-12  p{{ tfe.id }}'>
+    <div class="media-left media-top">
+        <a href='{{ path('noob_tfe_detail',{'id':tfe.id,'slug':tfe.slug}) }}'>
+            {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'preview', 'picturename': tfe.picture, 'alt': tfe.name } %}
+        </a>
+    </div>
+    <div class='media-body'>
+        <a href='{{ path('noob_tfe_detail',{'id':tfe.id,'slug':tfe.slug}) }}' style='color:#000; font-weight: bold;'>
+            {{ tfe.name }}
+        </a>
+        <div style='font-size:12px;'>
+            <p>Date de défense: {{ tfe.pubDate|date('d/m/Y') }}</p>
+            {{ tfe.description|slice(0,150) }}
+        </div>
+        {% if app.user == tfe.author %}
+            <p>
+                <a href="#" class="remove violet-me" data-id="{{ tfe.id }}"><i class="fa fa-times"></i> Supprimer</a> -
+                <a href="#" class="edit-tfe violet-me" data-id="{{ tfe.id }}"><i class="fa fa-pencil-square-o"></i> Editer</a>
+            </p>
+        {% endif %}
+    </div>
+</article>

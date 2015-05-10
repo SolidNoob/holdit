@@ -98,6 +98,14 @@ liip_imagine:
             quality: 100
             filters:
                 thumbnail: { size: [131, 131], mode: outbound }
+        cover:
+            quality: 100
+            filters:
+                thumbnail: { size: [1000, 500], mode: outbound }
+        post_detail:
+            quality: 100
+            filters:
+                thumbnail: { size: [460, 460], mode: outbound }
                 
 ewz_recaptcha:
     public_key:  6Le3xAUTAAAAALkfLONP340y6XX3Rv7PW--XMF-_

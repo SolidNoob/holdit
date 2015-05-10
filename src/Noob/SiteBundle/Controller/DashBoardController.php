@@ -8,8 +8,10 @@ use Noob\SiteBundle\CustomClass\PaginatorHelper;
 
 use Symfony\Component\HttpFoundation\Response;
 
-use Noob\UserBundle\Form\StudentParametersType;
+use Noob\UserBundle\Form\UserParametersType;
 use Noob\UserBundle\Entity\User;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 class DashBoardController extends Controller
 {
@@ -89,7 +91,7 @@ class DashBoardController extends Controller
     public function userInfoPageAction(){
         $user = $this->getUser();
         
-        $form = $this->createForm(new StudentParametersType(), $user);
+        $form = $this->createForm(new UserParametersType(), $user);
         $request = $this->getRequest();
         if($request->isMethod('POST')) 
         {
@@ -101,10 +103,74 @@ class DashBoardController extends Controller
                 $user->setUpdatedAt(new \Datetime);
                 $em->persist($user);
                 $em->flush();
+                $this->get('session')->getFlashBag()->add('notice','Vos changements ont été pris en compte');
             }
         }
         return $this->render('NoobSiteBundle:DashBoard:userInfoPage.html.twig',array(
             'user' => $user,
+            'form' => $form->createView(),
+        ));
+    }
+    
+    public function editUserPasswordAction(){
+        $em = $this->getDoctrine()->getEntityManager();
+        $me = $em->getRepository('NoobUserBundle:User')->findOneById($this->getUser()->getId());
+        $form = $this->createFormBuilder($me)
+                ->add('oldPassword','password',array(
+                            'error_bubbling' => true,
+                            'constraints' => 
+                                    array( 
+                                        new NotBlank(array('message' => 'Vous devez entrer un mot de passe')),
+                            ),
+                            'mapped' => false,
+                ))
+                ->add('newPassword', 'repeated', array(
+                            'type' => 'password',
+                            'invalid_message' => 'Les mots de passe doivent correspondre',
+                            'options' => array('required' => true),
+                            'constraints' => 
+                                    array( 
+                                        new NotBlank(array('message' => 'Vous devez entrer un mot de passe')),
+                                        new Length(array(
+                                            "min" => 6, 'minMessage' => "Le mot de passe est trop court (6 caractères minimum)",
+                                            "max" => 20, 'maxMessage' => "Le mot de passe est trop long (20 caractères maximum)"
+                                        )),
+                            ),
+                            'error_bubbling' => true,
+                            'mapped' => false,
+                ))
+            ->add('save', 'submit')
+            ->getForm();
+        $request = $this->getRequest();
+        if($request->isMethod('POST')) 
+        {
+            $form->handleRequest($request);
+            if(!$form->isValid())
+            {
+                $this->get('session')->getFlashBag()->add('bad-notice',"Votre mot de passe actuel ne correspond pas.");
+            }
+            else
+            {   
+                //on récupère le password entré par l'utilisateur dans le champ OldPasswor
+                //on le crypte et on le compare au password en base de données
+                $oldPassword =  $form->get('oldPassword')->getData();
+                $factory = $this->get('security.encoder_factory');
+                $encoder = $factory->getEncoder($me);
+                $encodedPassword = $encoder->encodePassword($oldPassword, $me->getSalt());
+                if($encodedPassword == $me->getPassword()){
+                    //oldPassword et password en db correspondent!
+                    //On crypte le nouveau password et on persist + flush
+                    $me->setSalt(md5(uniqid()));
+                    $newPassword = $form->get('newPassword')->getData();
+                    $newEncodedPassword = $encoder->encodePassword($newPassword, $me->getSalt());
+                    $me->setPassword($newEncodedPassword);
+                    $em->persist($me);
+                    $em->flush();
+                    $this->get('session')->getFlashBag()->add('notice','Vos changements ont été pris en compte');
+                }
+            }
+        }
+        return $this->render('NoobSiteBundle:DashBoard:editUserPassword.html.twig',array(
             'form' => $form->createView(),
         ));
     }
@@ -148,11 +214,12 @@ class DashBoardController extends Controller
                         }
                         $me->addTag($newTag);
                     }
+                    $this->get('session')->getFlashBag()->add('notice','Vos changements ont été pris en compte');
                 }
-                $this->get('session')->getFlashBag()->add(
-                    'notice',
-                    'Vos changements ont été pris en compte'
-                );
+                else
+                {
+                    $this->get('session')->getFlashBag()->add('bad-notice',"Vos changements n'ont pas été enregistrés. Vous devez choisir au moins un tag.");
+                }
                 
                 $em->persist($me);
                 $em->flush();

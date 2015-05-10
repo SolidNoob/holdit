@@ -8,22 +8,30 @@
 {% block content %}
 
 {% if user.cover %}
+    {% set default = false %}
     {% set cover_image = user.cover %}
 {% else %}
+    {% set default = true %}
     {% set cover_image = 'default.jpg' %}
 {% endif %}
 
 
 {# Background size cover method #}
 {#
-<div class="parallax-cover parallax-window" data-parallax="scroll" style="background: url({{asset('img/cover/' ~ cover_image)}}); background-size:cover;" data-speed="0.6"></div> 
+<div class="parallax-cover parallax-window" data-parallax="scroll" style="background: url({{('img/cover/' ~ cover_image)|imagine_filter('cover')}}); background-size:cover;" data-speed="0.6"></div> 
 #}
 
 {# 
 Paralax method
 <div class="parallax-cover parallax-window" data-parallax="scroll" data-image-src="{{asset('img/cover/' ~ cover_image)}}" data-speed="0.6"></div>
 #}
-<div class="parallax-cover parallax-window" data-parallax="scroll" data-image-src="{{asset('img/cover/' ~ cover_image)}}" data-speed="0.6"></div>
+
+{% if default == true %}
+<div class="parallax-cover parallax-window" data-parallax="scroll" data-image-src="{{asset('img/cover/' ~ cover_image)}}" data-speed="0.3"></div>
+{% else %}
+<div class="parallax-cover parallax-window" data-parallax="scroll" data-image-src="{{('img/cover/' ~ cover_image)|imagine_filter('cover')}}" data-speed="0.3"></div>
+{% endif %}
+
 
 
 <div class="profil-board pb">
@@ -143,7 +151,7 @@ Paralax method
                             {% if user.role.slug == 'etudiant' %}
                             
                                 {% if user.cv is not null and user.cv is not empty %}
-                                    <a href='{{ asset('cv/'~user.cv)}}' class="violet seek">Voir mon curriculum vitae</a>
+                                    <a href='{{ asset('cv/'~user.cv)}}' target="_blank" class="violet seek">Voir mon curriculum vitae</a>
                                 {% else %}
                                     <div class='violet seek'>{{ user.firstname }} n'a pas encore déposé son CV</div>
                                 {% endif %}
@@ -180,56 +188,114 @@ Paralax method
                        {% if offres is defined %}
                         <div class="portfolio planked">
                             <div class='heading'>Offres de stage ou d'emploi</div>
+                            {% if app.user and app.user.id == user.id  %}
+                            <div class='row'>
+                                <div class='col-xs-12'>
+                                    <p>
+                                        <button class="btn btn-success" id='publishnew-offre'><i class="fa fa-pencil-square-o"></i> Publier une nouvelle offre</button>
+                                    </p>
+                                </div>
+                            </div>
+                            {% endif %}
                             <div class="row">
+                                <div class="col-md-12">
                                 {% if offres is not empty %}
-                                    {% for offre in offres %}
-                                        <article class='col-md-4 col-xs-4'>
-                                            <a href='{{ path('noob_offre_detail',{'id':offre.id,'slug':offre.slug}) }}' >
-                                                {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'preview', 'picturename': offre.picture, 'alt': offre.name } %}
-                                            </a>
-                                            <div class='portfolio-title'>
-                                                <a href='{{ path('noob_offre_detail',{'id':offre.id,'slug':offre.slug}) }}' >
-                                                    {{ offre.name|length > 20 ? offre.name|slice(0, 20) ~ '...' : offre.name }}
-                                                </a>
-                                            </div>
-                                        </article
->                                    {% endfor %}
+                                    <div id="offre-list-wrapper">
+                                    {% include 'NoobPostBundle:Global:postsInProfilList.html.twig' with {'posts':offres} %}
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="load-more load-more-offres" data-of="9"> 
+                                                <span class="show-me">Afficher plus</span>
+                                                <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
+                                            </span>
+                                            <span class="no-more-result hide-me">
+                                                Aucun résultat
+                                            </span>
+                                        </div>
+                                    </div>
                                 {% else %}
-                                    <div class="col-sm-4 col-xs-6">
-                                        Aucune offre
+                                    <div id="offre-list-wrapper">
+                                        <div class="row">
+                                            <div class="col-md-12" id="no-offre">
+                                                  Aucune offre
+                                            </div>
+                                        </div>
                                     </div>
                                 {% endif %}
-                                    </div>
                                 </div>
+                                </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if tfe is defined %}
+                        <div class="portfolio planked">
+                            <div class='heading'>Travail de fin d'études:</div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                {% if tfe is not empty %}
+                                    <div id="tfe-wrapper">
+                                        {% include 'NoobPostBundle:Tfe:tfeInProfil.html.twig' with {'tfe':tfe} %}
+                                    </div>
+                                    {% else %}
+                                    <div id="tfe-wrapper">
+                                        <div id='no-tfe'>
+                                            Pas de travail de fin d'études
+                                            {% if app.user and app.user.id == user.id  %}
+                                            <p>
+                                            <button class="btn btn-success" id='publishnew-tfe'><i class="fa fa-pencil-square-o"></i> Publier mon TFE</button>
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                    
+                                </div>
+                            </div>
+                        </div>
                         {% endif %}
                         
                         
                         <div class="portfolio planked">
                             <div class='heading'>Portfolio</div>
+                            {% if app.user and app.user.id == user.id  %}
+                            <div class='row'>
+                                <div class='col-xs-12'>
+                                    <p>
+                                        <button class="btn btn-success" id='publishnew'><i class="fa fa-pencil-square-o"></i> Publier un nouvel élément</button>
+                                    </p>
+                                </div>
+                            </div>
+                            {% endif %}
                             <div class="row">
+                                <div class="col-md-12">
                                 {% if portfolioElements is not empty %}
-                                    {% for project in portfolioElements %}
-                                        <article class='col-md-4 col-xs-4'>
-                                            <a href='{{ path('noob_portfolio_detail',{'id':project.id,'slug':project.slug}) }}'>
-                                                {% include 'NoobPostBundle:Global:postImage.html.twig' with{ 'mode':'preview', 'picturename': project.picture, 'alt': project.name } %}
-                                            </a>
-                                            <div class='portfolio-title'>
-                                                <a href='{{ path('noob_portfolio_detail',{'id':project.id,'slug':project.slug}) }}'>
-                                                    {{ project.name|length > 20 ? project.name|slice(0, 20) ~ '...' : project.name }}
-                                                </a>
-                                            </div>
-                                        </article>
-                                    {% endfor %}
-                                    <div class='col-xs-12'>
-                                        <a href='#' class='see-more'>Voir la liste complète</a>
+                                    <div id="portfolio-list-wrapper">
+                                    {% include 'NoobPostBundle:Global:postsInProfilList.html.twig' with {'posts':portfolioElements} %}
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="load-more load-more-portfolio" data-of="9"> 
+                                                <span class="show-me">Afficher plus</span>
+                                                <i class="fa fa-spinner fa-pulse fa-2x hide-me"></i>
+                                            </span>
+                                            <span class="no-more-result hide-me">
+                                                Aucun résultat
+                                            </span>
+                                        </div>
                                     </div>
                                 {% else %}
-                                    <div class='col-xs-12'>
-                                        <p>Aucun élément dans le portfolio de {{ user.firstname }}</p>
+                                    <div id="portfolio-list-wrapper">
+                                        <div class="row">
+                                            <div class="col-md-12" id="no-portfolio">
+                                                   Aucun élément dans le portfolio
+                                            </div>
+                                        </div>
                                     </div>
                                 {% endif %}
+                                </div>
                             </div>
-                        </div>
+                       </div>
                         
                         
                     </div>
@@ -309,19 +375,526 @@ Paralax method
 
 {% block javascripts %}
 <script>
-var currEvent = true;
-$('body').on('click','.mp-me.notco', function(e){
-    e.preventDefault();
-    if(currEvent){
-        currEvent = false;
-        
-        bootbox.alert({
-            title: "Information",
-            message: "Vous devez vous connecter pour contacter ce membre"
-        });
-        currEvent = true;
-    }
-});
+    
+$(document).ready(function(){
+    
+    var currEvent = true;
+    
+    
+    $('body').on('click','.mp-me.notco', function(e){
+        e.preventDefault();
+        if(currEvent){
+            currEvent = false;
 
+            bootbox.alert({
+                title: "Information",
+                message: "Vous devez vous connecter pour contacter ce membre"
+            });
+            currEvent = true;
+        }
+    });
+    
+    
+    $('body').on('click', '.load-more-portfolio', function(e){
+        if(currEvent){
+            currEvent = false;
+            var of = $(this).attr('data-of');
+            $.ajax({
+                type: "POST",
+                url: "{{ path('noob_user_ajax_getMore_portfolio')}}",
+                data: {userid:{{user.id}}, of:of},
+                context: $(this),
+                success: function(data){
+                    if(data === false)
+                    {
+                        $(this).fadeOut('1000',function(){
+                            $(this).next('.no-more-result').fadeIn().css({'display':'block'});
+                        });
+                    }
+                    else
+                    {
+                        $response = $(data).hide();
+                        $(this).parent('div').parent('div').before($response);
+                        $response.fadeIn();
+                        $(this).children('span').removeClass('hide-me').addClass('show-me');
+                        $(this).children('i').addClass('hide-me').removeClass('show-me');
+                        of = parseInt(of) + 9;
+                        $(this).attr('data-of',of);
+                    }
+                },
+                complete:function(){
+                    currEvent = true;
+                }
+            });
+            $(this).children('span').toggleClass('hide-me').toggleClass('show-me');
+            $(this).children('i').toggleClass('hide-me').toggleClass('show-me');
+        }
+    });
+    
+    
+    $('body').on('click', '.load-more-offres', function(e){
+        if(currEvent){
+            currEvent = false;
+            var of = $(this).attr('data-of');
+            $.ajax({
+                type: "POST",
+                url: "{{ path('noob_user_ajax_getMore_offre')}}",
+                data: {userid:{{user.id}}, of:of},
+                context: $(this),
+                success: function(data){
+                    if(data === false)
+                    {
+                        $(this).fadeOut('1000',function(){
+                            $(this).next('.no-more-result').fadeIn().css({'display':'block'});
+                        });
+                    }
+                    else
+                    {
+                        $response = $(data).hide();
+                        $(this).parent('div').parent('div').before($response);
+                        $response.fadeIn();
+                        $(this).children('span').removeClass('hide-me').addClass('show-me');
+                        $(this).children('i').addClass('hide-me').removeClass('show-me');
+                        of = parseInt(of) + 9;
+                        $(this).attr('data-of',of);
+                    }
+                },
+                complete:function(){
+                    currEvent = true;
+                }
+            });
+            $(this).children('span').toggleClass('hide-me').toggleClass('show-me');
+            $(this).children('i').toggleClass('hide-me').toggleClass('show-me');
+        }
+    });
+       
+       
+{% if app.user and app.user.id == user.id  %}
+
+
+    $('#publishnew').click(function(e){
+         e.preventDefault();
+         if(currEvent){
+             currEvent = false;
+             $.ajax({
+                 url: "{{ path('noob_post_insertPortfolio') }}",
+                 type: 'POST',
+                 success: function(data){
+                     bootbox.dialog({
+                     message: data
+                     });
+                     currEvent = true;
+                 }
+             }); 
+         }
+     });
+    
+    $('body').on('submit','#my-form-portfolio-add',function(e){
+        e.preventDefault();
+            if(currEvent){
+            currEvent = false;
+            $.ajax({
+              url: "{{ path('noob_post_insertPortfolio') }}",
+              type: 'POST',
+              data: new FormData( this ),
+              processData: false,
+              contentType: false,
+              success: function(data){
+                  if(typeof data.status !== 'undefined'){
+                      bootbox.hideAll();
+                      $mynew = $(data.view);
+                      $mynew.prependTo('#portfolio-list-wrapper .row:first-child');
+                      $('#no-portfolio').hide();
+                      $mynew.hide().fadeIn('slow');
+                  }else{
+                    $('.bootbox-body').html(data);
+                  }
+                   currEvent = true;
+              },
+              error: function(data){
+                currEvent = true;
+
+              }
+            });
+        }
+    });
+    
+    
+    var timer = null;
+    $("body").on('keyup',"#tagField",function(e){
+        if(timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(getSuggestions, 300);
+    });
+    function getSuggestions(){
+        var searchString = $("#tagField").val();
+        if(searchString.length > 1){
+            $.ajax({
+                type: "POST",
+                url: "{{ path('noob_tag_ajax_suggestion')}}",
+                data: {searchString: searchString},
+                success: function(data){
+                    $("#tag-suggestions").html(data);
+                }
+            });
+        }
+    }
+    
+    
+    $('body').on('submit', '#tagField', function(e){
+        e.preventDefault;
+        if($('#tagField').val().length > 0){
+            var newTag = $('#tagField').val().replace(/ /g,"");;
+            $('#actualtags').append(' <a class="deletetag" href="#">'+newTag+'</a>');
+            $('#tagField').val('');
+            $("#tag-suggestions").html('');
+            updateTrueField();
+        }
+    });
+    
+    $('body').on('click','#tagbutton',function(){
+        if($('#tagField').val().length > 0){
+            var newTag = $('#tagField').val().replace(/ /g,"");;
+            $('#actualtags').append(' <a class="deletetag" href="#">'+newTag+'</a>');
+            $('#tagField').val('');
+            $("#tag-suggestions").html('');
+            updateTrueField();
+        }
+    });
+    $('body').on('click', '.deletetag', function(e){ 
+        e.preventDefault();
+        $(this).fadeOut().remove();
+        updateTrueField();
+    });
+    $('body').on('click', '.clicktoadd', function(e){ 
+        e.preventDefault();
+        var newTag = $(this).text();
+        $('#tagField').val('');
+        $("#tag-suggestions").html('');
+        $('#actualtags').append(' <a class="deletetag" href="#">'+newTag+'</a>');
+        updateTrueField();
+    });
+    
+    function updateTrueField(){
+        var searchString = '';
+        $('.deletetag').each(function(){
+            searchString = searchString + ' ' + $(this).text();
+        });
+        $('.truefield').val(searchString.trim());
+    }
+    
+    
+    
+    
+    //remove
+    $('body').on('click','.remove',function(e){
+        e.preventDefault();
+        if(currEvent){
+            currEvent = false;
+            var postId = $(this).data('id');
+            var mythis = $(this);
+            bootbox.confirm({
+            title: "Confirmer la suppression de cet élément?",
+            message: "Cette action entrainera la suppression définitive de l'élément et de tout ce qui le concerne. Confirmer?",
+            buttons: {
+                cancel: {
+                    label: "Annuler la suppression",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Confirmer la suppression",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                currEvent = true;
+                if (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: Routing.generate('noob_post_ajax_deleteUserPost', { postId: postId}),
+                        data: {postId:postId},
+                        success: function(data){
+                            mythis.closest('article').fadeOut();
+                        }
+                    });
+                }
+            }
+            });   
+        }
+    });
+    
+    
+    //update
+    
+    $('body').on('submit','#my-form-portfolio-edit',function(e){
+        e.preventDefault();
+            if(currEvent){
+            currEvent = false;
+            var postId = $(this).data('id');
+            var $divToFade = $('.p'+postId);
+            $.ajax({
+              url: Routing.generate('noob_post_updateUserPortfolio', { postId: postId}),
+              type: 'POST',
+              data: new FormData( this ),
+              processData: false,
+              contentType: false,
+              success: function(data){
+                  if(typeof data.status !== 'undefined'){
+                      bootbox.hideAll();
+                      $divToFade.fadeOut();
+                      $mynew = $(data.view);
+                      $mynew.prependTo('#portfolio-list-wrapper .row:first-child');
+                      $('#no-portfolio').hide();
+                      $mynew.hide().fadeIn('slow');
+                  }else{
+                    $('.bootbox-body').html(data);
+                  }
+                   currEvent = true;
+              },
+              error: function(data){
+                currEvent = true;
+              }
+            });
+        }
+    });
+    
+    $('body').on('click','.edit',function(e){
+        e.preventDefault();
+         if(currEvent){
+             currEvent = false;
+            var postId = $(this).data('id');
+             $.ajax({
+                 url: Routing.generate('noob_post_updateUserPortfolio', { postId: postId}),
+                 type: 'POST',
+                 success: function(data){
+                     bootbox.dialog({
+                     message: data
+                     });
+                     currEvent = true;
+                 }
+             }); 
+         }
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //offre
+    
+    $('#publishnew-offre').click(function(e){
+         e.preventDefault();
+         if(currEvent){
+             currEvent = false;
+             $.ajax({
+                 url: "{{ path('noob_post_insertOffre') }}",
+                 type: 'POST',
+                 success: function(data){
+                     bootbox.dialog({
+                     message: data
+                     });
+                     currEvent = true;
+                 }
+             }); 
+         }
+     });
+     
+     
+    $('body').on('submit','#my-form-offre-add',function(e){
+        e.preventDefault();
+            if(currEvent){
+            currEvent = false;
+            $.ajax({
+              url: "{{ path('noob_post_insertOffre') }}",
+              type: 'POST',
+              data: new FormData( this ),
+              processData: false,
+              contentType: false,
+              success: function(data){
+                  if(typeof data.status !== 'undefined'){
+                      bootbox.hideAll();
+                      $mynew = $(data.view);
+                      $mynew.prependTo('#offre-list-wrapper .row:first-child');
+                      $('#no-offre').hide();
+                      $mynew.hide().fadeIn('slow');
+                  }else{
+                    $('.bootbox-body').html(data);
+                  }
+                   currEvent = true;
+              },
+              error: function(data){
+                currEvent = true;
+
+              }
+            });
+        }
+    });
+    //update
+    $('body').on('submit','#my-form-offre-edit',function(e){
+        e.preventDefault();
+            if(currEvent){
+            currEvent = false;
+            var postId = $(this).data('id');
+            var $divToFade = $('.p'+postId);
+            $.ajax({
+              url: Routing.generate('noob_post_updateUserOffre', { postId: postId}),
+              type: 'POST',
+              data: new FormData( this ),
+              processData: false,
+              contentType: false,
+              success: function(data){
+                  if(typeof data.status !== 'undefined'){
+                      bootbox.hideAll();
+                      $divToFade.fadeOut();
+                      $mynew = $(data.view);
+                      $mynew.prependTo('#offre-list-wrapper .row:first-child');
+                      $('#no-offre').hide();
+                      $mynew.hide().fadeIn('slow');
+                  }else{
+                    $('.bootbox-body').html(data);
+                  }
+                   currEvent = true;
+              },
+              error: function(data){
+                currEvent = true;
+              }
+            });
+        }
+    });
+    
+    $('body').on('click','.edit-offre',function(e){
+        e.preventDefault();
+         if(currEvent){
+             currEvent = false;
+            var postId = $(this).data('id');
+             $.ajax({
+                 url: Routing.generate('noob_post_updateUserOffre', { postId: postId}),
+                 type: 'POST',
+                 success: function(data){
+                     bootbox.dialog({
+                     message: data
+                     });
+                     currEvent = true;
+                 }
+             }); 
+         }
+    });
+    
+    
+    
+    
+    
+    //tfe
+    $('#publishnew-tfe').click(function(e){
+         e.preventDefault();
+         if(currEvent){
+             currEvent = false;
+             $.ajax({
+                 url: "{{ path('noob_post_insertUserTfe') }}",
+                 type: 'POST',
+                 success: function(data){
+                     bootbox.dialog({
+                     message: data
+                     });
+                     currEvent = true;
+                 }
+             }); 
+         }
+     });
+     
+     
+    $('body').on('submit','#my-form-tfe-add',function(e){
+        e.preventDefault();
+            if(currEvent){
+            currEvent = false;
+            $.ajax({
+              url: "{{ path('noob_post_insertUserTfe') }}",
+              type: 'POST',
+              data: new FormData( this ),
+              processData: false,
+              contentType: false,
+              success: function(data){
+                  if(typeof data.status !== 'undefined'){
+                      bootbox.hideAll(); 
+                      $mynew = $(data.view);
+                      $mynew.prependTo('#tfe-wrapper');
+                      $('#no-tfe').hide();
+                      $mynew.hide().fadeIn('slow');
+                  }else{
+                    $('.bootbox-body').html(data);
+                  }
+                   currEvent = true;
+              },
+              error: function(data){
+                currEvent = true;
+
+              }
+            });
+        }
+    });
+    //update
+    $('body').on('submit','#my-form-tfe-edit',function(e){
+        e.preventDefault();
+            if(currEvent){
+            currEvent = false;
+            var postId = $(this).data('id');
+            var $divToFade = $('.p'+postId);
+            $.ajax({
+              url: Routing.generate('noob_post_updateUserTfe', { postId: postId}),
+              type: 'POST',
+              data: new FormData( this ),
+              processData: false,
+              contentType: false,
+              success: function(data){
+                  if(typeof data.status !== 'undefined'){
+                      bootbox.hideAll();
+                      $divToFade.fadeOut();
+                      $mynew = $(data.view);
+                      $mynew.prependTo('#tfe-wrapper');
+                      $('#no-offre').hide();
+                      $mynew.hide().fadeIn('slow');
+                  }else{
+                    $('.bootbox-body').html(data);
+                  }
+                   currEvent = true;
+              },
+              error: function(data){
+                currEvent = true;
+              }
+            });
+        }
+    });
+    
+    $('body').on('click','.edit-tfe',function(e){
+        e.preventDefault();
+         if(currEvent){
+             currEvent = false;
+            var postId = $(this).data('id');
+             $.ajax({
+                 url: Routing.generate('noob_post_updateUserTfe', { postId: postId}),
+                 type: 'POST',
+                 success: function(data){
+                     bootbox.dialog({
+                     message: data
+                     });
+                     currEvent = true;
+                 }
+             }); 
+         }
+    });
+    
+    
+    
+{% endif %}
+    
+    
+    
+});
 </script>
 {% endblock %}

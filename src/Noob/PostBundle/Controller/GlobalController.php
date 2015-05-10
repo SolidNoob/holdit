@@ -84,4 +84,30 @@ class GlobalController extends Controller
         $data['title'] = $post->getName();
         return new Response(json_encode($data),200, array('Content-Type'=>'application/json'));
     }
+    
+    public function deleteUserPostAjaxAction($postId){
+        $request = $this->getRequest();
+        if(!$request->isXmlHttpRequest()){
+            return new Response(json_encode(false),500, array('Content-Type'=>'application/json'));
+        }
+        $em = $this->getDoctrine()->getManager();
+        $me = $this->getUser();
+        $post = $em->getRepository('NoobPostBundle:Post')->findOneById(intval($postId));
+        if(!$post || $post->getAuthor() != $me){
+            return new Response(json_encode(false),500, array('Content-Type'=>'application/json'));
+        }
+        foreach($post->getTags() as $t){
+            $post->removeTag($t);
+        }
+        foreach($post->getLikers() as $l){
+            $post->removeLiker($l);
+        }
+        foreach($post->getComments() as $c){
+            $post->removeComment($c);
+            $em->remove($c);
+        }
+        $em->remove($post);
+        $em->flush();
+        return new Response(json_encode(true),200, array('Content-Type'=>'application/json'));
+    }
 }

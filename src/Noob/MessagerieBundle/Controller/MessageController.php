@@ -153,7 +153,14 @@ class MessageController extends Controller
                 $this->get('session')->getFlashBag()->add(
                     'notice', 'Le message a été envoyé'
                 );
-                 
+                $message = \Swift_Message::newInstance()
+                    ->setSubject("Vous avez reçu un message privé.")
+                    ->setFrom(array($this->container->getParameter('mailer_user') => $this->container->getParameter('mailer_from_name_in_mail')))
+                    ->setTo($recipient->getEmail())
+                    ->setBody($this->renderView('NoobMessagerieBundle:Global:messageReceived.html.twig', array('sender' => $user, 'me'=>$recipient, 'message'=>$message)))
+                    ->setContentType('text/html');
+                $this->get('mailer')->send($message);
+                
                 return $this->redirect($this->generateUrl('noob_messagerie_index'));
             }
         }

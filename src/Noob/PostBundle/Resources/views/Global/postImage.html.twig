@@ -26,14 +26,17 @@
 
 {# Set the variables needed #}
 {% if mode == 'preview' %}
-    {% set repertory = 'postpic230' %}
+    {% set repertory = 'postpicoriginal' %}
     {% set cssclass = 'preview-pic' %}
+    {% set imaginefilter = 'thumb_preview' %}
 {% elseif mode == 'detail' %}
     {% set repertory = 'postpicoriginal' %}
     {% set cssclass = 'post-detail-image' %}
+    {% set imaginefilter = 'post_detail' %}
 {% elseif mode == 'minithumb' %}
     {% set repertory = 'postpicoriginal' %}
     {% set cssclass = 'minithumb' %}
+    {% set imaginefilter = 'mini' %}
 {% else %}
     {% set repertory = 'Son, this repertory does not exist' %}
 {% endif %}
@@ -54,5 +57,7 @@
     <span><i class="fa fa-file-text"></i></span>
 </div>
 {% else %}
-<img src="{{asset('img/'~ repertory ~'/'~ picturename)}}" alt="{{ alt }}" class="img-responsive {{ cssclass ~' '~ customclass }}" />
+ <img src="{{('img/'~ repertory ~'/'~ picturename)|imagine_filter(imaginefilter)}}" alt="{{ alt }}" class="img-responsive {{ cssclass ~' '~ customclass }}" />
 {% endif %}
+
+    
